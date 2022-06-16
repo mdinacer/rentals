@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Island+Moments&family=Montserrat:wght@300;400&family=Oswald:wght@300;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+html {
+  scroll-behavior: smooth;
+}
