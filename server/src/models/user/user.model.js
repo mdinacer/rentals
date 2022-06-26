@@ -4,116 +4,138 @@ const pick = require('lodash/pick');
 const { User, validateRegister, validateLogin } = require('./user.mongo');
 
 const { Role } = require('./role.mongo');
+const { profile } = require('../../services/logger');
 
 async function GetCurrentUser(data) {
-    return User.findById(data._id)
-        .populate('roles profile', '-_id -__v')
-        .select(['-password', '-__v']);
+  const user = await User.findById(data._id)
+    .populate('roles', ' name')
+    .populate('profile');
+
+  const token = user.generateAuthToken();
+
+  return {
+    id: user._id,
+    email: user.email,
+    username: user.username,
+    profile: user.profile,
+    token,
+  };
 }
 
 async function LoginUser(data) {
-    const userData = pick(data, ['email', 'password']);
-    const { error: validationError } = validateLogin(userData);
+  const userData = pick(data, ['email', 'password']);
+  const { error: validationError } = validateLogin(userData);
 
-    if (validationError) {
-        const error = Error(validationError.details[0].message);
-        error.statusCode = 400;
-        throw error;
-    }
+  if (validationError) {
+    const error = Error(validationError.details[0].message);
+    error.statusCode = 400;
+    throw error;
+  }
 
-    let user = await User.findOne({ email: userData.email }).populate(
-        'roles',
-        'name'
-    );
+  let user = await User.findOne({ email: userData.email }).populate([
+    {
+      path: 'profile',
+    },
+    {
+      path: 'roles',
+    },
+  ]);
 
-    if (!user) {
-        const error = Error('Invalid email or password');
-        error.statusCode = 400;
-        throw error;
-    }
+  console.log(user);
 
-    const validPassword = await bcrypt.compare(userData.password, user.password);
+  if (!user) {
+    const error = Error('Invalid email or password');
+    error.statusCode = 400;
+    throw error;
+  }
 
-    if (!validPassword) {
-        const error = Error('Invalid email or password');
-        error.statusCode = 400;
-        throw error;
-    }
+  const validPassword = await bcrypt.compare(userData.password, user.password);
 
-    const token = user.generateAuthToken();
+  if (!validPassword) {
+    const error = Error('Invalid email or password');
+    error.statusCode = 400;
+    throw error;
+  }
 
-    return token;
+  const token = user.generateAuthToken();
+
+  return {
+    email: user.email,
+    username: user.username,
+    profile: user.profile,
+    token,
+  };
 }
 
 async function RegisterUser(data) {
-    const userData = pick(data, ['username', 'email', 'password']);
+  const userData = pick(data, ['username', 'email', 'password']);
 
-    const { error: validationError } = validateRegister(userData);
+  const { error: validationError } = validateRegister(userData);
 
-    if (validationError) {
-        const error = Error(validationError.details[0].message);
-        error.statusCode = 400;
-        throw error;
-    }
+  if (validationError) {
+    const error = Error(validationError.details[0].message);
+    error.statusCode = 400;
+    throw error;
+  }
 
-    let user = await User.findOne({ email: userData.email });
+  let user = await User.findOne({ email: userData.email });
 
-    if (user) {
-        const error = Error('User already registered');
-        error.statusCode = 400;
-        throw error;
-    }
+  if (user) {
+    const error = Error('User already registered');
+    error.statusCode = 400;
+    throw error;
+  }
 
-    let role = await Role.findOne({ name: 'user' });
+  let role = await Role.findOne({ name: 'user' });
 
-    if (!role) {
-        role = new Role({ name: 'user' });
-        await role.save();
-    }
+  if (!role) {
+    role = new Role({ name: 'user' });
+    await role.save();
+  }
 
-    user = new User({
-        ...userData,
-        isActive: true,
-        roles: [role._id],
-    });
+  user = new User({
+    ...userData,
+    isActive: true,
+    roles: [role._id],
+  });
 
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(userData.password, salt);
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(userData.password, salt);
 
-    await user.save();
+  await user.save();
 
-    return user;
+  return user;
 }
 
 async function UpdateUser(id, data) {
-    const user = new User({
-        name: data.name,
-        username: data.username,
-        email: data.address,
-        isActive: true,
-    });
+  const user = new User({
+    name: data.name,
+    username: data.username,
+    email: data.address,
+    isActive: true,
+  });
 
-    return User.findByIdAndUpdate(id, user, {new: true});
+  return User.findByIdAndUpdate(id, user, { new: true });
 }
 
 async function DeleteUser(id) {
-    const user = await User.findById(id);
+  const user = await User.findById(id);
 
-    if (!user) {
-        const error = Error('No matching user found');
-        error.statusCode = 404;
-        throw error;
-    }
+  if (!user) {
+    const error = Error('No matching user found');
+    error.statusCode = 404;
+    throw error;
+  }
 
-    const result = await user.updateOne({ isActive: false });
+  const result = await user.updateOne({ isActive: false });
 
-    return result.modifiedCount === 1;
+  return result.modifiedCount === 1;
 }
 
 module.exports = {
-    LoginUser,
-    GetCurrentUser,
-    RegisterUser,
-    UpdateUser,
-    DeleteUser,
+  LoginUser,
+  GetCurrentUser,
+  RegisterUser,
+  UpdateUser,
+  DeleteUser,
 };

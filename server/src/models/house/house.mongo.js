@@ -63,11 +63,35 @@ const houseSchema = new mongoose.Schema({
       ref: 'Rent',
     },
   ],
+  creationDate: {
+    type: Date,
+    default: Date.now(),
+  },
+
+  rating: {
+    type: Number,
+    default: 0,
+  },
 });
 
 houseSchema.options.toJSON = {
   transform: function (doc, ret, options) {
     ret.id = ret._id;
+
+    // ret.owner = {
+    //   id: doc.owner._id,
+    //   fullName: `${doc.owner.profile.firstName} ${doc.owner.profile.lastName}`,
+    //   image: doc.owner.profile.image.pictureUrl,
+    // };
+    // delete ret.rents;
+    // ret.rents = {
+    //   requests: doc.rents?.filter((rent) => rent.status === 'request') || [],
+    //   operations:
+    //     doc.rents?.filter((rent) => rent.status === 'operation') || [],
+    //   cancelled: doc.rents?.filter((rent) => rent.status === 'cancelled') || [],
+    // };
+    // ret.available = !doc.rents.some((rent) => rent.active);
+    // ret.availableFrom = doc.rents.filter((rent) => rent.active)[0]?.endDate;
     delete ret._id;
     delete ret.__v;
     return ret;

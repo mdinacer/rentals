@@ -39,8 +39,10 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.methods.generateAuthToken = function () {
-  this.populate('roles');
-  return jwt.sign({ _id: this._id }, process.env.JWT_KEY);
+  return jwt.sign(
+    { _id: this._id, roles: this.roles.map((r) => r.name) },
+    process.env.JWT_KEY
+  );
 };
 
 const User = mongoose.model('User', userSchema);

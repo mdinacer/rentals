@@ -1,5 +1,6 @@
 const {
   ListHouses,
+  GetHousesByUser,
   GetHouse,
   CreateHouse,
   EditHouse,
@@ -8,13 +9,21 @@ const {
   UpdatePrices,
 } = require('../../models/house/house.model');
 
-const { getPagination } = require('../../services/query');
+const { getPagination, setPaginationHeader } = require('../../services/query');
 
 async function httpListHouses(req, res) {
-  const { pageNumber, pageSize, ...params } = req.query;
+  const { paginated, pageNumber, pageSize, ...params } = req.query;
   const { skip, limit } = getPagination({ pageNumber, pageSize });
-  const houses = await ListHouses(skip, limit, params);
-  return res.status(200).json(houses);
+  const { totalCount, items } = await ListHouses(skip, limit, params);
+
+  setPaginationHeader(req, totalCount, res);
+
+  return res.status(200).json(items);
+}
+
+async function httpGetHousesByUser(req, res) {
+  result = await GetHousesByUser(req.user);
+  return res.status(200).json(result);
 }
 
 async function httpGetHouse(req, res) {
@@ -29,9 +38,11 @@ async function httpCreateHouse(req, res) {
 }
 
 async function httpEditHouse(req, res) {
-  const { cover, images } = req.files;
-  const slug = req.params.slug;
-  const house = await EditHouse(req.user, slug, req.body, cover, images);
+  let cover = req.files.cover || null;
+  let images = req.files.images || null;
+  console.log(req.params);
+  const houseId = req.params.id;
+  const house = await EditHouse(req.user, houseId, req.body, cover, images);
   return res.status(200).json(house);
 }
 
@@ -55,6 +66,7 @@ async function httpUpdatePrices(req, res) {
 
 module.exports = {
   httpListHouses,
+  httpGetHousesByUser,
   httpGetHouse,
   httpCreateHouse,
   httpEditHouse,

@@ -20,6 +20,12 @@ const housePriceSchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
+
+  durationType: {
+    type: String,
+    required: true,
+    min: 0,
+  },
 });
 
 housePriceSchema.options.toJSON = {
@@ -32,7 +38,7 @@ housePriceSchema.options.toJSON = {
 };
 
 const houseDetailsSchema = new mongoose.Schema({
-  floor: {
+  floors: {
     type: Number,
   },
 
@@ -46,6 +52,18 @@ const houseDetailsSchema = new mongoose.Schema({
     default: 1,
   },
 
+  beds: {
+    type: Number,
+    min: 1,
+    default: 1,
+  },
+
+  kitchens: {
+    type: Number,
+    min: 1,
+    default: 1,
+  },
+
   baths: {
     type: Number,
     min: 1,
@@ -53,16 +71,24 @@ const houseDetailsSchema = new mongoose.Schema({
   },
 
   parking: {
-    type: Boolean,
-    default: false,
+    type: Number,
+    min: 0,
+    default: 0,
   },
 
   pool: {
-    type: Boolean,
-    default: false,
+    type: Number,
+    min: 0,
+    default: 0,
   },
 
-  smokingAllowed: {
+  garden: {
+    type: Number,
+    min: 0,
+    default: 0,
+  },
+
+  smokingFree: {
     type: Boolean,
     default: false,
   },
@@ -84,13 +110,15 @@ houseDetailsSchema.options.toJSON = {
 
 function validateDetails(values) {
   const schema = Joi.object({
-    floor: Joi.number().min(0).max(300),
     area: Joi.number().min(0),
+    floors: Joi.number().min(0).max(300),
     rooms: Joi.number().min(0).max(50),
+    beds: Joi.number().min(0).max(50),
     baths: Joi.number().min(0).max(50),
-    parking: Joi.boolean(),
-    pool: Joi.boolean(),
-    smokingAllowed: Joi.boolean(),
+    kitchens: Joi.number().min(0).max(50),
+    parking: Joi.number().min(0).max(50),
+    pool: Joi.number().min(0).max(50),
+    smokingFree: Joi.boolean(),
     petsAllowed: Joi.boolean(),
   });
 

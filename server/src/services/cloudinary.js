@@ -13,25 +13,13 @@ cloudinary.config({
   api_secret: apiSecret,
 });
 
-async function SaveImageAsync(
-  buffer,
-  folder = 'test',
-  width = 500,
-  height = 500,
-  crop = 'fit',
-  tags = ''
-) {
-  try {
-    const result = await cloudinary.uploader.upload_stream();
-  } catch (error) {}
-}
-
 function SaveImage(
   fileBuffer,
   folder = 'test',
-  width = 500,
-  height = 500,
-  crop = 'fit',
+  width,
+  height,
+  crop = 'fill',
+  gravity = 'auto',
   tags = ''
 ) {
   return new Promise((resolve, reject) => {
@@ -42,6 +30,7 @@ function SaveImage(
         height,
         crop,
         folder,
+        gravity,
       },
       (error, result) => {
         if (result) {

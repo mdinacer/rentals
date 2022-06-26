@@ -4,7 +4,7 @@ const { House } = require('../../models/house/house.mongo');
 const { User } = require('../../models/user/user.mongo');
 const { Rent, validateRent } = require('./rent.mongo');
 
-init(process.env.MONGO_URL);
+init(process.env.MONGO_URL, 'tempRentsCollection');
 
 async function ListRents(skip, limit, params) {
   const { orderBy, ...filters } = params;
@@ -53,7 +53,7 @@ async function CreateRent(user, slug, data) {
   const rent = new Rent({
     owner: house.owner,
     client: user._id,
-    house: house._id,
+    house: house.id,
     startDate: data.startDate,
     endDate: data.endDate,
   });

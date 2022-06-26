@@ -34,7 +34,7 @@ const rentSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
-  type: {
+  status: {
     type: String,
     enum: ['request', 'operation', 'cancelled'],
     default: 'request',
@@ -61,11 +61,12 @@ const rentSchema = new mongoose.Schema({
 rentSchema.options.toJSON = {
   transform: function (doc, ret, options) {
     ret.id = ret._id;
-    ret.active = ret.startDate >= Date.now() && ret.endDate <= Date.now();
+    ret.active = doc.startDate <= new Date() && doc.endDate >= new Date();
     ret.duration = parseInt(
       (ret.endDate - ret.startDate) / (1000 * 60 * 60 * 24),
       10
     );
+    ret.test = doc.startDate.date;
     delete ret._id;
     delete ret.__v;
     return ret;

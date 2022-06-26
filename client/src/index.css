@@ -1,14 +1,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Island+Moments&family=Montserrat:wght@300;400&family=Oswald:wght@300;500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+body {
+  height: 100%;
+  width: 100vw;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 1px solid transparent;
+  -webkit-text-fill-color: inherit;
+  -webkit-box-shadow: 0 0 0px 1000px transparent#000 inset;
+  transition: background-color 5000s ease-in-out 0s;
+  line-height: 1.75rem;
 }
