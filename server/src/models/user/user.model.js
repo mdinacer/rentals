@@ -41,8 +41,6 @@ async function LoginUser(data) {
     },
   ]);
 
-  console.log(user);
-
   if (!user) {
     const error = Error('Invalid email or password');
     error.statusCode = 400;

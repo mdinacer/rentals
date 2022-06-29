@@ -1,3 +1,4 @@
+import { XIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
 import { House } from '../../models/house';
 import { Image } from '../../models/image';
@@ -35,20 +36,7 @@ export default function ImageSlider({ house }: Props) {
               className='absolute text-white z-10 top-0 right-0 m-2 bg-black bg-opacity-70 rounded-full'
               onClick={() => setSelectedImage(null)}
             >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                className='lg:h-16 h-8 lg:w-16 w-8'
-                fill='none'
-                viewBox='0 0 24 24'
-                stroke='currentColor'
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z'
-                />
-              </svg>
+              <XIcon className='lg:h-16 h-8 lg:w-16 w-8' />
             </button>
           </div>
         </div>

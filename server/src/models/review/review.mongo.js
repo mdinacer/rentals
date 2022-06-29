@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const Joi = require('joi');
 
 const reviewSchema = new mongoose.Schema({
+  hostName: {
+    type: String,
+  },
   creationDate: {
     type: Date,
     default: Date.now(),
@@ -49,8 +52,6 @@ function validateReview(values) {
   const schema = Joi.object({
     body: Joi.string(),
     rating: Joi.number().min(0).max(5),
-    // host: Joi.objectId().required(),
-    // house: Joi.objectId().required(),
   });
 
   return schema.validate(values);

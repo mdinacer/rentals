@@ -16,7 +16,6 @@ function setPaginationHeader(req, count, res) {
   const currentPage = Math.abs(req.query.pageNumber) || DEFAULT_PAGE_NUMBER;
   const pageSize = Math.abs(req.query.pageSize) || DEFAULT_PAGE_SIZE;
   const totalCount = count || 0;
-  console.log('Count: ', count);
   const totalPages = Math.ceil(totalCount / pageSize);
   res.setHeader(
     'Pagination',

@@ -14,7 +14,7 @@ export default function HousesList({ houses }: Props) {
       initial='initial'
       animate='animate'
       exit='exit'
-      className='grid grid-cols-1 lg:grid-cols-3 my-auto  gap-4 w-full  px-5'
+      className='grid grid-cols-1 lg:grid-cols-3 py-5  gap-4 w-full  px-5'
     >
       {houses.map((house) => (
         <motion.div key={house.slug} variants={ItemVariants}>

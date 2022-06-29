@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { HouseDetails } from '../../models/houseDetails';
 
 interface Props {
@@ -6,45 +7,46 @@ interface Props {
 }
 
 export default function HouseDetailsList({ houseType, houseDetails }: Props) {
+  const { t } = useTranslation('shared');
   return (
-    <div className='grid grid-flow-col w-auto gap-3  lg:gap-5 py-5 '>
+    <div className='grid grid-flow-col w-auto gap-3 snap-start  lg:gap-5 py-5 '>
       {/* <HouseDetailsListItem value={houseType} /> */}
       {houseDetails.rooms > 0 && (
         <HouseDetailsListItem
-          title={` Room${houseDetails.rooms > 1 && 's'}`}
+          title={t('room', { count: houseDetails.rooms })}
           value={houseDetails.rooms}
         />
       )}
 
       {houseDetails.beds > 0 && (
         <HouseDetailsListItem
-          title={` Bed${houseDetails.beds > 1 ? 's' : ''}`}
+          title={t('bed', { count: houseDetails.beds })}
           value={houseDetails.beds}
         />
       )}
 
       {houseDetails.baths > 0 && (
         <HouseDetailsListItem
-          title={` Bath${houseDetails.baths > 1 ? 's' : ''}`}
+          title={t('bath', { count: houseDetails.baths })}
           value={houseDetails.baths}
         />
       )}
 
       {houseDetails.parking > 0 && (
         <HouseDetailsListItem
-          title={` Parking${houseDetails.parking > 1 ? 's' : ''}`}
+          title={t('parking', { count: houseDetails.parking })}
           value={houseDetails.parking}
         />
       )}
 
       <HouseDetailsListItem
-        title={'Smoke Free'}
-        value={houseDetails.smokingFree ? 'Yes' : 'No'}
+        title={t('smoke_free')}
+        value={houseDetails.smokingFree ? t('yes') : t('no')}
       />
 
       <HouseDetailsListItem
-        title={'Pets Allowed'}
-        value={houseDetails.petsAllowed ? 'Yes' : 'No'}
+        title={t('pets_allowed')}
+        value={houseDetails.petsAllowed ? t('yes') : t('no')}
       />
     </div>
   );
@@ -68,7 +70,7 @@ function HouseDetailsListItem({ value, title }: ItemProps) {
           </p>
         </div>
       </div> */}
-      <div className='flex flex-col lg:flex-row w-full lg:min-w-[11rem] min-w-[8rem] drop-shadow-lg border border-gray-300 dark:border-gray-900 rounded-md overflow-hidden'>
+      <div className='snap-center flex flex-col lg:flex-row w-full lg:min-w-[11rem] min-w-[8rem] drop-shadow-lg border border-gray-300 dark:border-gray-900 rounded-md overflow-hidden'>
         <div className='flex-auto py-2 px-5 lg:pl-5 lg:pr-2 bg-gradient-to-b from-gray-200 to-gray-300   dark:from-gray-700 dark:to-gray-900 dark:text-white  flex items-center justify-center lg:justify-start '>
           {title && (
             <p className='font-Oswald text-base text-center lg:text-left lg:text-lg font-thin uppercase'>
@@ -77,7 +79,7 @@ function HouseDetailsListItem({ value, title }: ItemProps) {
           )}
         </div>
         <div className='flex-initial lg:py-2 py-1 px-5 bg-gradient-to-b from-sky-400 to-sky-500 dark:from-indigo-500 dark:to-indigo-900 text-white   flex items-center justify-center '>
-          <p className=' font-Oswald text-lg lg:text-3xl font-thin text-center lg:text-left'>
+          <p className=' font-Oswald capitalize text-lg lg:text-3xl font-thin text-center lg:text-left'>
             {value}
           </p>
         </div>

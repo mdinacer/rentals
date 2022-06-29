@@ -1,10 +1,13 @@
+import { LocationMarkerIcon } from '@heroicons/react/solid';
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import usePositions from '../../hooks/usePositions';
 import TextInput from './TextInput';
 
 export default function HouseAddressForm() {
   const { control, setValue } = useFormContext();
   const { busy, serviceState, getCurrentLocation } = usePositions();
+  const { t } = useTranslation(['shared']);
 
   async function getBrowserLocation() {
     const location = await getCurrentLocation();
@@ -51,65 +54,54 @@ export default function HouseAddressForm() {
           autoComplete='country'
           type='text'
           control={control}
-          label='Country'
+          label={t('country_one')}
           name='address.country'
-          placeholder='Country'
+          placeholder={t('country_one')}
         />
         <TextInput
           autoComplete='province'
           type='text'
           control={control}
-          label='Province'
+          label={t('province_one')}
           name='address.province'
-          placeholder='Province'
+          placeholder={t('province_one')}
         />
         <TextInput
           autoComplete='city'
           type='text'
           control={control}
-          label='City'
+          label={t('city_one')}
           name='address.city'
-          placeholder='City'
+          placeholder={t('city_one')}
         />
       </div>
       <TextInput
         autoComplete='address'
         type='text'
         control={control}
-        label='Address'
+        label={t('address_one')}
         name='address.address1'
-        placeholder='Address'
+        placeholder={t('address_one')}
       />
       <TextInput
         autoComplete='address2'
         type='text'
         control={control}
-        label='Address 2'
+        label={`${t('address_one')} 2`}
         name='address.address2'
-        placeholder='Address 2 (optional)'
+        placeholder={`${t('address_one')} 2`}
       />
 
       <button
         disabled={busy}
         type='button'
         className={`${
-          busy ? 'bg-orange-500' : 'bg-teal-500'
-        } inline-flex justify-center font-Montserrat text-white py-1 rounded-md items-center gap-x-1`}
+          busy ? 'bg-orange-500' : 'bg-sky-500 dark:bg-indigo-500'
+        } inline-flex justify-center font-Montserrat text-white py-1 rounded-sm items-center gap-x-1`}
         onClick={() => getBrowserLocation()}
       >
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          className='h-5 w-5'
-          viewBox='0 0 20 20'
-          fill='currentColor'
-        >
-          <path
-            fillRule='evenodd'
-            d='M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z'
-            clipRule='evenodd'
-          />
-        </svg>
-        {busy ? 'Loading GPS data' : 'Get GPS location'}
+        <LocationMarkerIcon className='h-5 w-5' />
+        {busy ? t('loading') : t('gps')}
       </button>
       <p className=' font-Montserrat text-sm text-center text-gray-600'>
         {serviceState?.message}

@@ -18,7 +18,7 @@ export default function HouseFiltersForm() {
   return (
     <form
       onSubmit={handleSubmit(handleSubmitData)}
-      className='w-full h-full flex-1 grid grid-flow-row gap-2 '
+      className='w-full h-full flex-1 grid grid-flow-row gap-5 '
     >
       <AppDropDown
         autoComplete='type'
@@ -43,21 +43,23 @@ export default function HouseFiltersForm() {
         name='title'
         placeholder='Find a house'
       />
-      <TextInput
+      <AppDropDown
         autoComplete='province'
         type='search'
         control={control}
         label='Province'
         name='province'
         placeholder='Province'
+        items={[]}
       />
-      <TextInput
+      <AppDropDown
         autoComplete='city'
         type='search'
         control={control}
         label='City'
         name='city'
         placeholder='City'
+        items={[]}
       />
 
       <AppNumberInput
@@ -96,7 +98,7 @@ export default function HouseFiltersForm() {
           name='maxRating'
         />
 
-        <div className='grid col-span-2 grid-cols-2 gap-4'>
+        <div className='grid col-span-2 grid-cols-1 gap-4'>
           <AppCheckbox control={control} label='Parking' name='parking' />
           <AppCheckbox control={control} label='Swimming Pool' name='pool' />
           <AppCheckbox

@@ -63,6 +63,12 @@ const houseSchema = new mongoose.Schema({
       ref: 'Rent',
     },
   ],
+  reviews: [
+    {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Review',
+    },
+  ],
   creationDate: {
     type: Date,
     default: Date.now(),

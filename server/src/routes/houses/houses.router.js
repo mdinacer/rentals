@@ -12,6 +12,7 @@ const {
   httpDeleteHouse,
   httpUpdateDetails,
   httpUpdatePrices,
+  httpAddToFavorites,
 } = require('./houses.controller');
 
 const uploadFields = [
@@ -35,5 +36,6 @@ housesRouter.put('/:id', [auth, upload.fields(uploadFields)], httpEditHouse);
 housesRouter.put('/:id/details', auth, httpUpdateDetails);
 housesRouter.put('/:id/prices', auth, httpUpdatePrices);
 housesRouter.delete('/:id', auth, httpDeleteHouse);
+housesRouter.put('/:id/fav', auth, httpAddToFavorites);
 
 module.exports = housesRouter;

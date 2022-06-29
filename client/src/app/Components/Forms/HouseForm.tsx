@@ -1,8 +1,14 @@
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  XIcon,
+} from '@heroicons/react/solid';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { FieldValues, FormProvider, useForm } from 'react-hook-form';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import agent from '../../api/agent';
 import { House } from '../../models/house';
 import { setHouse, updateHouse } from '../../slices/housesSlice';
@@ -23,7 +29,6 @@ interface Props {
 
 export default function HouseForm({ house }: Props) {
   const isEdit = !!house;
-  const { state }: any | null = useLocation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [pageDirection, setPageDirection] = useState('next');
@@ -37,6 +42,8 @@ export default function HouseForm({ house }: Props) {
     resolver: yupResolver(validationSchema),
   });
 
+  const { t } = useTranslation(['house_form']);
+
   const watchFile = methods.watch('cover', null);
   const watchFiles: any[] = methods.watch('images', null);
 
@@ -47,25 +54,8 @@ export default function HouseForm({ house }: Props) {
         type: house.type,
         catchPhrase: house.catchPhrase,
         prices: house.prices,
-        details: {
-          area: house.details.area,
-          floors: house.details.floors,
-          rooms: house.details.rooms,
-          beds: house.details.beds,
-          baths: house.details.baths,
-          kitchens: house.details.kitchens,
-          gardens: house.details.gardens,
-          parking: house.details.parking,
-          pool: house.details.pool,
-          smokingFree: house.details.smokingFree,
-          petsAllowed: house.details.petsAllowed,
-        },
-        address: {
-          province: house.address.province,
-          city: house.address.city,
-          address1: house.address.address1,
-          address2: house.address.address2,
-        },
+        details: house.details,
+        address: house.address,
         // images: [''],
         // cover: '',
       };
@@ -135,6 +125,7 @@ export default function HouseForm({ house }: Props) {
 
   async function handleSubmitData(data: FieldValues) {
     let from = '/houses';
+    console.log(data);
 
     try {
       const { images, cover, ...rest } = data;
@@ -152,7 +143,6 @@ export default function HouseForm({ house }: Props) {
       if (isEdit) {
         result = await agent.Houses.update(house.id, formData);
         dispatch(updateHouse({ id: result.id, changes: result }));
-        console.log(result);
 
         from = `/houses/${result.slug}`;
       } else {
@@ -199,14 +189,28 @@ export default function HouseForm({ house }: Props) {
     }
   };
 
-  const pagesNames = ['Informations', 'Details', 'Address', 'prices', 'Images'];
+  const pagesNames = [
+    t('informations'),
+    t('details'),
+    t('addresses'),
+    t('prices'),
+    t('images'),
+  ];
 
   return (
     <FormProvider {...methods}>
       <form
         onSubmit={methods.handleSubmit(handleSubmitData)}
-        className='w-full h-full flex-1  flex lg:items-center'
+        className='relative w-full h-full flex-1  flex lg:items-center'
       >
+        <button
+          type='button'
+          title='close'
+          className='absolute top-0 right-0  p-2 opacity-50 hover:opacity-100'
+          onClick={() => navigate(house ? `/houses/${house.slug}` : '/houses')}
+        >
+          <XIcon className='w-6 h-6' />
+        </button>
         <div className=' px-5 lg:px-0 lg:max-w-xl w-full mx-auto  flex flex-col h-auto lg:min-h-[50vh] flex-1 '>
           <div className='flex-auto h-auto flex items-center'>
             <AnimatePresence exitBeforeEnter>
@@ -228,36 +232,25 @@ export default function HouseForm({ house }: Props) {
             </AnimatePresence>
           </div>
 
-          <div className='w-full inline-flex justify-between items-center gap-x-5 py-2 mb-5 lg:mb-0 flex-initial'>
+          <div className='w-full inline-flex justify-between items-center gap-x-5 py-2 mb-5 lg:mb-0 flex-initial text-white'>
             {selectedPageIndex > 0 ? (
               <button
                 type='button'
                 onClick={handlePreviousPage}
                 className={` w-full lg:w-auto cursor-pointer inline-flex items-center gap-x-2 bg-orange-500 py-1 px-5 rounded-md uppercase font-Oswald text-xl font-thin`}
               >
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  className='h-6 w-6'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    d='M15 19l-7-7 7-7'
-                  />
-                </svg>
-                {selectedPageIndex > 0 ? 'Previous' : 'Cancel'}
+                <ChevronLeftIcon className='h-6 w-6' />
+                {t('previous')}
               </button>
             ) : (
               <button
                 type='button'
-                onClick={() => navigate(state?.from?.pathname || '/houses')}
+                onClick={() =>
+                  navigate(house ? `/houses/${house.slug}` : '/houses')
+                }
                 className={`$cursor-pointer bg-red-500 py-1 rounded-md px-5 uppercase font-Oswald text-xl font-thin`}
               >
-                Cancel
+                {t('cancel')}
               </button>
             )}
 
@@ -265,38 +258,27 @@ export default function HouseForm({ house }: Props) {
               <button
                 type='button'
                 onClick={handleNextPage}
-                className={`cursor-pointer w-full lg:w-auto inline-flex justify-end items-center gap-x-2 bg-teal-500 py-1 rounded-md   px-5 uppercase font-Oswald text-xl font-thin`}
+                className={`cursor-pointer w-full lg:w-auto inline-flex justify-end items-center gap-x-2 bg-sky-500 dark:bg-indigo-500 py-1 rounded-md   px-5 uppercase font-Oswald text-xl font-thin`}
               >
-                Next
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  className='h-6 w-6'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    d='M9 5l7 7-7 7'
-                  />
-                </svg>
+                {t('next')}
+                <ChevronRightIcon className='h-6 w-6' />
               </button>
             ) : (
               <input
                 className={`${
                   methods.formState.isValid
-                    ? 'opacity-100 bg-teal-500 '
-                    : 'opacity-50 bg-teal-800'
+                    ? 'opacity-100 bg-sky-500 dark:bg-indigo-500 '
+                    : 'opacity-50 bg-sky-800 dark:bg-indigo-800'
                 } cursor-pointer  py-1 rounded-md  px-5 uppercase font-Oswald text-xl font-thin`}
                 type='submit'
+                disabled={!methods.formState.isValid}
                 value={
-                  methods.formState.isSubmitting
-                    ? 'Please wait'
+                  methods.formState.isSubmitting ||
+                  methods.formState.isValidating
+                    ? t('wait')
                     : isEdit
-                    ? 'Update'
-                    : 'Save'
+                    ? t('update')
+                    : t('save')
                 }
               />
             )}

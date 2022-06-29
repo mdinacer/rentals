@@ -1,3 +1,4 @@
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { MetaData } from '../../models/pagination';
@@ -35,44 +36,13 @@ export default function AppPagination({ metaData, onPageChange }: Props) {
               activeClassName='font-normal text-orange-500'
               pageLinkClassName={'p-2 font-Oswald  text-inherit text-xl'}
               breakLabel='...'
-              nextLabel={
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  className='h-6 w-6'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    d='M9 5l7 7-7 7'
-                  />
-                </svg>
-              }
+              nextLabel={<ChevronRightIcon className='h-6 w-6' />}
               onPageChange={({ selected }) => {
-
                 handlePageChange(selected);
               }}
               pageRangeDisplayed={3}
               pageCount={totalPages}
-              previousLabel={
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  className='h-6 w-6'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    d='M15 19l-7-7 7-7'
-                  />
-                </svg>
-              }
+              previousLabel={<ChevronLeftIcon className='h-6 w-6' />}
             />
           )}
         </div>

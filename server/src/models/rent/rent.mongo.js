@@ -75,10 +75,8 @@ rentSchema.options.toJSON = {
 
 function validateRent(values) {
   const schema = Joi.object({
-    // client: Joi.objectId().required(),
-    // house: Joi.objectId().required(),
     startDate: Joi.date().required(),
-    endDate: Joi.date().required(),
+    endDate: Joi.date().greater(Joi.ref('startDate')).required(),
   });
 
   return schema.validate(values);

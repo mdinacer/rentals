@@ -10,7 +10,6 @@ const { getPagination, setPaginationHeader } = require('../../services/query');
 
 async function httpGetReviewsByHouse(req, res) {
   const houseId = req.params.id;
-  console.log(req);
   const { pageNumber, pageSize } = req.query;
   const { skip, limit } = getPagination({ pageNumber, pageSize });
   const { totalCount, items } = await GetReviewsByHouse(houseId, skip, limit);

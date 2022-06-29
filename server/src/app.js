@@ -24,7 +24,7 @@ app.use(
     origin: '*', //'http://localhost:3000/',
     optionsSuccessStatus: 200,
     exposedHeaders: ['Pagination'],
-    // methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     // credentials: true,
     // preflightContinue: true,
   })

@@ -44,6 +44,13 @@ const profileSchema = new mongoose.Schema({
   address: {
     type: addressSchema,
   },
+
+  favorites: [
+    {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'House',
+    },
+  ],
 });
 
 profileSchema
@@ -65,8 +72,6 @@ profileSchema.options.toJSON = {
 };
 
 function validateProfile(values) {
-  console.log('Values: ', values);
-
   const schema = Joi.object({
     firstName: Joi.string().min(3).max(255).required(),
     lastName: Joi.string().min(3).max(255).required(),

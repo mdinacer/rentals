@@ -1,13 +1,12 @@
-import { RentStatus } from "./RentStatus"
-
 export interface Rent {
+    id: string;
     client: string,
     owner: string,
     house: string,
     startDate: string,
     endDate: string,
     creationDate: string,
-    status: RentStatus,
+    status: string,
     price: number,
     paid: number,
     accepted: boolean,

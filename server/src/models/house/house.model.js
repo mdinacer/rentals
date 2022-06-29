@@ -1,6 +1,9 @@
 const { House, validate } = require('./house.mongo');
 const { validateDetails, validatePrice } = require('./houseDetails.mongo');
 const { User } = require('../user/user.mongo');
+const { Profile } = require('../profile/profile.mongo');
+
+const socketApi = require('../../services/socket');
 
 const pick = require('lodash/pick');
 
@@ -53,6 +56,10 @@ async function GetHouse(slug, user) {
     {
       path: 'rents',
     },
+    {
+      path: 'reviews',
+      select: { creationDate: 1, host: 1, hostName: 1, rating: 1, body: 1 },
+    },
   ]);
 
   if (!house) {
@@ -73,6 +80,7 @@ async function GetHouse(slug, user) {
     'details',
     'address',
     'rating',
+    'reviews',
   ]);
 
   const activeRent = house.rents.some((rent) => rent.active);
@@ -216,9 +224,9 @@ async function UpdatePrices(user, slug, values) {
   return house.prices;
 }
 
-async function DeleteHouse(slug, user) {
+async function DeleteHouse(id, user) {
   const house = await House.findOne({
-    slug: slug,
+    _id: id,
     owner: user._id,
   });
 
@@ -241,6 +249,32 @@ async function DeleteHouse(slug, user) {
   return;
 }
 
+async function AddToFavorites(houseId, user) {
+  const house = await House.findById(houseId);
+
+  if (!house) {
+    const error = Error('No matching house found');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const favorite = user.profile.favorites.includes(houseId);
+
+  if (favorite) {
+    await Profile.updateOne(
+      { user: user._id },
+      { $pull: { favorites: houseId } }
+    );
+    return false;
+  } else {
+    await Profile.updateOne(
+      { user: user._id },
+      { $push: { favorites: houseId } }
+    );
+    return true;
+  }
+}
+
 function validateHouse(values) {
   const { error: validationError } = validate(values);
 
@@ -260,4 +294,5 @@ module.exports = {
   UpdateDetails,
   UpdatePrices,
   DeleteHouse,
+  AddToFavorites,
 };

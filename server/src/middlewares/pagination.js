@@ -7,7 +7,6 @@ module.exports = function (req, res, next) {
   //const skipIndex = (currentPage - 1) * pageSize;
   const totalCount = res.count || 10;
   const totalPages = Math.ceil(totalCount / pageSize);
-  console.log('Middleware First');
   res.setHeader(
     'Pagination',
     JSON.stringify({

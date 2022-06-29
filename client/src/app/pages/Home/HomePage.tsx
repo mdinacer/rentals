@@ -1,32 +1,19 @@
-import HouseForm from '../../Components/Forms/HouseForm';
-import { signInUser } from '../../slices/accountSlice';
-import { useAppDispatch, useAppSelector } from '../../store/configureStore';
+import Layout from '../../layout/Layout';
+import { registerLocale } from 'react-datepicker';
+import { ar, fr, enUS } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
+
+registerLocale('ar', ar);
+registerLocale('fr', fr);
+registerLocale('en', enUS);
 
 export default function HomePage() {
-  const { user } = useAppSelector((state) => state.account);
-  const dispatch = useAppDispatch();
-
-  const login = async () => {
-    try {
-      await dispatch(
-        signInUser({
-          email: 'mdi.nacer@outlook.com',
-          password: 'Pa$$w0rd',
-        })
-      );
-    } catch (error: any) {
-      console.log(error);
-    }
-  };
-
+  const { t } = useTranslation();
   return (
-    <div className='flex-1  w-full  bg-sky-500 dark:bg-indigo-500 text-white'>
-      in construction
-      <div className='container mx-auto px-5 flex-1 flex items-center justify-center h-full'>
-        <p className=' font-Oswald text-5xl'>
-          If you don’t like where you are, move. You are not a tree.
-        </p>
+    <Layout className='relative bg-gradient-to-br from-sky-500 to-sky-800 dark:from-indigo-700 dark:to-indigo-900 flex'>
+      <div className='container mx-auto px-5 flex-col flex items-center justify-center flex-1 '>
+        <p className=' font-Oswald text-5xl'>{t('hero_text')}</p>
       </div>
-    </div>
+    </Layout>
   );
 }

@@ -4,11 +4,12 @@ import { history } from "../..";
 import { House } from "../models/house";
 import { HouseReview } from "../models/houseReview";
 import { PaginatedResponse } from "../models/pagination";
+import { Rent } from "../models/rent";
 import { User } from "../models/user";
 import { store } from "../store/configureStore";
 
 
-const sleep = () => new Promise(resolve => setTimeout(resolve, 0));
+const sleep = () => new Promise(resolve => setTimeout(resolve, 1000));
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 //axios.defaults.withCredentials = true;
@@ -101,34 +102,34 @@ function createFormData(item: any) {
     return formData
 }
 
-function buildFormData(formData: any, data: any, parentKey?: any) {
-    if (
-        data &&
-        typeof data === 'object' &&
-        !(data instanceof Date) &&
-        !(data instanceof File)
-    ) {
-        Object.keys(data).forEach((key) => {
-            buildFormData(
-                formData,
-                data[key],
-                parentKey ? `${parentKey}.${key}` : key
-            );
-        });
-    } else {
-        const value = data == null ? '' : data;
+// function buildFormData(formData: any, data: any, parentKey?: any) {
+//     if (
+//         data &&
+//         typeof data === 'object' &&
+//         !(data instanceof Date) &&
+//         !(data instanceof File)
+//     ) {
+//         Object.keys(data).forEach((key) => {
+//             buildFormData(
+//                 formData,
+//                 data[key],
+//                 parentKey ? `${parentKey}.${key}` : key
+//             );
+//         });
+//     } else {
+//         const value = data == null ? '' : data;
 
-        formData.append(parentKey, value);
-    }
-}
+//         formData.append(parentKey, value);
+//     }
+// }
 
-function jsonToFormData(data: any) {
-    const formData = new FormData();
+// function jsonToFormData(data: any) {
+//     const formData = new FormData();
 
-    buildFormData(formData, data);
+//     buildFormData(formData, data);
 
-    return formData;
-}
+//     return formData;
+// }
 
 const Account = {
     login: (values: any) => requests.post<User>('auth/', values),
@@ -143,6 +144,7 @@ const Houses = {
     create: (house: any) => requests.postForm(`houses/`, house),
     update: (id: string, house: any) => requests.putForm(`houses/${id}`, house),
     delete: (id: string) => requests.delete<void>(`houses/${id}`),
+    addFav: (id: string) => requests.put(`houses/${id}/fav`, {}),
 }
 
 const Reviews = {
@@ -151,6 +153,16 @@ const Reviews = {
     create: (houseId: string, review: any) => requests.post(`reviews/${houseId}`, review),
     update: (id: string, review: any) => requests.put<House>(`reviews/${id}`, review),
     delete: (id: string) => requests.delete<void>(`reviews/${id}`),
+}
+
+const Rents = {
+    list: (houseId: string, params?: URLSearchParams) => requests.get<HouseReview[]>(`rents/${houseId}`, params),
+    getActiveRequest: (houseId: string) => requests.get<Rent>(`rents/${houseId}/active`),
+    create: (houseId: string, rent: any) => requests.post(`rents/${houseId}`, rent),
+    update: (id: string, rent: any) => requests.put(`rents/${id}`, rent),
+    acceptRequest: (id: string, status: any) => requests.put(`rents/${id}/accept`, status),
+    cancelRequest: (id: string, status: any) => requests.put(`rents/${id}/cancel`, status),
+    delete: (id: string) => requests.delete<void>(`rents/${id}`),
 }
 
 const Location = {
@@ -162,6 +174,7 @@ const agent = {
     Account,
     Houses,
     Location,
+    Rents,
     Reviews
 }
 

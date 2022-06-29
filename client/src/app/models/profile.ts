@@ -9,7 +9,8 @@ export interface UserProfile {
     mobile: string,
     email: string,
     image: string,
-    user: string
+    user: string,
+    favorites: string[]
 }
 
 export interface UserProfileCreate {

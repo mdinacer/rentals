@@ -15,16 +15,22 @@ const housePriceSchema = new mongoose.Schema({
     min: 0,
   },
 
+  installment: {
+    type: Boolean,
+    default: false,
+  },
+
   duration: {
     type: Number,
     required: true,
-    min: 0,
+    min: 1,
   },
 
   durationType: {
     type: String,
+    enum: ['day', 'week', 'month', 'year'],
+    default: 'day',
     required: true,
-    min: 0,
   },
 });
 

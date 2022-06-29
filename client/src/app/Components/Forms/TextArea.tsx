@@ -20,16 +20,16 @@ export default function AppTextArea(props: Props) {
       className={`w-full  border-b-4 bg-gray-200 dark:bg-slate-600  pt-1 flex flex-col overflow-hidden  ${
         fieldState.error
           ? 'border-b-red-500'
-          : 'border-b-sky-500 dark:border-indigo-500'
+          : 'border-b-sky-500 dark:border-b-indigo-500'
       }`}
     >
       <div className='w-full px-5'>
-        <p className='text-sm font-Montserrat text-gray-600 dark:text-gray-300'>
+        <p className='capitalize text-sm font-Montserrat text-gray-600 dark:text-gray-300'>
           {props.label}
         </p>
         <textarea
           rows={props.rows || 3}
-          className={`border-none flex-auto font-Montserrat resize-none text-base my-auto lg:text-base placeholder:capitalize placeholder:text-gray-400   pb-2 pt-0  w-full h-auto block bg-transparent focus-within:outline-none  text-black dark:text-white`}
+          className={`focus:outline-none focus:border-none focus:ring-0 border-none flex-auto font-Montserrat resize-none text-base my-auto lg:text-base placeholder:capitalize placeholder:text-gray-400   pb-2 pt-0  w-full h-auto block bg-transparent focus-within:outline-none  text-black dark:text-white`}
           aria-label={props.label}
           type={props.type}
           {...props}

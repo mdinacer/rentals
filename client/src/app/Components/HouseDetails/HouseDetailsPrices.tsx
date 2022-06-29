@@ -21,11 +21,14 @@ interface ItemProps {
 function HouseDetailsPriceItem({ price }: ItemProps) {
   return (
     <div className='py-3 px-5 border border-sky-200 dark:border-indigo-900 bg-gradient-to-br from-sky-400 to-sky-600 dark:from-indigo-500 dark:to-indigo-800 text-white rounded-2xl drop-shadow-lg '>
-      {price.title && (
+      <div className=' inline-flex w-full justify-between items-center'>
         <p className='font-Montserrat text-base uppercase mb-2'>
-          {price.title}
+          {price.title || ''}
         </p>
-      )}
+        <p className='font-Montserrat text-xs uppercase mb-2'>
+          {price.installment ? 'Installment' : 'full payment'}
+        </p>
+      </div>
 
       <div className='flex flex-row  justify-between items-end w-full'>
         <p>

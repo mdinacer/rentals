@@ -39,10 +39,28 @@ async function ListRents(skip, limit, params) {
   return result;
 }
 
-async function CreateRent(user, slug, data) {
+async function GetActiveRequest(user, houseId) {
+  console.log('user: ', user);
+  const rent = await Rent.findOne({
+    house: houseId,
+    client: user._id,
+    status: 'request',
+  });
+
+  if (!rent) {
+    const error = Error('No matching operation found');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  return rent;
+}
+
+async function CreateRent(user, houseId, data) {
+  console.log(data);
   validateRentData(data);
 
-  const house = await House.findOne({ slug: slug });
+  const house = await House.findById(houseId);
 
   if (!house) {
     const error = Error('No matching house found');
@@ -53,26 +71,48 @@ async function CreateRent(user, slug, data) {
   const rent = new Rent({
     owner: house.owner,
     client: user._id,
-    house: house.id,
+    house: house._id,
     startDate: data.startDate,
     endDate: data.endDate,
   });
 
-  new Task()
-    .save('rents', rent)
-    .update('houses', { slug: slug }, { $push: { rents: rent._id } })
-    .update(
-      'users',
-      { _id: user._id },
-      { $push: { 'requests.sent': rent._id } }
-    )
-    .update(
-      'users',
-      { _id: house.owner },
-      { $push: { 'requests.received': rent._id } }
-    )
-    .run();
+  await rent.save();
+
+  // new Task()
+  //   .save('rents', rent)
+  //   .update('houses', { id: houseId }, { $push: { rents: rent._id } })
+  //   .update(
+  //     'users',
+  //     { _id: user._id },
+  //     { $push: { 'requests.sent': rent._id } }
+  //   )
+  //   .update(
+  //     'users',
+  //     { _id: house.owner },
+  //     { $push: { 'requests.received': rent._id } }
+  //   )
+  //   .run();
   return rent;
+}
+
+async function EditRent(user, id, data) {
+  validateRentData(data);
+  const rent = await Rent.findOne({ _id: id, owner: user._id });
+
+  if (!rent) {
+    const error = Error('No matching operation found');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  if (!rent.status === 'request') {
+    const error = Error('You cannot update a confirmed rent operation');
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const result = await rent.updateOne(data);
+  return await Rent.findOne({ _id: id });
 }
 
 async function AcceptRent(user, id) {
@@ -85,6 +125,22 @@ async function AcceptRent(user, id) {
   }
 
   const result = await rent.updateOne({ accepted: true, type: 'operation' });
+  return result.modifiedCount > 0;
+}
+
+async function CancelRent(user, id) {
+  const rent = await Rent.findOne({
+    _id: id,
+    $or: [{ owner: user._id }, { client: user._id }],
+  });
+
+  if (!rent) {
+    const error = Error('No matching operation found');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const result = await rent.updateOne({ accepted: false, type: 'cancelled' });
   return result.modifiedCount > 0;
 }
 
@@ -154,7 +210,10 @@ function validateRentData(values) {
 
 module.exports = {
   ListRents,
+  GetActiveRequest,
   CreateRent,
-  AcceptRent,
+  EditRent,
   DeleteRent,
+  AcceptRent,
+  CancelRent,
 };

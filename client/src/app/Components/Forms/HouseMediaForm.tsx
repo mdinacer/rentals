@@ -1,4 +1,5 @@
 import { Control, FieldValues, useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { House } from '../../models/house';
 import MediaDropZone from './MediaDropZone';
 
@@ -14,10 +15,11 @@ export default function HouseMediaForm({
   images,
 }: HouseMediaProps) {
   const { control } = useFormContext();
+  const { t } = useTranslation(['house_images_form']);
   return (
     <div className='flex flex-col gap-4 '>
       <div className='flex flex-col w-full bg-gray-200 dark:bg-slate-600  border-b-4 border-b-teal-500'>
-        <p className=' font-Oswald text-xl font-thin px-5 py-2'>Cover</p>
+        <p className=' font-Oswald text-xl font-thin px-5 py-2'>{t('cover')}</p>
         {(cover || house) && (
           <div className='flex items-center  h-auto w-full '>
             {cover ? (
@@ -39,7 +41,9 @@ export default function HouseMediaForm({
       </div>
 
       <div className='flex flex-col w-full bg-gray-200 dark:bg-slate-600 border-b-4 border-b-teal-500'>
-        <p className=' font-Oswald text-xl font-thin px-5 py-2'>Images</p>
+        <p className=' font-Oswald text-xl font-thin px-5 py-2 capitalize'>
+          {t('images')}
+        </p>
         {(images || house) && (
           <div className=' w-full overflow-y-auto '>
             {images ? (

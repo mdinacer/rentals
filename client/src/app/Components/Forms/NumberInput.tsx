@@ -17,21 +17,21 @@ export default function AppNumberInput(props: Props) {
 
   return (
     <div
-      className={`w-full border-b-4 bg-gray-200 dark:bg-slate-600  flex flex-col overflow-hidden pt-1 ${
-        fieldState.error ? 'border-b-red-500' : 'border-b-teal-500 '
+      className={`w-full border-b-4 bg-gray-200 dark:bg-slate-600  flex flex-col overflow-hidden px-2 pt-2 ${
+        fieldState.error
+          ? 'border-b-red-500'
+          : 'border-b-sky-500 dark:border-b-indigo-500'
       }`}
     >
       <div
-        className={` w-full flex flex-row lg:flex-col px-2 items-center lg:items-start  ${
-          props.vertical ? 'flex-col items-start' : 'flex-row items-center'
-        }`}
+        className={` w-full flex flex-row lg:flex-col px-2 items-center lg:items-start `}
       >
-        <p className='text-sm font-Montserrat text-gray-600 dark:text-gray-300'>
+        <p className='capitalize text-sm font-Montserrat text-gray-600 dark:text-gray-300'>
           {props.label}
         </p>
         <div className='flex flex-row items-center w-full'>
           <input
-            className={`border-none text-right lg:text-center placeholder:text-left flex-auto font-Montserrat text-lg my-auto lg:text-base placeholder:capitalize placeholder:text-gray-400   pt-0 w-full h-auto block bg-transparent focus-within:outline-none  text-black dark:text-white`}
+            className={`border-none text-right lg:text-center  placeholder:text-left flex-auto font-Montserrat text-lg my-auto lg:text-base placeholder:capitalize placeholder:text-gray-400   pt-0 w-full h-auto block bg-transparent focus-within:outline-none  text-black dark:text-white`}
             aria-label={props.label}
             type={'number'}
             min={props.min || 0}

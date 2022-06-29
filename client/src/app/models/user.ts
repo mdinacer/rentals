@@ -5,7 +5,7 @@ export interface User {
     username: string,
     email: string,
     token: string,
-    profile?: UserProfile,
+    profile: UserProfile,
     roles: string[]
 }
 export interface UserRegister {

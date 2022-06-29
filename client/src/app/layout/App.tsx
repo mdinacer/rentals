@@ -4,15 +4,34 @@ import { fetchCurrentUser } from '../slices/accountSlice';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingComponent from '../Components/Common/LoadingComponent';
-import { Link, Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import HomePage from '../pages/Home';
 import Header from '../Components/Header';
+import SocketClient from '../util/socketClient';
+
+export const Client = new SocketClient();
 
 function App() {
   const { user } = useAppSelector((state) => state.account);
   const [loading, setLoading] = useState(true);
   const dispatch = useAppDispatch();
   const { pathname } = useLocation();
+
+  const initSocket = useCallback(
+    (token?: string) => {
+      Client.connect(token);
+
+      Client.socket?.emit('join', {
+        name: user?.username || 'anonymous',
+        room: 'test',
+      });
+
+      Client.on('message', (value: any) => {
+        // console.log('message:', value);
+      });
+    },
+    [user]
+  );
 
   const initApp = useCallback(async () => {
     try {
@@ -26,18 +45,23 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    initApp().then(() => setLoading(false));
+    initApp().then(() => {
+      setLoading(false);
+    });
   }, [initApp]);
+
+  useEffect(() => {
+    initSocket(user?.token);
+    return () => {
+      Client.disconnect();
+    };
+  }, [initSocket, user]);
 
   if (loading) return <LoadingComponent message='Initializing Application' />;
   return (
-    <div className=' w-full  min-h-screen  flex  pt-[44px] text-black dark:text-white bg-gray-100  border-black dark:border-white dark:bg-black '>
+    <div className=' w-full  min-h-screen    text-black dark:text-white bg-gray-100 h-full  border-black dark:border-white dark:bg-black '>
       <ToastContainer position='bottom-right' hideProgressBar />
-      {/* {user ? (
-        <Header />
-      ) : (
-        pathname !== '/' && <div className='fixed top-0 left-0 p-10 '></div>
-      )} */}
+
       <Header />
       <Routes>
         <Route path='/' element={<HomePage />} />

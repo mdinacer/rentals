@@ -7,6 +7,7 @@ const {
   DeleteHouse,
   UpdateDetails,
   UpdatePrices,
+  AddToFavorites,
 } = require('../../models/house/house.model');
 
 const { getPagination, setPaginationHeader } = require('../../services/query');
@@ -40,15 +41,14 @@ async function httpCreateHouse(req, res) {
 async function httpEditHouse(req, res) {
   let cover = req.files.cover || null;
   let images = req.files.images || null;
-  console.log(req.params);
   const houseId = req.params.id;
   const house = await EditHouse(req.user, houseId, req.body, cover, images);
   return res.status(200).json(house);
 }
 
 async function httpDeleteHouse(req, res) {
-  const slug = req.params.slug;
-  await DeleteHouse(slug, req.user);
+  const houseId = req.params.id;
+  await DeleteHouse(houseId, req.user);
   return res.status(200).json({ success: true });
 }
 
@@ -64,6 +64,12 @@ async function httpUpdatePrices(req, res) {
   return res.status(200).json(house);
 }
 
+async function httpAddToFavorites(req, res) {
+  const houseId = req.params.id;
+  const isFav = await AddToFavorites(houseId, req.user);
+  return res.status(200).json({ isFav });
+}
+
 module.exports = {
   httpListHouses,
   httpGetHousesByUser,
@@ -73,4 +79,5 @@ module.exports = {
   httpDeleteHouse,
   httpUpdateDetails,
   httpUpdatePrices,
+  httpAddToFavorites,
 };

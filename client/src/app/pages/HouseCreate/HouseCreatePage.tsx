@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import agent from '../../api/agent';
 import LoadingComponent from '../../Components/Common/LoadingComponent';
 import HouseForm from '../../Components/Forms/HouseForm';
+import Layout from '../../layout/Layout';
 import { House } from '../../models/house';
 
 export default function HouseCreatePage() {
@@ -32,10 +33,10 @@ export default function HouseCreatePage() {
   }, [slug]);
 
   return (
-    <div className='w-full  flex-1 flex  '>
+    <Layout className='w-full  flex-1 flex  '>
       <div className='  lg:max-w-m w-full mx-auto  lg:px-5 flex-1 flex  items-stretch lg:items-center justify-center'>
         <HouseForm house={house} />
       </div>
-    </div>
+    </Layout>
   );
 }

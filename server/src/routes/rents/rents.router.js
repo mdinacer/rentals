@@ -4,26 +4,22 @@ const auth = require('../../middlewares/auth');
 
 const {
   httpListRents,
-  //httpGetRent,
+  httpGetActiveRequest,
   httpCreateRent,
+  httpEditRent,
   httpAcceptRent,
+  httpCancelRent,
   httpDeleteRent,
-  // httpEditRent,
-  // httpDeleteRent,
-  // httpUpdateDetails,
-  // httpUpdatePrices,
 } = require('./rents.controller');
 
 const rentsRouter = express.Router();
 
 rentsRouter.get('/', httpListRents);
-//rentsRouter.get('/:slug', httpGetRent);
-rentsRouter.post('/:slug', auth, httpCreateRent);
-rentsRouter.put('/:id/accept', auth, httpAcceptRent);
-rentsRouter.delete('/:id', auth, httpDeleteRent);
-// rentsRouter.put('/:slug', [auth, upload.fields(uploadFields)], httpEditRent);
-// rentsRouter.put('/:slug/details', auth, httpUpdateDetails);
-// rentsRouter.put('/:slug/prices', auth, httpUpdatePrices);
-// rentsRouter.delete('/:slug', auth, httpDeleteRent);
+rentsRouter.get('/:id/active', auth, httpGetActiveRequest); //id: HouseId
+rentsRouter.post('/:id', auth, httpCreateRent); //id: HouseId
+rentsRouter.put('/:id', auth, httpEditRent); //id: RentId
+rentsRouter.put('/:id/accept', auth, httpAcceptRent); //id: RentId
+rentsRouter.put('/:id/cancel', auth, httpCancelRent); //id: RentId
+rentsRouter.delete('/:id', auth, httpDeleteRent); //id: RentId
 
 module.exports = rentsRouter;

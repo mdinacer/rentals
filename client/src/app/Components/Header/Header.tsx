@@ -1,9 +1,18 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { MenuAlt3Icon, UserIcon, XIcon } from '@heroicons/react/solid';
+
+import { LogoutIcon } from '@heroicons/react/outline';
+import {
+  AnimatePresence,
+  motion,
+  useTransform,
+  useViewportScroll,
+} from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { signOut } from '../../slices/accountSlice';
 import { useAppDispatch, useAppSelector } from '../../store/configureStore';
 import useMediaQuery from '../../util/mediaQuery';
+import { useTranslation } from 'react-i18next';
 
 const logo = 'Kiraa';
 
@@ -13,6 +22,19 @@ export default function Header() {
   const isMobile = useMediaQuery('(max-width: 1024px)');
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
+  const { scrollYProgress } = useViewportScroll();
+  const opacity = useTransform(scrollYProgress, [0, 0.1], [0.2, 1]);
+
+  const { t } = useTranslation('header');
+
+  const links = [
+    { title: t('home_link'), path: '/' },
+    { title: t('browse_link'), path: '/houses' },
+    { title: t('about_link'), path: '/about' },
+    { title: t('contact_link'), path: '/contact' },
+  ];
+  const loginElement = { title: t('login_link'), path: '/account/login' };
+  const logoutElement = { title: t('logout_link'), path: '/' };
 
   useEffect(() => {
     if (!isMobile && open) {
@@ -21,47 +43,35 @@ export default function Header() {
   }, [isMobile, open]);
 
   return (
-    <div className='w-screen h-auto  bg-slate-900 fixed z-10 top-0 left-0 py-1 text-white flex items-center justify-between drop-shadow-md'>
-      <div className='container px-5 mx-auto flex items-center justify-between'>
+    <nav className='w-screen h-auto    fixed z-10 top-0 left-0 py-1 text-white flex items-center justify-between drop-shadow-md'>
+      <motion.div
+        style={{ opacity: opacity }}
+        className='absolute top-0 left-0 right-0 bottom-0 bg-slate-900'
+      />
+
+      <div className='w-full xl:container  px-5 mx-auto flex items-center justify-between relative'>
         <Link to={'/'}>
           <p className=' font-Oswald text-3xl'>{logo}</p>
         </Link>
 
         {!isMobile && (
-          <ul className=' list-none flex flex-row gap-x-5 items-center '>
+          <ul className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 list-none flex flex-row gap-x-5 items-center '>
             {links.map((link, index) => (
               <li
                 key={index}
                 className={`${
-                  pathname === link.path ? 'text-teal-500' : 'text-inherit'
+                  pathname === link.path
+                    ? ' opacity-100 font-bold'
+                    : 'text-inherit opacity-50 font-normal'
                 } hover:scale-110 transition-all duration-300`}
               >
                 <Link to={link.path}>
-                  <p
-                    className={
-                      ' font-Oswald text-base first-letter:text-xl uppercase font-thin'
-                    }
-                  >
+                  <p className={' font-Montserrat   text-lg uppercase'}>
                     {link.title}
                   </p>
                 </Link>
               </li>
             ))}
-            {/* {isAdmin && (
-              <li
-                className={`${
-                  pathname === '/admin' ? 'text-red-500' : 'text-inherit'
-                } hover:scale-110 transition-all duration-300`}
-              >
-                <Link
-                  onClick={() => setOpen(false)}
-                  to={'/admin'}
-                  className={'font-Oswald text-xl uppercase font-thin'}
-                >
-                  Admin Panel
-                </Link>
-              </li>
-            )} */}
           </ul>
         )}
 
@@ -71,7 +81,7 @@ export default function Header() {
               <Link to={'/profile'} className={'px-5'}>
                 <div className=' flex flex-row items-center justify-center gap-x-2'>
                   {user.profile?.image ? (
-                    <div className=' h-10 w-10 rounded-full overflow-hidden'>
+                    <div className=' h-10 w-10 rounded-md overflow-hidden'>
                       <img
                         src={user.profile.image}
                         alt={user.username}
@@ -79,54 +89,28 @@ export default function Header() {
                       />
                     </div>
                   ) : (
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      className='h-6 w-6'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      stroke='currentColor'
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
-                        d='M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z'
-                      />
-                    </svg>
+                    <UserIcon className='h-6 w-6' />
                   )}
-                  <p className=' text-base capitalize'>
-                    {user.profile?.fullName || user.username}
+                  <p className=' font-Oswald text-2xl font-thin capitalize'>
+                    {user.username}
                   </p>
                 </div>
               </Link>
-              <button
-                title='logout'
-                type='button'
+              <Link
+                to={logoutElement.path}
                 onClick={() => dispatch(signOut())}
                 className={
-                  ' font-Oswald text-base uppercase font-thin bg-red-500 py-0 px-3 rounded-md flex flex-row gap-x-2 items-center'
+                  ' font-Oswald font-thin text-base uppercase  bg-red-500 py-1 px-3 rounded-md flex flex-row gap-x-2 items-center'
                 }
               >
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  className='h-6 w-6'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1'
-                  />
-                </svg>
-                <p>Logout</p>
-              </button>
+                <LogoutIcon className='h-6 w-6' />
+                <p>{logoutElement.title}</p>
+              </Link>
             </div>
           ) : (
             <Link
               to={loginElement.path}
+              onClick={() => setOpen(false)}
               className={
                 ' font-Oswald text-base uppercase font-thin bg-red-500 py-1 px-3 rounded-md'
               }
@@ -144,20 +128,7 @@ export default function Header() {
               ' font-Oswald text-lg uppercase font-thin  py-1 px-3 rounded-md'
             }
           >
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              className='h-8 w-8'
-              fill='none'
-              viewBox='0 0 24 24'
-              stroke='currentColor'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth={2}
-                d='M4 6h16M4 12h16m-7 6h7'
-              />
-            </svg>
+            <MenuAlt3Icon className='h-8 w-8' />
           </button>
         )}
       </div>
@@ -170,9 +141,9 @@ export default function Header() {
             exit={{ y: '-100%' }}
             transition={{
               stiffness: 250,
-              duration: 0.5,
+              duration: 0.3,
             }}
-            className='flex absolute top-0 left-0 w-screen h-screen bg-slate-800 items-center justify-center'
+            className='flex absolute top-0 left-0 w-screen h-screen bg-gradient-to-br dark:from-slate-900 dark:to-black items-center justify-center'
           >
             <button
               title='menuButton'
@@ -182,20 +153,7 @@ export default function Header() {
                 'absolute top-0 right-0 m-5 font-Oswald text-lg uppercase font-thin  py-1 px-3 rounded-md'
               }
             >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                className='h-8 w-8'
-                fill='none'
-                viewBox='0 0 24 24'
-                stroke='currentColor'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  strokeWidth={2}
-                  d='M6 18L18 6M6 6l12 12'
-                />
-              </svg>
+              <XIcon className='h-8 w-8' />
             </button>
             <ul className=' list-none flex flex-col gap-y-3'>
               {links.map((link, index) => (
@@ -209,32 +167,20 @@ export default function Header() {
                   </Link>
                 </li>
               ))}
-              {/* {isAdmin && (
-                <li className='list-item'>
-                  <Link
-                    onClick={() => setOpen(false)}
-                    to={'/admin'}
-                    className={'font-Oswald text-4xl uppercase font-thin'}
-                  >
-                    Admin Panel
-                  </Link>
-                </li>
-              )} */}
 
               <li className='list-item'>
                 {user ? (
-                  <button
-                    title='logout'
-                    type='button'
+                  <Link
+                    to={logoutElement.path}
                     onClick={() => dispatch(signOut())}
                     className={
-                      ' font-Oswald w-full text-lg uppercase font-thin text-red-500 py-1  rounded-md flex flex-row gap-x-2 items-center'
+                      'mt-5 font-Oswald w-full text-lg uppercase font-thin text-red-500 py-1  rounded-md flex flex-row gap-x-2 items-center'
                     }
                   >
                     <p className={'font-Oswald text-4xl uppercase font-thin'}>
-                      Logout
+                      {logoutElement.title}
                     </p>
-                  </button>
+                  </Link>
                 ) : (
                   <Link
                     to={loginElement.path}
@@ -248,14 +194,6 @@ export default function Header() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </nav>
   );
 }
-
-const links = [
-  { title: 'Home', path: '/' },
-  { title: 'Browse', path: '/houses' },
-  { title: 'About', path: '/about' },
-  { title: 'Contact', path: '/contact' },
-];
-const loginElement = { title: 'Login', path: '/account/login' };

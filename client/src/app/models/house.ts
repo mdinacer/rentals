@@ -25,6 +25,7 @@ export interface House {
     availableFrom?: string,
     creationDate?: string,
     rating: number,
-    reviews?: HouseReview[]
+    reviews: HouseReview[],
+    isOwner: boolean
 }
 

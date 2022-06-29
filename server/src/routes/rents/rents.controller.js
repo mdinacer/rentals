@@ -1,8 +1,11 @@
 const {
   ListRents,
+  GetActiveRequest,
   CreateRent,
-  AcceptRent,
+  EditRent,
   DeleteRent,
+  AcceptRent,
+  CancelRent,
 } = require('../../models/rent/rent.model');
 
 const { getPagination } = require('../../services/query');
@@ -14,62 +17,48 @@ async function httpListRents(req, res) {
   return res.status(200).json(rents);
 }
 
-// async function httpGetRent(req, res) {
-//   const rent = await GetRent(req.params.slug);
-//   return res.status(200).json(rent);
-// }
+async function httpGetActiveRequest(req, res) {
+  const houseId = req.params.id;
+  const rent = await GetActiveRequest(req.user, houseId);
+  return res.status(200).json(rent);
+}
 
 async function httpCreateRent(req, res) {
-  const slug = req.params.slug;
-  const rent = await CreateRent(req.user, slug, req.body);
+  const houseId = req.params.id;
+  const rent = await CreateRent(req.user, houseId, req.body);
   return res.status(201).json(rent);
 }
 
+async function httpEditRent(req, res) {
+  const rentId = req.params.id;
+  const rent = await EditRent(req.user, rentId, req.body);
+  return res.status(200).json(rent);
+}
+
 async function httpAcceptRent(req, res) {
-  const id = req.params.id;
-  const rent = await AcceptRent(req.user, id);
+  const rentId = req.params.id;
+  const rent = await AcceptRent(req.user, rentId);
+  return res.status(200).json(rent);
+}
+
+async function httpCancelRent(req, res) {
+  const rentId = req.params.id;
+  const rent = await CancelRent(req.user, rentId);
   return res.status(200).json(rent);
 }
 
 async function httpDeleteRent(req, res) {
-  const id = req.params.id;
-  const rent = await DeleteRent(req.user, id);
+  const rentId = req.params.id;
+  const rent = await DeleteRent(req.user, rentId);
   return res.status(200).json(rent);
 }
 
-// async function httpEditRent(req, res) {
-//   const { cover, images } = req.files;
-//   const slug = req.params.slug;
-//   const rent = await EditRent(req.user, slug, req.body, cover, images);
-//   return res.status(200).json(rent);
-// }
-
-// async function httpDeleteRent(req, res) {
-//   const slug = req.params.slug;
-//   await DeleteRent(slug, req.user);
-//   return res.status(200).json({ success: true });
-// }
-
-// async function httpUpdateDetails(req, res) {
-//   const slug = req.params.slug;
-//   const rent = await UpdateDetails(req.user, slug, req.body);
-//   return res.status(200).json(rent);
-// }
-
-// async function httpUpdatePrices(req, res) {
-//   const slug = req.params.slug;
-//   const rent = await UpdatePrices(req.user, slug, req.body);
-//   return res.status(200).json(rent);
-// }
-
 module.exports = {
   httpListRents,
-  //httpGetRent,
+  httpGetActiveRequest,
   httpCreateRent,
-  httpAcceptRent,
+  httpEditRent,
   httpDeleteRent,
-  // httpEditRent,
-  // httpDeleteRent,
-  // httpUpdateDetails,
-  // httpUpdatePrices,
+  httpAcceptRent,
+  httpCancelRent,
 };

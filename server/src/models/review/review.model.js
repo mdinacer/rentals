@@ -1,8 +1,10 @@
 const { Review, validateReview } = require('./review.mongo');
 const { House } = require('../house/house.mongo');
-const { init, Task } = require('fawn');
 
-init(process.env.MONGO_URL, 'tempReviewCollection');
+const socketApi = require('../../services/socket');
+// const { init, Task } = require('fawn');
+
+// init(process.env.MONGO_URL, 'tempReviewCollection');
 
 async function GetReviewsByHouse(houseId, skip, limit) {
   const reviews = await Review.find({ house: houseId })
@@ -35,30 +37,35 @@ async function CreateReview(user, houseId, data) {
     error.statusCode = 404;
     throw error;
   }
+  const review = new Review({
+    ...data,
+    host: user._id,
+    hostName: `${user.profile.firstName} ${user.profile.lastName}`,
+    house: house._id,
+  });
 
-  // let review = await Review.findOne({ house: house.id, host: user.profile });
+  await review.save();
+  await House.findOneAndUpdate(
+    { _id: house.id },
+    {
+      $set: {
+        rating:
+          house.rating > 0
+            ? Math.ceil((house.rating + review.rating) / 2)
+            : review.rating,
+      },
+      $push: {
+        reviews: review._id,
+      },
+    }
+  );
 
-  // if (review) {
-  //   const error = Error('You have already posted a review');
-  //   error.statusCode = 404;
-  //   throw error;
-  // }
+  socketApi.io.in(house.slug).emit('addReview', review);
 
-  const review = new Review({ ...data, host: user.profile, house: house._id });
-
-  new Task()
-    .save('reviews', review)
-    .update(
-      'houses',
-      { _id: house.id },
-      {
-        $set: { rating: (house.rating + review.rating) / 2 },
-        $push: {
-          review: review._id,
-        },
-      }
-    )
-    .run();
+  // socketApi.io.emit('houseRequired', houseData);
+  // socket.broadcast
+  // .to(user.room)
+  // .emit('message', { user: 'admin', text: `${user.name}, has joined` });
 
   return review;
 }
@@ -66,7 +73,7 @@ async function CreateReview(user, houseId, data) {
 async function EditReview(user, reviewId, data) {
   validate(data);
 
-  let review = await Review.findOne({ _id: reviewId, host: user.profile });
+  let review = await Review.findOne({ _id: reviewId, host: user._id });
 
   if (!review) {
     const error = Error('No matching review found');

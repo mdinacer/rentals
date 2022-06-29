@@ -1,7 +1,8 @@
-import { UserProfile } from "./profile";
 
 export interface HouseReview {
-    host: UserProfile,
+    _id: string,
+    host: string,
+    hostName: string,
     rating: number,
     creationDate: string,
     lastUpdate: string,
