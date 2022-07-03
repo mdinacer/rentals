@@ -16,40 +16,36 @@ export default function AppNumberInput(props: Props) {
   });
 
   return (
-    <div
-      className={`w-full border-b-4 bg-gray-200 dark:bg-slate-600  flex flex-col overflow-hidden px-2 pt-2 ${
-        fieldState.error
-          ? 'border-b-red-500'
-          : 'border-b-sky-500 dark:border-b-indigo-500'
-      }`}
-    >
-      <div
-        className={` w-full flex flex-row lg:flex-col px-2 items-center lg:items-start `}
-      >
-        <p className='capitalize text-sm font-Montserrat text-gray-600 dark:text-gray-300'>
+    <div className={`w-full overflow-hidden`}>
+      <div className='py-1 min-w-[6rem]'>
+        <p className='text-base text-slate-600 dark:text-gray-100 capitalize'>
           {props.label}
         </p>
-        <div className='flex flex-row items-center w-full'>
-          <input
-            className={`border-none text-right lg:text-center  placeholder:text-left flex-auto font-Montserrat text-lg my-auto lg:text-base placeholder:capitalize placeholder:text-gray-400   pt-0 w-full h-auto block bg-transparent focus-within:outline-none  text-black dark:text-white`}
-            aria-label={props.label}
-            type={'number'}
-            min={props.min || 0}
-            {...props}
-            {...field}
-          />
-          {props.prefix && (
-            <p className='text-base whitespace-nowrap lg:text-sm pl-2 font-Montserrat dark:text-gray-300 '>
-              {props.prefix}
-            </p>
-          )}
-        </div>
+      </div>
+      <div
+        className={`flex flex-row items-center w-full border border-gray-400 focus:border-gray-400 ${
+          fieldState.error
+            ? 'border-red-400 focus:border-red-400'
+            : 'border-gray-400 focus:border-gray-400'
+        } `}
+      >
+        <input
+          className={`focus:outline-none border-none  border-gray-400 focus:border-none bg-transparent py-2 px-5 flex-auto form-input font-Montserrat placeholder:capitalize placeholder:text-gray-400 w-full `}
+          aria-label={props.label}
+          type={'number'}
+          min={props.min || 0}
+          {...props}
+          {...field}
+        />
+        {props.prefix && (
+          <p className='text-base whitespace-nowrap lg:text-sm pl-2  dark:text-gray-300 px-5'>
+            {props.prefix}
+          </p>
+        )}
       </div>
       {fieldState.error && (fieldState.isDirty || fieldState.isTouched) && (
-        <div className='py-1 px-5 bg-red-500 w-full'>
-          <p
-            className={`text-base lg:text-sm leading-none w-full text-center lg:text-left text-white `}
-          >
+        <div className='py-1 w-full'>
+          <p className={`w-full text-sm text-red-500 first-letter:uppercase `}>
             {fieldState.error.message}
           </p>
         </div>

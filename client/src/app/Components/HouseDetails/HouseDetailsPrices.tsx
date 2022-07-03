@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { HousePrice } from '../../models/housePrice';
 
 interface Props {
@@ -6,7 +7,7 @@ interface Props {
 
 export default function HouseDetailsPrices({ prices }: Props) {
   return (
-    <div className='grid gap-4 lg:grid-cols-4  lg:gap-3'>
+    <div className='grid gap-4 lg:grid-cols-2  lg:gap-3'>
       {prices.map((price, index) => (
         <HouseDetailsPriceItem key={index} price={price} />
       ))}
@@ -19,33 +20,22 @@ interface ItemProps {
 }
 
 function HouseDetailsPriceItem({ price }: ItemProps) {
+  const { t } = useTranslation(['prices_form']);
   return (
-    <div className='py-3 px-5 border border-sky-200 dark:border-indigo-900 bg-gradient-to-br from-sky-400 to-sky-600 dark:from-indigo-500 dark:to-indigo-800 text-white rounded-2xl drop-shadow-lg '>
-      <div className=' inline-flex w-full justify-between items-center'>
-        <p className='font-Montserrat text-base uppercase mb-2'>
-          {price.title || ''}
-        </p>
-        <p className='font-Montserrat text-xs uppercase mb-2'>
-          {price.installment ? 'Installment' : 'full payment'}
-        </p>
-      </div>
+    <div className='w-full flex flex-col lg:flex-row items-center justify-between pb-1 px-5 lg:bg-black text-white'>
+      <p className=' inline-flex items-end gap-x-1'>
+        <span className=' font-Oswald text-3xl'>{price.price.toFixed(2)}</span>
+        <span className=' font-Oswald text-lg font-thin'> DA</span>
 
-      <div className='flex flex-row  justify-between items-end w-full'>
-        <p>
-          <span className=' font-Oswald text-base lg:text-xl font-thin'>
-            {price.duration}
-          </span>
-          <span className='uppercase'>
-            {` ${price.durationType}${price.duration > 1 ? 's' : ''}`}
-          </span>
-        </p>
-        <p>
-          <span className=' font-Oswald text-base lg:text-2xl font-thin'>
-            {price.price.toFixed(2)}
-          </span>
-          <span className='uppercase'> DA</span>
-        </p>
-      </div>
+        <span className=' font-Oswald text-4xl font-thin'> / </span>
+
+        <span className=' font-Oswald text-2xl font-thin uppercase'>
+          {price.durationType}
+        </span>
+      </p>
+      <p className='font-Montserrat text-xs uppercase mt-2 text-center'>
+        {price.installment ? 'easy payment' : 'Full payment'}
+      </p>
     </div>
   );
 }

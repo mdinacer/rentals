@@ -9,7 +9,7 @@ import { House } from '../../models/house';
 export default function HouseCreatePage() {
   const { slug } = useParams<{ slug: string }>();
   const [house, setHouse] = useState<House | undefined>(undefined);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const fetchHouse = useCallback(async (slug: string) => {
     try {
@@ -31,6 +31,8 @@ export default function HouseCreatePage() {
       setHouse(undefined);
     };
   }, [slug]);
+
+  if (loading && !house) return <LoadingComponent />;
 
   return (
     <Layout className='w-full  flex-1 flex  '>

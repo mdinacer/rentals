@@ -1,5 +1,6 @@
 const {
   ListRents,
+  GetRent,
   GetActiveRequest,
   CreateRent,
   EditRent,
@@ -15,6 +16,12 @@ async function httpListRents(req, res) {
   const { skip, limit } = getPagination({ pageNumber, pageSize });
   const rents = await ListRents(skip, limit, params);
   return res.status(200).json(rents);
+}
+
+async function httpGetRent(req, res) {
+  const rentId = req.params.id;
+  const rent = await GetRent(req.user, rentId);
+  return res.status(200).json(rent);
 }
 
 async function httpGetActiveRequest(req, res) {
@@ -55,6 +62,7 @@ async function httpDeleteRent(req, res) {
 
 module.exports = {
   httpListRents,
+  httpGetRent,
   httpGetActiveRequest,
   httpCreateRent,
   httpEditRent,

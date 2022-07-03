@@ -13,27 +13,30 @@ export default function AppPasswordInput(props: Props) {
   const [visible, setVisible] = useState(false);
 
   return (
-    <div
-      className={`w-full  border-b-4 bg-gray-200 dark:bg-slate-600  flex flex-col  overflow-hidden pt-1 border-b-orange-500 ${
-        fieldState.error
-          ? 'border-b-red-500'
-          : 'border-b-sky-500 dark:border-b-indigo-500'
-      }`}
-    >
-      <div className='w-full px-5'>
-        <p className='text-sm font-Montserrat text-gray-600 dark:text-gray-300'>
-          {props.label}
-        </p>
-        <div className=' w-full inline-flex items-center '>
+    <div className={`w-full overflow-hidden flex flex-col`}>
+      <div className='w-full '>
+        <div className='py-1'>
+          <p className='text-base text-slate-600 dark:text-gray-100 capitalize'>
+            {props.label}
+          </p>
+        </div>
+        <div
+          className={`w-full inline-flex items-center border ${
+            fieldState.error
+              ? 'border-red-400 focus:border-red-400'
+              : 'border-gray-400 focus:border-gray-400'
+          }`}
+        >
           <input
-            className={` flex-auto font-Montserrat text-base my-auto lg:text-base placeholder:capitalize placeholder:text-gray-400   pb-2 pt-3  w-full h-auto block bg-transparent focus:outline-none focus:border-none focus:ring-0  text-black dark:text-white`}
+            className={`focus:outline-none border-none  bg-transparent py-2 px-5 flex-auto form-input font-Montserrat placeholder:capitalize placeholder:text-gray-400 w-full`}
             aria-label={props.label}
             type={visible ? 'text' : 'password'}
             {...props}
             {...field}
           />
           <button
-            className='flex-initial h-full px-2 text-gray-300'
+            tabIndex={-1}
+            className='flex-initial h-full py-2 px-2 text-gray-700'
             onClick={() => setVisible((prev) => !prev)}
           >
             {visible ? (

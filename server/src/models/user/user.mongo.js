@@ -38,6 +38,16 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+// userSchema.options.toJSON = {
+//   transform: function (doc, ret, options) {
+//     ret.id = doc._id;
+
+//     // delete ret._id;
+//     delete ret.__v;
+//     return ret;
+//   },
+// };
+
 userSchema.methods.generateAuthToken = function () {
   return jwt.sign(
     { _id: this._id, roles: this.roles.map((r) => r.name) },

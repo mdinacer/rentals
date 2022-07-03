@@ -23,7 +23,7 @@ export interface House {
     requests: Rent[];
     available: Boolean,
     availableFrom?: string,
-    creationDate?: string,
+    creationDate: string,
     rating: number,
     reviews: HouseReview[],
     isOwner: boolean

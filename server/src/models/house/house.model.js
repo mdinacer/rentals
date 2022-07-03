@@ -12,12 +12,13 @@ const { SaveImage, DeleteImage } = require('../../services/cloudinary');
 async function ListHouses(skip, limit, params) {
   const { orderBy, pagination, ...filters } = params;
   const query = await House.find(filters)
+    .populate('rents')
     .sort({
       name: 1,
     })
     .skip(skip)
     .limit(limit)
-    .select(' -rents -owner -images');
+    .select('  -owner -images');
 
   const totalCount = await House.countDocuments();
   return { items: query, totalCount };
@@ -25,7 +26,6 @@ async function ListHouses(skip, limit, params) {
 
 async function GetHousesByUser(user) {
   const houses = await House.find({ owner: user._id })
-
     .populate([
       {
         path: 'owner',
@@ -38,8 +38,7 @@ async function GetHousesByUser(user) {
     ])
     .sort({
       name: 1,
-    })
-    .select({ rents: 0 });
+    });
 
   return houses;
 }
@@ -97,11 +96,10 @@ async function GetHouse(slug, user) {
       mobile: house.owner.profile.mobile,
     },
     // rents: {
-    //   requests: house.rents?.filter((rent) => rent.status === 'request') || [],
-    //   operations:
-    //     house.rents?.filter((rent) => rent.status === 'operation') || [],
-    //   cancelled:
-    //     house.rents?.filter((rent) => rent.status === 'cancelled') || [],
+    requests: house.rents?.filter((rent) => rent.status === 'request') || [],
+    operations:
+      house.rents?.filter((rent) => rent.status === 'operation') || [],
+    cancelled: house.rents?.filter((rent) => rent.status === 'cancelled') || [],
     // },
   };
 }

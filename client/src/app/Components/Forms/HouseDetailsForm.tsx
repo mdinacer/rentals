@@ -7,7 +7,7 @@ export default function HouseDetailsForm() {
   const { t } = useTranslation(['shared']);
   const { control } = useFormContext();
   return (
-    <div className='grid grid-cols-1 lg:grid-cols-2 gap-4 '>
+    <div className='grid grid-cols-2 lg:grid-cols-2 gap-4 '>
       <div className=' lg:col-span-2'>
         <AppNumberInput
           autoComplete='off'
@@ -84,16 +84,18 @@ export default function HouseDetailsForm() {
         name='details.pool'
       />
 
-      <AppCheckbox
-        name='details.smokingFree'
-        control={control}
-        label={t('smoke_free')}
-      />
-      <AppCheckbox
-        name='details.petsAllowed'
-        control={control}
-        label={t('pets_allowed')}
-      />
+      <div className=' grid col-span-2 lg:grid-cols-2 gap-4'>
+        <AppCheckbox
+          name='details.smokingFree'
+          control={control}
+          label={t('smoke_free')}
+        />
+        <AppCheckbox
+          name='details.petsAllowed'
+          control={control}
+          label={t('pets_allowed')}
+        />
+      </div>
     </div>
   );
 }

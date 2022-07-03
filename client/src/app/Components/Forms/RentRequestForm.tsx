@@ -19,6 +19,7 @@ import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import agent from '../../api/agent';
 import { Rent } from '../../models/rent';
 import { RentStatus } from '../../models/RentStatus';
+import { useTranslation } from 'react-i18next';
 
 registerLocale('ar', ar);
 registerLocale('fr', fr);
@@ -45,6 +46,7 @@ export default function RentRequestForm({ house, request, onClose }: Props) {
   const [endDate, setEndDate] = useState<Date | null>(
     request ? new Date(request.startDate) : new Date()
   );
+  const { t } = useTranslation(['request_form']);
   const {
     control,
     setValue,
@@ -134,21 +136,21 @@ export default function RentRequestForm({ house, request, onClose }: Props) {
       </button>
       <div className='grid grid-flow-row gap-2 font-Oswald font-thin text-xl lg:text-2xl my-5 mb-10'>
         <div className=' flex flex-row lg:flex-row justify-between lg:items-end'>
-          <small className=' font-Montserrat text-lg min-w-[10rem]'>
-            Owner
+          <small className='capitalize font-Montserrat text-lg min-w-[10rem]'>
+            {t('owner')}
           </small>
           <p>{house.owner.fullName}</p>
         </div>
         <div className=' flex flex-row justify-between lg:items-end'>
-          <small className=' font-Montserrat text-lg min-w-[10rem]'>
-            House
+          <small className='capitalize  font-Montserrat text-lg min-w-[10rem]'>
+            {t('house')}
           </small>
           <p>{house.title}</p>
         </div>
 
         <div className=' flex flex-row justify-between lg:items-end'>
-          <small className=' font-Montserrat text-lg min-w-[10rem]'>
-            Address
+          <small className='capitalize font-Montserrat text-lg min-w-[10rem]'>
+            {t('address')}
           </small>
           <p>
             {house.address.city} - {house.address.province},{' '}
@@ -159,22 +161,22 @@ export default function RentRequestForm({ house, request, onClose }: Props) {
         {isEdit && (
           <>
             <div className=' flex flex-row justify-between lg:items-end'>
-              <small className=' font-Montserrat text-lg min-w-[10rem]'>
-                Request date
+              <small className=' first-letter:capitalize font-Montserrat text-lg min-w-[10rem]'>
+                {t('request_date')}
               </small>
               <p>{format(new Date(request.creationDate), 'dd/MM/yyyy')}</p>
             </div>
             <div className=' flex flex-row justify-between lg:items-end'>
-              <small className=' font-Montserrat text-lg min-w-[10rem]'>
-                Status
+              <small className='capitalize font-Montserrat text-lg min-w-[10rem]'>
+                {t('status')}
               </small>
               <p>{RentStatus[request.status as any]}</p>
             </div>
           </>
         )}
         <div className=' flex flex-row justify-between lg:items-end'>
-          <small className=' font-Montserrat text-lg min-w-[10rem]'>
-            Duration
+          <small className='capitalize font-Montserrat text-lg min-w-[10rem]'>
+            {t('duration')}
           </small>
           {startDate && endDate && startDate < endDate && (
             <p>
@@ -197,7 +199,7 @@ export default function RentRequestForm({ house, request, onClose }: Props) {
         <div className='grid gap-7'>
           <AppDatePicker
             //defaultValue={request ? new Date(request.startDate) : new Date()}
-            label='Start date'
+            label={t('start_date')}
             control={control}
             name='startDate'
             selectsStart
@@ -241,16 +243,16 @@ export default function RentRequestForm({ house, request, onClose }: Props) {
                 });
                 setEndDate(startDate || new Date());
               }}
-              className=' inline-flex items-center justify-center bg-red-600  hover:bg-red-500 col-span-2 lg:col-span-2 px-2 py-1 font-Oswald rounded-md font-thin text-lg text-white'
+              className=' inline-flex items-center justify-center bg-red-600  hover:bg-red-500 col-span-2 lg:col-span-2 px-2 py-1 font-Oswald rounded-md font-thin text-2xl capitalize text-white'
               type='button'
             >
               <RefreshIcon className='h-6 w-6 mr-2' />
-              Reset
+              {t('reset')}
             </button>
           </div>
           <AppDatePicker
             // defaultValue={request ? new Date(request.endDate) : new Date()}
-            label='End date'
+            label={t('end_date')}
             control={control}
             name='endDate'
             selectsEnd
@@ -263,9 +265,9 @@ export default function RentRequestForm({ house, request, onClose }: Props) {
 
         <div className='flex justify-between items-center mt-7 '>
           <input
-            className={`bg-red-500 cursor-pointer  text-white font-Oswald text-2xl font-thin px-5 py-1 rounded-md `}
+            className={`bg-red-500 cursor-pointer  text-white font-Oswald text-xl font-thin px-5 py-1 rounded-md uppercase `}
             type='button'
-            value={'Cancel'}
+            value={t('exit')}
             onClick={() => onClose(null)}
           />
           <input
@@ -273,10 +275,10 @@ export default function RentRequestForm({ house, request, onClose }: Props) {
               isValid
                 ? 'opacity-100 bg-sky-500 dark:bg-indigo-500 '
                 : 'opacity-50 bg-sky-700 dark:bg-indigo-700'
-            }  text-white font-Oswald text-2xl font-thin px-5 py-1 rounded-md `}
+            }  text-white font-Oswald text-xl font-thin px-5 py-1 rounded-md uppercase `}
             disabled={!isValid}
             type='submit'
-            value={isSubmitting ? 'Please wait' : 'Send'}
+            value={isSubmitting ? t('wait') : t('send')}
           />
         </div>
       </form>

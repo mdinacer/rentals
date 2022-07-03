@@ -42,9 +42,9 @@ function HouseDetailsReviewItem({ review, userId = '' }: ItemProps) {
   return (
     <motion.div
       layout
-      className='w-full min-h-[10vh] bg-gradient-to-br from-gray-200 py-2 dark:from-slate-800 dark:to-slate-900 to-gray-300   flex items-start flex-col rounded-md overflow-hidden '
+      className='w-full min-h-[10vh] bg-gradient-to-br from-gray-100 py-2 dark:from-slate-800 dark:to-slate-800 to-gray-200   flex items-start flex-col rounded-md overflow-hidden '
     >
-      <div className=' w-full flex flow-row justify-between items-center px-5 py-2 border-b-2 border-b-sky-500 dark:border-b-indigo-500'>
+      <div className=' w-full flex flow-row justify-between items-center px-5 py-2 border-b-2 border-b-gray-500 '>
         <div className=''>
           <p className=' font-Montserrat text-xl  lg:text-2xl font-thin'>
             {review.hostName}
@@ -62,7 +62,9 @@ function HouseDetailsReviewItem({ review, userId = '' }: ItemProps) {
 
         <div className=' inline-flex gap-x-1 items-end'>
           <StarIcon
-            className={`h-8 w-8 ${isOwner ? 'text-sky-500' : 'text-inherit'}`}
+            className={`h-8 w-8 ${
+              isOwner ? 'text-sky-500 dark:text-indigo-500' : 'text-inherit'
+            }`}
           />
           <p className=' font-Oswald text-3xl font-thin'>{review.rating}</p>
         </div>

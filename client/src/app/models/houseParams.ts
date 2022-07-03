@@ -15,7 +15,7 @@ export interface HouseParams {
 }
 
 
-export function getAxiosParams(houseParams: HouseParams) {
+export function getAxiosHouseParams(houseParams: HouseParams) {
     const params = new URLSearchParams();
     params.append("pageNumber", houseParams.pageNumber.toString());
     params.append("pageSize", houseParams.pageSize.toString());

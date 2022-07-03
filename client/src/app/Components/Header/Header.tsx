@@ -1,12 +1,7 @@
 import { MenuAlt3Icon, UserIcon, XIcon } from '@heroicons/react/solid';
 
 import { LogoutIcon } from '@heroicons/react/outline';
-import {
-  AnimatePresence,
-  motion,
-  useTransform,
-  useViewportScroll,
-} from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { signOut } from '../../slices/accountSlice';
@@ -22,8 +17,6 @@ export default function Header() {
   const isMobile = useMediaQuery('(max-width: 1024px)');
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
-  const { scrollYProgress } = useViewportScroll();
-  const opacity = useTransform(scrollYProgress, [0, 0.1], [0.2, 1]);
 
   const { t } = useTranslation('header');
 
@@ -43,12 +36,7 @@ export default function Header() {
   }, [isMobile, open]);
 
   return (
-    <nav className='w-screen h-auto    fixed z-10 top-0 left-0 py-1 text-white flex items-center justify-between drop-shadow-md'>
-      <motion.div
-        style={{ opacity: opacity }}
-        className='absolute top-0 left-0 right-0 bottom-0 bg-slate-900'
-      />
-
+    <nav className='w-screen h-auto  bg-gray-800 fixed z-10 top-0 left-0 py-1 text-white flex items-center justify-between drop-shadow-md'>
       <div className='w-full xl:container  px-5 mx-auto flex items-center justify-between relative'>
         <Link to={'/'}>
           <p className=' font-Oswald text-3xl'>{logo}</p>
@@ -143,7 +131,7 @@ export default function Header() {
               stiffness: 250,
               duration: 0.3,
             }}
-            className='flex absolute top-0 left-0 w-screen h-screen bg-gradient-to-br dark:from-slate-900 dark:to-black items-center justify-center'
+            className='flex absolute top-0 left-0 w-screen h-screen bg-gradient-to-br bg-gray-800 dark:from-slate-900 dark:to-black items-center justify-center'
           >
             <button
               title='menuButton'
@@ -172,7 +160,10 @@ export default function Header() {
                 {user ? (
                   <Link
                     to={logoutElement.path}
-                    onClick={() => dispatch(signOut())}
+                    onClick={() => {
+                      dispatch(signOut());
+                      setOpen(false);
+                    }}
                     className={
                       'mt-5 font-Oswald w-full text-lg uppercase font-thin text-red-500 py-1  rounded-md flex flex-row gap-x-2 items-center'
                     }
@@ -184,6 +175,7 @@ export default function Header() {
                 ) : (
                   <Link
                     to={loginElement.path}
+                    onClick={() => setOpen(false)}
                     className={'font-Oswald text-4xl uppercase font-thin'}
                   >
                     {loginElement.title}

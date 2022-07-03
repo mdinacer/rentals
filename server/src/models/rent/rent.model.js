@@ -8,39 +8,129 @@ init(process.env.MONGO_URL, 'tempRentsCollection');
 
 async function ListRents(skip, limit, params) {
   const { orderBy, ...filters } = params;
-  const query = Rent.find(filters);
+  const query = await Rent.find(filters)
+    .sort({ [orderBy]: -1 })
+    .populate([
+      {
+        path: 'owner',
+        select: 'profile',
+        populate: {
+          path: 'profile',
+          model: 'Profile',
+          select: [
+            '_id',
+            'fullName',
+            'firstName',
+            'lastName',
+            'address',
+            'email',
+            'mobile',
+            'image.pictureUrl',
+          ],
+        },
+      },
+      {
+        path: 'client',
+        select: 'profile',
+        populate: {
+          path: 'profile',
+          model: 'Profile',
+          select: [
+            '_id',
+            'fullName',
+            'firstName',
+            'lastName',
+            'address',
+            'email',
+            'mobile',
+            'image.pictureUrl',
+          ],
+        },
+      },
+      {
+        path: 'house',
+        select: ['title', 'type', 'address', 'cover.pictureUrl'],
+        populate: {
+          path: 'rents',
+          model: 'Rent',
+          select: ['active'],
+        },
+      },
+    ])
+    .skip(skip)
+    .limit(limit);
 
-  if (orderBy) {
-    switch (orderBy) {
-      case 'name':
-        query = query.sort({ name: 1 });
-        break;
-      case 'availability':
-        query = query.sort({ active: 1 });
-        break;
+  const totalCount = await Rent.countDocuments(filters);
+  return { items: query, totalCount };
+}
 
-      default:
-        break;
-    }
+async function GetRent(user, rentId) {
+  console.log(user);
+  const rent = await Rent.findOne({
+    _id: rentId,
+    $or: [{ owner: user._id }, { client: user._id }],
+  }).populate([
+    {
+      path: 'owner',
+      select: 'profile',
+      populate: {
+        path: 'profile',
+        model: 'Profile',
+        select: [
+          '_id',
+          'fullName',
+          'firstName',
+          'lastName',
+          'address',
+          'email',
+          'mobile',
+          'image.pictureUrl',
+        ],
+      },
+    },
+    {
+      path: 'client',
+      select: 'profile',
+      populate: {
+        path: 'profile',
+        model: 'Profile',
+        select: [
+          '_id',
+          'fullName',
+          'firstName',
+          'lastName',
+          'address',
+          'email',
+          'mobile',
+          'image.pictureUrl',
+        ],
+      },
+    },
+    {
+      path: 'house',
+      select: ['title', 'type', 'address', 'cover.pictureUrl'],
+      populate: {
+        path: 'rents',
+        model: 'Rent',
+        select: ['active'],
+      },
+    },
+    {
+      path: 'payments',
+      sort: { paymentDate: 1 },
+      select: ['creationDate', 'paymentDate', 'amount', 'type', 'received'],
+    },
+  ]);
+
+  if (!rent) {
+    const error = Error('No matching operation found');
+    error.statusCode = 404;
+    throw error;
   }
-
-  if (skip && limit) {
-    query = query.skip(skip).limit(limit);
-  }
-
-  const result = await query.select({
-    title: 1,
-    slug: 1,
-    catchPhrase: 1,
-    'cover.pictureUrl': 1,
-    details: 1,
-    address: 1,
-  });
-  return result;
+  return rent;
 }
 
 async function GetActiveRequest(user, houseId) {
-  console.log('user: ', user);
   const rent = await Rent.findOne({
     house: houseId,
     client: user._id,
@@ -52,7 +142,6 @@ async function GetActiveRequest(user, houseId) {
     error.statusCode = 404;
     throw error;
   }
-
   return rent;
 }
 
@@ -111,7 +200,7 @@ async function EditRent(user, id, data) {
     throw error;
   }
 
-  const result = await rent.updateOne(data);
+  await rent.updateOne(data);
   return await Rent.findOne({ _id: id });
 }
 
@@ -210,6 +299,7 @@ function validateRentData(values) {
 
 module.exports = {
   ListRents,
+  GetRent,
   GetActiveRequest,
   CreateRent,
   EditRent,

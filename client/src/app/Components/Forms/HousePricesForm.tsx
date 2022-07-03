@@ -3,9 +3,8 @@ import { motion } from 'framer-motion';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import AppCheckbox from './CheckBox';
-import AppDropDown from './DropDown';
+import AppDropDownInput from './DropDownInput';
 import AppNumberInput from './NumberInput';
-import TextInput from './TextInput';
 
 export default function HousePricesForm() {
   const { control } = useFormContext();
@@ -16,25 +15,24 @@ export default function HousePricesForm() {
   });
 
   const durations = [
-    { title: t('day'), value: 'day' },
-    { title: t('week'), value: 'week' },
-    { title: t('month'), value: 'month' },
+    { title: t('day_one'), value: 'day' },
+    { title: t('week_one'), value: 'week' },
+    { title: t('month_one'), value: 'month' },
   ];
 
   return (
     <div className=''>
-      <div className='w-full flex justify-end'>
+      <div className='w-full flex justify-end mb-5'>
         <button
-          className='mb-5 bg-sky-500 dark:bg-indigo-500 font-Oswald font-thin text-xl uppercase text-white  py-1 px-2 rounded-md ml-auto  inline-flex items-center justify-center'
+          className=' border border-gray-400 bg-green-500  uppercase text-gray-100  py-1 px-2 ml-auto  inline-flex items-center justify-center'
           type='button'
           onClick={() => append({ title: '', price: 0, duration: 0 })}
         >
-          <PlusIcon className='h-8 w-8 pr-2' />
-          {t('add')}
+          <PlusIcon className='h-6 w-6 ' />
         </button>
       </div>
-      <div className='lg:max-h-[50vh] max-h-[70vh] overflow-y-auto'>
-        <motion.div className=' grid gap-6  '>
+      <div className='lg:max-h-[60vh] max-h-[60vh] overflow-y-auto'>
+        <motion.div className='grid gap-6'>
           {fields.map((field, index) => (
             <motion.div
               layout
@@ -42,56 +40,32 @@ export default function HousePricesForm() {
               initial={{ opacity: 0, x: -200 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -200, transition: { duration: 1 } }}
-              className=' w-full  flex flex-col-reverse lg:flex-row gap-3  px-3 py-2 rounded-md'
+              className=' w-full  flex flex-col-reverse  gap-3  px-3 py-5 bg-gray-200 rounded-md overflow-hidden shadow-md '
             >
-              <div className='grid grid-flow-row  gap-2 flex-auto'>
-                <div className=' grid lg:grid-cols-3 grid-cols-1 gap-3'>
-                  <div className=' lg:col-span-2 '>
-                    <TextInput
-                      autoComplete='priceTitle'
-                      type='text'
-                      control={control}
-                      label={t('title')}
-                      name={`prices.${index}.title`}
-                      placeholder={t('title')}
-                    />
-                  </div>
-                  <AppNumberInput
-                    autoComplete='price'
-                    min={0}
-                    control={control}
-                    label={t('price')}
-                    name={`prices.${index}.price`}
-                    prefix='DA'
-                  />
-                </div>
-                <div className=' grid grid-cols-2 gap-3'>
-                  <AppNumberInput
-                    autoComplete='duration'
-                    min={0}
-                    control={control}
-                    label={t('duration')}
-                    name={`prices.${index}.duration`}
-                  />
-                  <AppDropDown
-                    autoComplete='durationType'
-                    items={durations}
-                    control={control}
-                    label={t('duration_type')}
-                    placeholder={t('duration_type')}
-                    name={`prices.${index}.durationType`}
-                  />
-                  <div className=' col-span-2'>
-                    <AppCheckbox
-                      name={`prices.${index}.installment`}
-                      label={t('installment')}
-                    />
-                  </div>
-                </div>
+              <div className='grid grid-flow-row  gap-4 flex-auto'>
+                <AppDropDownInput
+                  autoComplete='durationType'
+                  items={durations}
+                  control={control}
+                  label={t('duration')}
+                  name={`prices.${index}.durationType`}
+                />
+                <AppNumberInput
+                  autoComplete='price'
+                  min={0}
+                  control={control}
+                  label={t('price')}
+                  name={`prices.${index}.price`}
+                  prefix='DA'
+                />
+                <AppCheckbox
+                  name={`prices.${index}.installment`}
+                  label={t('installment')}
+                />
               </div>
               <button
                 title='Remove price'
-                className='lg:px-2 ml-1 lg:bg-red-500 text-red-500 lg:text-white flex items-center justify-end lg:justify-center'
+                className='lg:px-2 ml-auto  text-gray-500 '
                 type='button'
                 onClick={() => remove(index)}
               >

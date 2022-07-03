@@ -3,6 +3,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { accountSlice } from "../slices/accountSlice";
 import { housesSlice } from "../slices/housesSlice";
 import { notificationsSlice } from "../slices/notificationsSlice";
+import { rentsSlice } from "../slices/rentsSlice";
 import SocketClient from "../util/socketClient";
 
 export const socket = new SocketClient()
@@ -11,6 +12,7 @@ export const store = configureStore({
     reducer: {
         account: accountSlice.reducer,
         houses: housesSlice.reducer,
+        rents: rentsSlice.reducer,
         notifications: notificationsSlice.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware(),

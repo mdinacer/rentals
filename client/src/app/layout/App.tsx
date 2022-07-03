@@ -66,6 +66,14 @@ function App() {
       <Routes>
         <Route path='/' element={<HomePage />} />
         <Route path={'/*'}>
+          <Route
+            path='test/:slug'
+            element={
+              <Suspense fallback={<div />}>
+                <TestPage />
+              </Suspense>
+            }
+          />
           <Route path='account'>
             <Route
               path='login'
@@ -102,6 +110,15 @@ function App() {
                 </Suspense>
               }
             />
+
+            <Route
+              path='edit/:slug'
+              element={
+                <Suspense fallback={<div />}>
+                  <HouseAddEdit />
+                </Suspense>
+              }
+            />
             <Route
               path=':slug'
               element={
@@ -121,25 +138,40 @@ function App() {
             />
           </Route>
 
-          <Route
-            path='profile'
-            element={
-              <Suspense fallback={<div />}>
-                <Profile />
-              </Suspense>
-            }
-          />
+          <Route path='profile'>
+            <Route
+              index
+              element={
+                <Suspense fallback={<div />}>
+                  <Profile />
+                </Suspense>
+              }
+            />
+
+            <Route
+              path='operations'
+              element={
+                <Suspense fallback={<div />}>
+                  <UserOperations />
+                </Suspense>
+              }
+            />
+          </Route>
         </Route>
       </Routes>
     </div>
   );
 }
 
+const TestPage = lazy(() => import('../pages/TestPage'));
 const Login = lazy(() => import('../pages/Account/LoginPage'));
 const Register = lazy(() => import('../pages/Account/RegisterPage'));
 const Houses = lazy(() => import('../pages/Houses'));
 const HouseDetails = lazy(() => import('../pages/HouseDetails'));
-const Profile = lazy(() => import('../pages/Profile'));
 const HouseAddEdit = lazy(() => import('../pages/HouseCreate'));
+const Profile = lazy(() => import('../pages/Profile'));
+const UserOperations = lazy(
+  () => import('../pages/Profile/UserOperationsPage')
+);
 
 export default App;

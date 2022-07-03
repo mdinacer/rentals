@@ -96,8 +96,8 @@ export default function HouseAddressForm() {
         disabled={busy}
         type='button'
         className={`${
-          busy ? 'bg-orange-500' : 'bg-sky-500 dark:bg-indigo-500'
-        } inline-flex justify-center font-Montserrat text-white py-1 rounded-sm items-center gap-x-1`}
+          busy ? 'bg-orange-500' : 'bg-gray-400 dark:bg-indigo-500'
+        } inline-flex justify-center font-Montserrat text-white py-1 rounded-sm items-center gap-x-1 first-letter:capitalize`}
         onClick={() => getBrowserLocation()}
       >
         <LocationMarkerIcon className='h-5 w-5' />

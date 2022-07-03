@@ -9,7 +9,7 @@ export default function DetailsListItem({ title, value, prefix }: Props) {
     <div className=' py-0 border-b  border-b-inherit '>
       {value ? (
         <div className='relative w-full flex flex-row justify-between items-end '>
-          <p className=' font-Oswald  font-thin text-sm lg:text-base uppercase '>
+          <p className=' font-Oswald  font-thin text-sm lg:text-lg uppercase '>
             {title}
           </p>
           <p className=' '>

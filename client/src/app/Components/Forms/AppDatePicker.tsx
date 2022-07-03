@@ -33,7 +33,7 @@ export default function AppDatePicker(props: Props) {
       }`}
     >
       <div className='w-full px-5'>
-        <p className='text-sm font-Montserrat text-gray-600 dark:text-gray-300'>
+        <p className=' first-letter:capitalize text-sm font-Montserrat text-gray-600 dark:text-gray-300'>
           {props.label}
         </p>
         <Controller

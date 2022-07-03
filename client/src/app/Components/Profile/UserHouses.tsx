@@ -37,8 +37,8 @@ export default function UserHouses({ user }: Props) {
 
   return (
     <div className=' w-full'>
-      <p className=' text-5xl font-Oswald font-thin mb-5'>Hosted Houses</p>
-      <div className='grid  lg:grid-cols-5 w-full gap-5 lg:px-5 '>
+      <p className=' text-3xl font-Oswald font-thin mb-5'>Hosted Houses</p>
+      <div className='grid  lg:grid-cols-2 w-full gap-5 lg:px-5 '>
         {houses.map((house, index) => (
           <UserHouseCard key={index} house={house} />
         ))}

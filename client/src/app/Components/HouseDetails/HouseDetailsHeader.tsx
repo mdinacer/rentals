@@ -48,7 +48,9 @@ export default function HouseDetailsHeader({ house }: Props) {
         alt={house.slug}
         className='absolute  top-0 left-0 bottom-0 right-0  h-full w-full object-cover lg:object-fill object-center'
       />
-      <div className='absolute top-0 left-0 right-0 bottom-0  bg-gradient-to-b from-transparent to-black ' />
+
+      <div className='absolute top-0 left-0 right-0 bottom-0  bg-gradient-to-t from-black ' />
+      <div className='absolute top-0 left-0 right-0 bottom-0  bg-gradient-to-t from-black    ' />
 
       <div className='relative w-full h-full justify-between flex flex-col px-5 lg:px-10 pb-5 lg:py-10'>
         <div className='flex flex-row justify-between items-center py-5 lg:py-2 '>

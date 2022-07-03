@@ -7,6 +7,7 @@ const housesRouter = require('./houses/houses.router');
 const rentsRouter = require('./rents/rents.router');
 const profilesRouter = require('./profiles/profiles.router');
 const reviewsRouter = require('./reviews/reviews.router');
+const paymentsRouter = require('./payments/payments.router');
 
 const api = express.Router();
 
@@ -16,6 +17,7 @@ api.use('/profiles', profilesRouter);
 api.use('/houses', housesRouter);
 api.use('/rents', rentsRouter);
 api.use('/reviews', reviewsRouter);
+api.use('/payments', paymentsRouter);
 
 api.delete('images/:id', async (req, res) => {
   const result = await DeleteImage(id);

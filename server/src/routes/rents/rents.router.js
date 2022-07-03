@@ -4,6 +4,7 @@ const auth = require('../../middlewares/auth');
 
 const {
   httpListRents,
+  httpGetRent,
   httpGetActiveRequest,
   httpCreateRent,
   httpEditRent,
@@ -14,7 +15,8 @@ const {
 
 const rentsRouter = express.Router();
 
-rentsRouter.get('/', httpListRents);
+rentsRouter.get('/', auth, httpListRents);
+rentsRouter.get('/:id', auth, httpGetRent); //id: RentId
 rentsRouter.get('/:id/active', auth, httpGetActiveRequest); //id: HouseId
 rentsRouter.post('/:id', auth, httpCreateRent); //id: HouseId
 rentsRouter.put('/:id', auth, httpEditRent); //id: RentId

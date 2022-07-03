@@ -9,7 +9,7 @@ import { User } from "../models/user";
 import { store } from "../store/configureStore";
 
 
-const sleep = () => new Promise(resolve => setTimeout(resolve, 1000));
+const sleep = () => new Promise(resolve => setTimeout(resolve, 0));
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 //axios.defaults.withCredentials = true;
@@ -156,7 +156,8 @@ const Reviews = {
 }
 
 const Rents = {
-    list: (houseId: string, params?: URLSearchParams) => requests.get<HouseReview[]>(`rents/${houseId}`, params),
+    list: (params?: URLSearchParams) => requests.get<Rent[]>(`rents/`, params),
+    details: (id: string) => requests.get<Rent>(`rents/${id}`),
     getActiveRequest: (houseId: string) => requests.get<Rent>(`rents/${houseId}/active`),
     create: (houseId: string, rent: any) => requests.post(`rents/${houseId}`, rent),
     update: (id: string, rent: any) => requests.put(`rents/${id}`, rent),

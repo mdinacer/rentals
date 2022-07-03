@@ -1,7 +1,7 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 import agent from "../api/agent";
 import { House } from "../models/house";
-import { HouseParams, getAxiosParams } from "../models/houseParams";
+import { HouseParams, getAxiosHouseParams } from "../models/houseParams";
 import { MetaData } from "../models/pagination";
 import { RootState } from "../store/configureStore";
 
@@ -21,7 +21,7 @@ export const fetchHousesAsync = createAsyncThunk<House[], void, { state: RootSta
     "house/fetchHousesAsync",
     async (_, thunkApi) => {
         const houseParams = thunkApi.getState().houses.houseParams;
-        const params = getAxiosParams(houseParams);
+        const params = getAxiosHouseParams(houseParams);
         try {
             const response = await agent.Houses.list(params);
 

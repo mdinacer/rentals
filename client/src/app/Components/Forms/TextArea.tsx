@@ -16,31 +16,27 @@ export default function AppTextArea(props: Props) {
   });
 
   return (
-    <div
-      className={`w-full  border-b-4 bg-gray-200 dark:bg-slate-600  pt-1 flex flex-col overflow-hidden  ${
-        fieldState.error
-          ? 'border-b-red-500'
-          : 'border-b-sky-500 dark:border-b-indigo-500'
-      }`}
-    >
-      <div className='w-full px-5'>
-        <p className='capitalize text-sm font-Montserrat text-gray-600 dark:text-gray-300'>
+    <div className={`w-full overflow-hidden flex flex-col`}>
+      <div className='py-1'>
+        <p className='text-base text-slate-600 dark:text-gray-100 capitalize'>
           {props.label}
         </p>
-        <textarea
-          rows={props.rows || 3}
-          className={`focus:outline-none focus:border-none focus:ring-0 border-none flex-auto font-Montserrat resize-none text-base my-auto lg:text-base placeholder:capitalize placeholder:text-gray-400   pb-2 pt-0  w-full h-auto block bg-transparent focus-within:outline-none  text-black dark:text-white`}
-          aria-label={props.label}
-          type={props.type}
-          {...props}
-          {...field}
-        />
       </div>
+      <textarea
+        rows={props.rows || 3}
+        className={`resize-none focus:outline-none border bg-transparent py-2 px-5 flex-auto form-input font-Montserrat placeholder:capitalize placeholder:text-gray-400 w-full  ${
+          fieldState.error
+            ? 'border-red-400 focus:border-red-400'
+            : 'border-gray-400 focus:border-gray-400'
+        }`}
+        aria-label={props.label}
+        type={props.type}
+        {...props}
+        {...field}
+      />
       {fieldState.error && (fieldState.isDirty || fieldState.isTouched) && (
-        <div className='py-1 px-5 bg-red-500 w-full'>
-          <p
-            className={`text-base lg:text-sm leading-none w-full text-center lg:text-left text-white `}
-          >
+        <div className='py-1 w-full'>
+          <p className={`w-full text-sm text-red-500 first-letter:uppercase `}>
             {fieldState.error.message}
           </p>
         </div>

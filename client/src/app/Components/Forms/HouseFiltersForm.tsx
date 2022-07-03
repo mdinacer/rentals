@@ -1,6 +1,6 @@
 import { FieldValues, useForm } from 'react-hook-form';
 import AppCheckbox from './CheckBox';
-import AppDropDown from './DropDown';
+import AppDropDownInput from './DropDownInput';
 import AppNumberInput from './NumberInput';
 import TextInput from './TextInput';
 
@@ -20,14 +20,13 @@ export default function HouseFiltersForm() {
       onSubmit={handleSubmit(handleSubmitData)}
       className='w-full h-full flex-1 grid grid-flow-row gap-5 '
     >
-      <AppDropDown
+      <AppDropDownInput
         autoComplete='type'
         type='text'
         control={control}
         label='House Type'
         initial='all'
         name='type'
-        placeholder='House Type'
         items={[
           { title: 'All', value: 'all' },
           { title: 'House', value: 'house' },
@@ -43,22 +42,20 @@ export default function HouseFiltersForm() {
         name='title'
         placeholder='Find a house'
       />
-      <AppDropDown
+      <AppDropDownInput
         autoComplete='province'
         type='search'
         control={control}
         label='Province'
         name='province'
-        placeholder='Province'
         items={[]}
       />
-      <AppDropDown
+      <AppDropDownInput
         autoComplete='city'
         type='search'
         control={control}
         label='City'
         name='city'
-        placeholder='City'
         items={[]}
       />
 

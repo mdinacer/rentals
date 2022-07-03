@@ -72,7 +72,7 @@ export default function HouseDetails() {
   }, [fetchHouse, slug]);
 
   useEffect(() => {
-    if (house) {
+    if (house && !house.isOwner) {
       fetchActiveRequest(house.id);
     }
 
@@ -136,34 +136,42 @@ export default function HouseDetails() {
         <HouseDetailsHeader house={house} />
 
         <div className='bg-black'>
-          <div className=' w-full bg-white  overflow-hidden dark:bg-[#222831] flex flex-col gap-y-5 lg:rounded-t-3xl  min-h-[50vh] lg:-translate-y-[3vh] py-10 lg:py-10 lg:px-10 px-5'>
-            <HouseOwnerDetails
-              slug={slug!}
-              isOwner={house.isOwner}
-              owner={house.owner}
-              onRequest={() => setOpenRequest(true)}
-              isEdit={!!activeRequest}
-              loadingRequest={loadingRequest}
-            />
-
-            <div className=' overflow-x-auto scrollbar-hide w-full max-w-[100vw] snap-x snap-mandatory'>
-              <HouseDetailsList
-                houseType={house.type}
-                houseDetails={house.details}
+          <div className=' w-full bg-white  overflow-hidden dark:bg-gradient-to-b dark:bg-black flex flex-col  lg:rounded-t-3xl  min-h-[50vh] lg:-translate-y-[3vh] py-10 lg:py-10 lg:px-0 px-0'>
+            <div className='px-10 mb-5'>
+              <HouseOwnerDetails
+                slug={slug!}
+                isOwner={house.isOwner}
+                owner={house.owner}
+                onRequest={() => setOpenRequest(true)}
+                isEdit={!!activeRequest}
+                loadingRequest={loadingRequest}
               />
             </div>
 
-            <HouseDetailsSection title={t('description')} className='py-3'>
-              <p className=' font-Montserrat'>{house.catchPhrase}</p>
+            <HouseDetailsSection
+              title={t('description')}
+              className=' py-5 lg:px-10 px-5 mb-5'
+            >
+              <p className=' font-Montserrat text-lg'>{house.catchPhrase}</p>
             </HouseDetailsSection>
 
-            <HouseDetailsSection title={t('prices')} className='py-5'>
+            <HouseDetailsSection
+              title={t('details')}
+              className=' overflow-x-auto overscroll-none scrollbar-hide snap-x snap-mandatory bg-gray-900 lg:px-10 px-5 py-5 dark:bg-gray-800 lg:bg-gray-200 lg:dark:bg-gray-800 shadow-inner  lg:text-inherit text-white'
+            >
+              <HouseDetailsList houseDetails={house.details} />
+            </HouseDetailsSection>
+
+            <HouseDetailsSection
+              title={t('prices')}
+              className='py-5 bg-gray-800 lg:bg-inherit dark:bg-gray-900 lg:dark:bg-gray-900 lg:text-inherit   text-white lg:px-10 px-5'
+            >
               <HouseDetailsPrices prices={house.prices} />
             </HouseDetailsSection>
 
             <HouseDetailsSection
               title={t('photos')}
-              className=' overscroll-x-none'
+              className=' overscroll-x-none lg:px-10 px-5 py-5 my-5'
             >
               <div className=' w-full max-w-[100vw] rounded-md overflow-auto max-h-[40vh] snap-x snap-mandatory overscroll-x-none scrollbar-hide'>
                 <ImageSlider house={house} />
@@ -172,7 +180,7 @@ export default function HouseDetails() {
 
             <HouseDetailsSection
               title={t('reviews')}
-              className='py-5 dark:lg:bg-transparent rounded-md '
+              className='py-5 lg:px-10 px-5'
             >
               <HouseDetailsReviews house={house} reviews={reviews} />
             </HouseDetailsSection>

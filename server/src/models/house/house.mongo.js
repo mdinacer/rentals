@@ -96,8 +96,12 @@ houseSchema.options.toJSON = {
     //     doc.rents?.filter((rent) => rent.status === 'operation') || [],
     //   cancelled: doc.rents?.filter((rent) => rent.status === 'cancelled') || [],
     // };
-    // ret.available = !doc.rents.some((rent) => rent.active);
-    // ret.availableFrom = doc.rents.filter((rent) => rent.active)[0]?.endDate;
+
+    if (doc.rents && doc.rents.length > 0) {
+      ret.available = !doc.rents.some((rent) => rent.active);
+      ret.availableFrom = doc.rents.filter((rent) => rent.active)[0]?.endDate;
+    }
+
     delete ret._id;
     delete ret.__v;
     return ret;
