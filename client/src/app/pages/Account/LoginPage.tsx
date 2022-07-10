@@ -48,7 +48,7 @@ export default function LoginPage() {
     <div className='py-20 h-screen w-screen flex items-center justify-center  dark:bg-slate-800 '>
       <div className='h-auto lg:p-20 p-5 w-full  drop-shadow-md rounded-md flex items-center justify-center'>
         <div className='w-full lg:max-w-md '>
-          <p className=' font-Oswald text-7xl text-center pb-10 uppercase'>
+          <p className=' font-Primary text-7xl text-center pb-10 uppercase'>
             Sing In
           </p>
 
@@ -76,8 +76,8 @@ export default function LoginPage() {
             <input
               disabled={!isValid}
               className={`${
-                isValid ? 'opacity-100 bg-teal-500 ' : 'opacity-50 bg-teal-800'
-              } cursor-pointer bg-gray-300  max-w-sm mx-auto w-full rounded-xl lg:rounded-full py-2 my-10 px-5 uppercase font-Oswald text-xl font-thin`}
+                isValid ? 'opacity-100  ' : 'opacity-70 '
+              } cursor-pointer bg-gray-900 text-white w-full py-2 my-10 px-5 uppercase font-Primary text-xl font-thin`}
               type='submit'
               value={isSubmitting ? 'Please wait' : 'Login'}
             />
@@ -85,9 +85,9 @@ export default function LoginPage() {
 
           <Link
             to={registerPath}
-            className='underline underline-offset-4 text-center lg:hover:text-teal-300'
+            className='underline underline-offset-4 text-center '
           >
-            <p className=' font-Montserrat text-lg '>Create a new account.</p>
+            <p className=' font-Secondary text-lg '>Create a new account.</p>
           </Link>
         </div>
       </div>

@@ -7,7 +7,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { signOut } from '../../slices/accountSlice';
 import { useAppDispatch, useAppSelector } from '../../store/configureStore';
 import useMediaQuery from '../../util/mediaQuery';
-import { useTranslation } from 'react-i18next';
 
 const logo = 'Kiraa';
 
@@ -18,16 +17,14 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
 
-  const { t } = useTranslation('header');
-
   const links = [
-    { title: t('home_link'), path: '/' },
-    { title: t('browse_link'), path: '/houses' },
-    { title: t('about_link'), path: '/about' },
-    { title: t('contact_link'), path: '/contact' },
+    { title: 'Home', path: '/' },
+    { title: 'Houses', path: '/houses' },
+    { title: 'About', path: '/about' },
+    { title: 'Contact', path: '/contact' },
   ];
-  const loginElement = { title: t('login_link'), path: '/account/login' };
-  const logoutElement = { title: t('logout_link'), path: '/' };
+  const loginElement = { title: 'Login', path: '/account/login' };
+  const logoutElement = { title: 'Logout', path: '/' };
 
   useEffect(() => {
     if (!isMobile && open) {
@@ -36,10 +33,10 @@ export default function Header() {
   }, [isMobile, open]);
 
   return (
-    <nav className='w-screen h-auto  bg-gray-800 fixed z-10 top-0 left-0 py-1 text-white flex items-center justify-between drop-shadow-md'>
+    <nav className='fixed top-0 left-0 w-screen h-auto  bg-black z-10  py-1 text-white flex items-center justify-between drop-shadow-md'>
       <div className='w-full xl:container  px-5 mx-auto flex items-center justify-between relative'>
         <Link to={'/'}>
-          <p className=' font-Oswald text-3xl'>{logo}</p>
+          <p className=' font-Primary text-3xl'>{logo}</p>
         </Link>
 
         {!isMobile && (
@@ -54,9 +51,7 @@ export default function Header() {
                 } hover:scale-110 transition-all duration-300`}
               >
                 <Link to={link.path}>
-                  <p className={' font-Montserrat   text-lg uppercase'}>
-                    {link.title}
-                  </p>
+                  <p className={' font-Secondary uppercase'}>{link.title}</p>
                 </Link>
               </li>
             ))}
@@ -79,7 +74,7 @@ export default function Header() {
                   ) : (
                     <UserIcon className='h-6 w-6' />
                   )}
-                  <p className=' font-Oswald text-2xl font-thin capitalize'>
+                  <p className=' font-Primary text-2xl font-thin capitalize'>
                     {user.username}
                   </p>
                 </div>
@@ -88,7 +83,7 @@ export default function Header() {
                 to={logoutElement.path}
                 onClick={() => dispatch(signOut())}
                 className={
-                  ' font-Oswald font-thin text-base uppercase  bg-red-500 py-1 px-3 rounded-md flex flex-row gap-x-2 items-center'
+                  ' font-Primary font-thin text-base uppercase  bg-red-500 py-1 px-3 rounded-md flex flex-row gap-x-2 items-center'
                 }
               >
                 <LogoutIcon className='h-6 w-6' />
@@ -100,7 +95,7 @@ export default function Header() {
               to={loginElement.path}
               onClick={() => setOpen(false)}
               className={
-                ' font-Oswald text-base uppercase font-thin bg-red-500 py-1 px-3 rounded-md'
+                ' font-Primary text-base uppercase font-thin bg-red-500 py-1 px-3 rounded-md'
               }
             >
               {loginElement.title}
@@ -108,16 +103,30 @@ export default function Header() {
           ))}
 
         {isMobile && (
-          <button
-            title='menuButton'
-            type='button'
-            onClick={() => setOpen((prev) => !prev)}
-            className={
-              ' font-Oswald text-lg uppercase font-thin  py-1 px-3 rounded-md'
-            }
-          >
-            <MenuAlt3Icon className='h-8 w-8' />
-          </button>
+          <div>
+            {user && (
+              <Link
+                to={'/profile'}
+                title='menuButton'
+                type='button'
+                className={
+                  ' font-Primary text-lg uppercase font-thin  py-1 px-3 rounded-md'
+                }
+              >
+                <UserIcon className='h-8 w-8' />
+              </Link>
+            )}
+            <button
+              title='menuButton'
+              type='button'
+              onClick={() => setOpen((prev) => !prev)}
+              className={
+                ' font-Primary text-lg uppercase font-thin  py-1 px-3 rounded-md'
+              }
+            >
+              <MenuAlt3Icon className='h-8 w-8' />
+            </button>
+          </div>
         )}
       </div>
 
@@ -138,7 +147,7 @@ export default function Header() {
               type='button'
               onClick={() => setOpen(false)}
               className={
-                'absolute top-0 right-0 m-5 font-Oswald text-lg uppercase font-thin  py-1 px-3 rounded-md'
+                'absolute top-0 right-0 m-5 font-Primary text-lg uppercase font-thin  py-1 px-3 rounded-md'
               }
             >
               <XIcon className='h-8 w-8' />
@@ -149,7 +158,7 @@ export default function Header() {
                   <Link
                     onClick={() => setOpen(false)}
                     to={link.path}
-                    className={'font-Oswald text-4xl uppercase font-thin'}
+                    className={'font-Primary text-4xl uppercase font-thin'}
                   >
                     {link.title}
                   </Link>
@@ -165,10 +174,10 @@ export default function Header() {
                       setOpen(false);
                     }}
                     className={
-                      'mt-5 font-Oswald w-full text-lg uppercase font-thin text-red-500 py-1  rounded-md flex flex-row gap-x-2 items-center'
+                      'mt-5 font-Primary w-full text-lg uppercase font-thin text-red-500 py-1  rounded-md flex flex-row gap-x-2 items-center'
                     }
                   >
-                    <p className={'font-Oswald text-4xl uppercase font-thin'}>
+                    <p className={'font-Primary text-4xl uppercase font-thin'}>
                       {logoutElement.title}
                     </p>
                   </Link>
@@ -176,7 +185,7 @@ export default function Header() {
                   <Link
                     to={loginElement.path}
                     onClick={() => setOpen(false)}
-                    className={'font-Oswald text-4xl uppercase font-thin'}
+                    className={'font-Primary text-4xl uppercase font-thin'}
                   >
                     {loginElement.title}
                   </Link>

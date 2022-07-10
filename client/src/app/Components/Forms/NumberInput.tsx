@@ -18,7 +18,7 @@ export default function AppNumberInput(props: Props) {
   return (
     <div className={`w-full overflow-hidden`}>
       <div className='py-1 min-w-[6rem]'>
-        <p className='text-base text-slate-600 dark:text-gray-100 capitalize'>
+        <p className='text-sm text-slate-600 dark:text-gray-100 capitalize'>
           {props.label}
         </p>
       </div>
@@ -30,7 +30,7 @@ export default function AppNumberInput(props: Props) {
         } `}
       >
         <input
-          className={`focus:outline-none border-none  border-gray-400 focus:border-none bg-transparent py-2 px-5 flex-auto form-input font-Montserrat placeholder:capitalize placeholder:text-gray-400 w-full `}
+          className={`focus:outline-none border-none  border-gray-400 focus:border-none bg-transparent py-2 px-5 flex-auto form-input font-Secondary placeholder:capitalize placeholder:text-gray-400 w-full `}
           aria-label={props.label}
           type={'number'}
           min={props.min || 0}

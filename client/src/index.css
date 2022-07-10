@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Island+Moments&family=Montserrat:wght@300;400;700&family=Oswald:wght@300;500&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@100;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -79,7 +81,7 @@ textarea:focus {
 }
 
 .react-datepicker__day-names {
-  @apply flex justify-around text-gray-400 font-thin font-Oswald text-center text-lg;
+  @apply flex justify-around text-gray-400 font-thin font-Primary text-center text-lg;
 }
 
 .react-datepicker__day-name {
@@ -99,7 +101,7 @@ textarea:focus {
 }
 
 .react-datepicker__day {
-  @apply mb-1 w-8 h-8 flex items-center justify-center py-1 text-lg font-thin font-Oswald leading-loose transition text-gray-700 rounded cursor-pointer;
+  @apply mb-1 w-8 h-8 flex items-center justify-center py-1 text-lg font-thin font-Primary leading-loose transition text-gray-700 rounded cursor-pointer;
 }
 
 .react-datepicker__day--disabled {

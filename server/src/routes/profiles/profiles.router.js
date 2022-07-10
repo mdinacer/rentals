@@ -12,7 +12,7 @@ const {
 const profilesRouter = express.Router();
 
 profilesRouter.get('/:id', httpGetProfile);
-profilesRouter.post('/', [auth, upload.single('file')], httpPostProfile);
-profilesRouter.put('/', [auth, upload.single('file')], httpPutProfile);
+profilesRouter.post('/', [auth, upload.single('image')], httpPostProfile);
+profilesRouter.put('/', [auth, upload.single('image')], httpPutProfile);
 
 module.exports = profilesRouter;

@@ -1,12 +1,10 @@
 import { useFormContext } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import AppDropDownInput from './DropDownInput';
 import AppTextArea from './TextArea';
 import TextInput from './TextInput';
 
 export default function HouseInfoForm() {
   const { control } = useFormContext();
-  const { t } = useTranslation(['shared', 'forms']);
   return (
     <div className='grid grid-flow-row gap-4'>
       <AppDropDownInput
@@ -17,8 +15,8 @@ export default function HouseInfoForm() {
         initial='house'
         name='type'
         items={[
-          { title: t('shared:house'), value: 'house' },
-          { title: t('shared:apartment'), value: 'apartment' },
+          { title: 'House', value: 'house' },
+          { title: 'Apartment', value: 'apartment' },
         ]}
       />
 
@@ -26,18 +24,18 @@ export default function HouseInfoForm() {
         autoComplete='title'
         type='text'
         control={control}
-        label={t('forms:title')}
+        label={'Title'}
         name='title'
-        placeholder={t('forms:title')}
+        placeholder={'Title'}
       />
       <AppTextArea
         autoComplete='catchPhrase'
         type='text'
         rows={6}
         control={control}
-        label={t('forms:description')}
+        label={'Description'}
         name='catchPhrase'
-        placeholder={t('forms:description')}
+        placeholder={'Description'}
       />
     </div>
   );

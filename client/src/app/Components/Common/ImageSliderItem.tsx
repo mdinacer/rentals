@@ -9,7 +9,7 @@ export default function ImageSliderItem({ image, handleOnClick }: Props) {
   return (
     <div
       onClick={() => handleOnClick(image)}
-      className='h-[30vh] lg:w-[40vw] w-[80vw] overflow-hidden rounded-md snap-center lg:hover:drop-shadow-md'
+      className='h-full lg:w-[30vw] w-[80vw] overflow-hidden rounded-md snap-center lg:hover:drop-shadow-md ml-3'
     >
       <img
         src={image.pictureUrl}

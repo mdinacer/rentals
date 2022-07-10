@@ -1,4 +1,4 @@
-import { CheckIcon, XIcon } from '@heroicons/react/solid';
+import { CheckIcon } from '@heroicons/react/solid';
 import { UseControllerProps, useController } from 'react-hook-form';
 
 interface Props extends UseControllerProps {
@@ -12,7 +12,10 @@ export default function AppCheckbox(props: Props) {
     defaultValue: false,
   });
   return (
-    <label className=' inline-flex items-center justify-start gap-x-2 w-full cursor-pointer border border-gray-400 focus:border-gray-400  '>
+    <label className=' px-5 inline-flex items-center justify-start gap-x-2 w-full cursor-pointer border border-gray-400 focus:border-gray-400  '>
+      <p className='flex-auto font-Secondary text-sm capitalize text-inherit dark:text-gray-300'>
+        {props.label}
+      </p>
       <input
         className={`form-checkbox hidden appearance-none`}
         aria-label={props.label}
@@ -21,19 +24,14 @@ export default function AppCheckbox(props: Props) {
         {...field}
       />
       <div
-        className={` flex items-center justify-center transition-all duration-300 text-white px-2 py-2 ${
-          field.value === true ? 'bg-green-500 ' : 'bg-red-500'
-        }`}
+        className={` flex items-center justify-center transition-all duration-300 px-2 py-1`}
       >
-        {field.value ? (
-          <CheckIcon className='h-6 w-6' />
-        ) : (
-          <XIcon className='h-6 w-6' />
-        )}
+        <CheckIcon
+          className={`h-6 w-6   ${
+            field.value === true ? ' opacity-100' : ' opacity-20'
+          }`}
+        />
       </div>
-      <p className='text-base capitalize text-inherit dark:text-gray-300'>
-        {props.label}
-      </p>
     </label>
   );
 }

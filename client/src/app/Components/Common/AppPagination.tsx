@@ -18,10 +18,10 @@ export default function AppPagination({ metaData, onPageChange }: Props) {
   }
 
   return (
-    <div className='border-b-4 px-5 pt-1 border-b-teal-500 w-auto h-auto'>
+    <div className='border-b-4 px-5 pt-1 border-b-yellow-500 dark:border-b-indigo-500 w-auto h-auto'>
       {metaData && (
         <div className='flex flex-col lg:flex-row justify-between items-center gap-y-2 lg:gap-y-0'>
-          <p className='font-Oswald font-thin text-lg lg:text-xl'>
+          <p className='font-Primary font-thin text-lg lg:text-xl'>
             Showing {(currentPage - 1) * pageSize + 1} to{' '}
             {currentPage * pageSize > totalCount
               ? totalCount
@@ -34,7 +34,7 @@ export default function AppPagination({ metaData, onPageChange }: Props) {
               forcePage={pageNumber - 1}
               pageClassName='font-thin'
               activeClassName='font-normal text-orange-500'
-              pageLinkClassName={'p-2 font-Oswald  text-inherit text-xl'}
+              pageLinkClassName={'p-2 font-Primary  text-inherit text-xl'}
               breakLabel='...'
               nextLabel={<ChevronRightIcon className='h-6 w-6' />}
               onPageChange={({ selected }) => {

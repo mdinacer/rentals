@@ -33,8 +33,8 @@ housesRouter.get('/me', auth, httpGetHousesByUser);
 housesRouter.get('/:slug', httpGetHouse);
 housesRouter.post('/', [auth, upload.fields(uploadFields)], httpCreateHouse);
 housesRouter.put('/:id', [auth, upload.fields(uploadFields)], httpEditHouse);
-housesRouter.put('/:id/details', auth, httpUpdateDetails);
-housesRouter.put('/:id/prices', auth, httpUpdatePrices);
+//housesRouter.put('/:id/details', auth, httpUpdateDetails);
+//housesRouter.put('/:id/prices', auth, httpUpdatePrices);
 housesRouter.delete('/:id', auth, httpDeleteHouse);
 housesRouter.put('/:id/fav', auth, httpAddToFavorites);
 

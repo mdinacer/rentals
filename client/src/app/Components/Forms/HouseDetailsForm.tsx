@@ -1,10 +1,7 @@
 import { useFormContext } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import AppCheckbox from './CheckBox';
 import AppNumberInput from './NumberInput';
 
 export default function HouseDetailsForm() {
-  const { t } = useTranslation(['shared']);
   const { control } = useFormContext();
   return (
     <div className='grid grid-cols-2 lg:grid-cols-2 gap-4 '>
@@ -13,8 +10,8 @@ export default function HouseDetailsForm() {
           autoComplete='off'
           control={control}
           min={0}
-          label={t('area')}
-          name='details.area'
+          label={'Area'}
+          name='area'
           prefix='m²'
         />
       </div>
@@ -22,7 +19,7 @@ export default function HouseDetailsForm() {
         initial={0}
         autoComplete='off'
         control={control}
-        label={t('floors')}
+        label={'Floors'}
         min={0}
         name='details.floors'
       />
@@ -30,7 +27,7 @@ export default function HouseDetailsForm() {
         initial={0}
         autoComplete='off'
         control={control}
-        label={t('room_other')}
+        label={'Rooms'}
         min={1}
         name='details.rooms'
       />
@@ -40,14 +37,14 @@ export default function HouseDetailsForm() {
         autoComplete='off'
         control={control}
         min={1}
-        label={t('bed_other')}
+        label={'Beds'}
         name='details.beds'
       />
       <AppNumberInput
         initial={0}
         autoComplete='off'
         control={control}
-        label={t('bath_other')}
+        label={'Baths'}
         min={0}
         name='details.baths'
       />
@@ -55,7 +52,7 @@ export default function HouseDetailsForm() {
         initial={0}
         autoComplete='off'
         control={control}
-        label={t('kitchen_other')}
+        label={'Kitchens'}
         min={0}
         name='details.kitchens'
       />
@@ -63,7 +60,7 @@ export default function HouseDetailsForm() {
         initial={0}
         autoComplete='off'
         control={control}
-        label={t('garden_other')}
+        label={'Gardens'}
         min={0}
         name='details.garden'
       />
@@ -71,7 +68,7 @@ export default function HouseDetailsForm() {
         initial={0}
         autoComplete='off'
         control={control}
-        label={t('parking_other')}
+        label={'Parkings'}
         min={0}
         name='details.parking'
       />
@@ -79,23 +76,10 @@ export default function HouseDetailsForm() {
         initial={0}
         autoComplete='off'
         control={control}
-        label={t('pool_other')}
+        label={'Pools'}
         min={0}
         name='details.pool'
       />
-
-      <div className=' grid col-span-2 lg:grid-cols-2 gap-4'>
-        <AppCheckbox
-          name='details.smokingFree'
-          control={control}
-          label={t('smoke_free')}
-        />
-        <AppCheckbox
-          name='details.petsAllowed'
-          control={control}
-          label={t('pets_allowed')}
-        />
-      </div>
     </div>
   );
 }

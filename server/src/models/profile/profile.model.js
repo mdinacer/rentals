@@ -62,7 +62,7 @@ async function EditProfile(user, data, file) {
     data.image = result;
   }
   await profile.updateOne(data);
-  return profile;
+  return await Profile.findOne({ user: user._id });
 }
 
 function validateProfileData(values) {

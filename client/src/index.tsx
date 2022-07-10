@@ -7,7 +7,7 @@ import { createBrowserHistory } from 'history';
 import { HistoryRouter } from './app/layout/HistoryRouter';
 import { Provider } from 'react-redux';
 import { store } from './app/store/configureStore';
-import('./i18n');
+//import('./i18n');
 
 export const history = createBrowserHistory();
 

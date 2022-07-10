@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const helmet = require('helmet');
 const cors = require('cors');
 var bodyParser = require('body-parser');
 const errorMiddleware = require('./middlewares/error');
@@ -9,6 +10,8 @@ const morgan = require('morgan');
 const api = require('./routes/api');
 
 const app = express();
+
+app.use(helmet());
 
 // parse various different custom JSON types as JSON
 app.use(bodyParser.json({ type: 'application/*+json' }));

@@ -1,3 +1,4 @@
+import { MenuAlt4Icon } from '@heroicons/react/solid';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import OperationsFilters from '../../Components/Profile/OperationsFilters';
@@ -6,12 +7,10 @@ import RentDetails from '../../Components/RentDetails/RentDetails';
 import useRents from '../../hooks/useRents';
 import Layout from '../../layout/Layout';
 import { Rent } from '../../models/rent';
-import { useAppSelector, useAppDispatch } from '../../store/configureStore';
 
 export default function UserOperationsPage() {
-  const { user } = useAppSelector((state) => state.account);
+  const [visible, setVisible] = useState(false);
   const { rents } = useRents();
-  const dispatch = useAppDispatch();
   const [selectedItem, setSelectedItem] = useState<Rent | undefined>(undefined);
 
   const handleSelect = (item: Rent) => {
@@ -22,10 +21,27 @@ export default function UserOperationsPage() {
     <>
       <Layout className='dark:bg-gray-900'>
         <div className='container mx-auto px-5 flex flex-col'>
-          <p className=' font-Oswald text-4xl font-thin my-10'>Operations</p>
-          <div className='mb-10'>
-            <OperationsFilters />
+          <div className=' w-full inline-flex justify-between items-center'>
+            <p className=' font-Primary text-4xl font-thin my-10'>Operations</p>
+            <button
+              onClick={() => setVisible((prev) => !prev)}
+              title='menuButton'
+              type='button'
+              className={
+                'inline-flex items-center gap-x-1 font-Primary text-lg uppercase font-thin  py-1 px-3 rounded-md'
+              }
+            >
+              <MenuAlt4Icon className='h-8 w-8' />
+              <span className=''>Filters</span>
+            </button>
           </div>
+
+          {visible && (
+            <div className='mb-10'>
+              <OperationsFilters />
+            </div>
+          )}
+
           <div>
             <OperationsList rents={rents} onSelect={handleSelect} />
           </div>

@@ -4,7 +4,9 @@ import { useAppSelector, useAppDispatch } from '../store/configureStore';
 
 export default function useHouses() {
   const houses = useAppSelector(houseSelectors.selectAll);
-  const { housesLoaded, metaData } = useAppSelector((state) => state.houses);
+  const { housesLoaded, metaData, houseParams } = useAppSelector(
+    (state) => state.houses
+  );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -14,6 +16,7 @@ export default function useHouses() {
   }, [dispatch, houses, housesLoaded]);
   return {
     houses,
+    houseParams,
     housesLoaded,
     metaData,
   };

@@ -1,13 +1,11 @@
 import { LocationMarkerIcon } from '@heroicons/react/solid';
 import { useFormContext } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import usePositions from '../../hooks/usePositions';
 import TextInput from './TextInput';
 
 export default function HouseAddressForm() {
   const { control, setValue } = useFormContext();
   const { busy, serviceState, getCurrentLocation } = usePositions();
-  const { t } = useTranslation(['shared']);
 
   async function getBrowserLocation() {
     const location = await getCurrentLocation();
@@ -54,42 +52,42 @@ export default function HouseAddressForm() {
           autoComplete='country'
           type='text'
           control={control}
-          label={t('country_one')}
+          label={'Country'}
           name='address.country'
-          placeholder={t('country_one')}
+          placeholder={'Country'}
         />
         <TextInput
           autoComplete='province'
           type='text'
           control={control}
-          label={t('province_one')}
+          label={'Province'}
           name='address.province'
-          placeholder={t('province_one')}
+          placeholder={'Province'}
         />
         <TextInput
           autoComplete='city'
           type='text'
           control={control}
-          label={t('city_one')}
+          label={'City'}
           name='address.city'
-          placeholder={t('city_one')}
+          placeholder={'City'}
         />
       </div>
       <TextInput
         autoComplete='address'
         type='text'
         control={control}
-        label={t('address_one')}
+        label={'Address'}
         name='address.address1'
-        placeholder={t('address_one')}
+        placeholder={'Address'}
       />
       <TextInput
         autoComplete='address2'
         type='text'
         control={control}
-        label={`${t('address_one')} 2`}
+        label={'Address 2'}
         name='address.address2'
-        placeholder={`${t('address_one')} 2`}
+        placeholder={'Address 2 (optional)'}
       />
 
       <button
@@ -97,13 +95,13 @@ export default function HouseAddressForm() {
         type='button'
         className={`${
           busy ? 'bg-orange-500' : 'bg-gray-400 dark:bg-indigo-500'
-        } inline-flex justify-center font-Montserrat text-white py-1 rounded-sm items-center gap-x-1 first-letter:capitalize`}
+        } inline-flex justify-center font-Secondary text-white py-1 rounded-sm items-center gap-x-1 first-letter:capitalize`}
         onClick={() => getBrowserLocation()}
       >
         <LocationMarkerIcon className='h-5 w-5' />
-        {busy ? t('loading') : t('gps')}
+        {busy ? 'Loading' : 'GPS Location'}
       </button>
-      <p className=' font-Montserrat text-sm text-center text-gray-600'>
+      <p className=' font-Secondary text-sm text-center text-gray-600'>
         {serviceState?.message}
       </p>
     </div>

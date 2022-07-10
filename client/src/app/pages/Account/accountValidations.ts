@@ -10,7 +10,10 @@ export const loginValidationSchema = yup.object({
 });
 
 export const registerValidationSchema = yup.object({
-    fullName: yup.string().required("User full name is required"),
+    // profile: yup.object({
+    //     firstName: yup.string().required("User full name is required"),
+    //     lastName: yup.string().required("User full name is required"),
+    // }),
     username: yup.string().required("Username is required"),
     email: yup.string().email().required("Email is required"),
     password: yup

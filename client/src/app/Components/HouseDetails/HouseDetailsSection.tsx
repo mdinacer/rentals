@@ -10,10 +10,8 @@ export default function HouseDetailsSection({
   className,
 }: Props) {
   return (
-    <div className={`lg:mb-0 ${className}`}>
-      <p className=' font-Oswald text-3xl lg:text-4xl font-thin  mb-5  uppercase'>
-        {title}
-      </p>
+    <div className={`${className} w-full`}>
+      <p className=' font-Raleway text-xl mb-2'>{title}</p>
       {children}
     </div>
   );

@@ -70,7 +70,7 @@ export default function OperationsFilters() {
         <button
           type='button'
           onClick={handleResetData}
-          className='rounded-md w-full lg:w-auto cursor-pointer bg-red-700 text-white font-Oswald text-xl font-thin px-5 py-1'
+          className='w-full lg:w-auto cursor-pointer  border font-Primary text-xl font-thin px-5 py-1'
         >
           Reset
         </button>
@@ -96,4 +96,5 @@ const statusItems = [
   { title: 'Pending', value: 'request' },
   { title: 'Accepted', value: 'operation' },
   { title: 'Cancelled', value: 'cancelled' },
+  { title: 'Rejected', value: 'rejected' },
 ];

@@ -18,13 +18,13 @@ export default function AppTextArea(props: Props) {
   return (
     <div className={`w-full overflow-hidden flex flex-col`}>
       <div className='py-1'>
-        <p className='text-base text-slate-600 dark:text-gray-100 capitalize'>
+        <p className='text-sm text-slate-600 dark:text-gray-100 capitalize'>
           {props.label}
         </p>
       </div>
       <textarea
         rows={props.rows || 3}
-        className={`resize-none focus:outline-none border bg-transparent py-2 px-5 flex-auto form-input font-Montserrat placeholder:capitalize placeholder:text-gray-400 w-full  ${
+        className={`resize-none focus:outline-none border bg-transparent py-2 px-5 flex-auto form-input font-Secondary placeholder:capitalize placeholder:text-gray-400 w-full  ${
           fieldState.error
             ? 'border-red-400 focus:border-red-400'
             : 'border-gray-400 focus:border-gray-400'

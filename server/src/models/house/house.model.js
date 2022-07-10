@@ -10,8 +10,21 @@ const pick = require('lodash/pick');
 const { SaveImage, DeleteImage } = require('../../services/cloudinary');
 
 async function ListHouses(skip, limit, params) {
-  const { orderBy, pagination, ...filters } = params;
+  const { orderBy, minPrice, maxPrice, pagination, ...filters } = params;
+
+  const priceFilters = [];
+  if (minPrice) {
+    filters['price.price'] = { $gte: minPrice };
+    priceFilters.push({ 'price.price': { $gte: minPrice } });
+  }
+
+  if (maxPrice) {
+    filters['price.price'] = { $lte: maxPrice };
+    priceFilters.push({ 'price.price': { $lte: maxPrice } });
+  }
+
   const query = await House.find(filters)
+    //.and(priceFilters)
     .populate('rents')
     .sort({
       name: 1,
@@ -69,14 +82,16 @@ async function GetHouse(slug, user) {
 
   const houseData = pick(house, [
     'id',
+    'area',
     'slug',
     'title',
     'type',
     'catchPhrase',
     'cover',
     'images',
-    'prices',
+    'price',
     'details',
+    'services',
     'address',
     'rating',
     'reviews',
@@ -94,13 +109,12 @@ async function GetHouse(slug, user) {
       image: house.owner.profile.image.pictureUrl,
       email: house.owner.profile.email,
       mobile: house.owner.profile.mobile,
+      address: house.owner.profile.address,
     },
-    // rents: {
-    requests: house.rents?.filter((rent) => rent.status === 'request') || [],
-    operations:
-      house.rents?.filter((rent) => rent.status === 'operation') || [],
-    cancelled: house.rents?.filter((rent) => rent.status === 'cancelled') || [],
-    // },
+    // requests: house.rents?.filter((rent) => rent.status === 'request') || [],
+    // operations:
+    //   house.rents?.filter((rent) => rent.status === 'operation') || [],
+    // cancelled: house.rents?.filter((rent) => rent.status === 'cancelled') || [],
   };
 }
 
@@ -199,28 +213,28 @@ async function UpdateDetails(user, slug, data) {
   return house.details;
 }
 
-async function UpdatePrices(user, slug, values) {
-  for (const value of values) {
-    const { error: validationError } = validatePrice(value);
+// async function UpdatePrices(user, slug, values) {
+//   for (const value of values) {
+//     const { error: validationError } = validatePrice(value);
 
-    if (validationError) {
-      const error = Error(validationError.details[0].message);
-      error.statusCode = 400;
-      throw error;
-    }
-  }
+//     if (validationError) {
+//       const error = Error(validationError.details[0].message);
+//       error.statusCode = 400;
+//       throw error;
+//     }
+//   }
 
-  const house = await House.findOne({ slug: slug, owner: user._id });
+//   const house = await House.findOne({ slug: slug, owner: user._id });
 
-  if (!house) {
-    const error = Error('No matching house found');
-    error.statusCode = 404;
-    throw error;
-  }
+//   if (!house) {
+//     const error = Error('No matching house found');
+//     error.statusCode = 404;
+//     throw error;
+//   }
 
-  await house.updateOne({ prices: values });
-  return house.prices;
-}
+//   await house.updateOne({ prices: values });
+//   return house.prices;
+// }
 
 async function DeleteHouse(id, user) {
   const house = await House.findOne({
@@ -290,7 +304,6 @@ module.exports = {
   CreateHouse,
   EditHouse,
   UpdateDetails,
-  UpdatePrices,
   DeleteHouse,
   AddToFavorites,
 };

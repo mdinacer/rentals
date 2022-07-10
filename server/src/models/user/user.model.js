@@ -2,9 +2,9 @@ const bcrypt = require('bcrypt');
 const pick = require('lodash/pick');
 
 const { User, validateRegister, validateLogin } = require('./user.mongo');
+const { Profile } = require('../profile/profile.mongo');
 
 const { Role } = require('./role.mongo');
-const { profile } = require('../../services/logger');
 
 async function GetCurrentUser(data) {
   const user = await User.findById(data._id)
@@ -67,6 +67,7 @@ async function LoginUser(data) {
 
 async function RegisterUser(data) {
   const userData = pick(data, ['username', 'email', 'password']);
+  const profileData = pick(data, ['firstName', 'lastName']);
 
   const { error: validationError } = validateRegister(userData);
 
@@ -105,15 +106,8 @@ async function RegisterUser(data) {
   return user;
 }
 
-async function UpdateUser(id, data) {
-  const user = new User({
-    name: data.name,
-    username: data.username,
-    email: data.address,
-    isActive: true,
-  });
-
-  return User.findByIdAndUpdate(id, user, { new: true });
+async function UpdateUser(user, data) {
+  return User.findByIdAndUpdate(user._id, data, { new: true });
 }
 
 async function DeleteUser(id) {

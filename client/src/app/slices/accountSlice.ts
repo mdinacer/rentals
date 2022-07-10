@@ -66,6 +66,11 @@ export const accountSlice = createSlice({
                 state.user = action.payload;
             }
         },
+        setProfile: (state, action) => {
+            if (state.user) {
+                state.user.profile = action.payload
+            }
+        },
     },
     extraReducers: (builder => {
         builder.addCase(fetchCurrentUser.rejected, (state) => {
@@ -95,5 +100,5 @@ export const accountSlice = createSlice({
     })
 })
 
-export const { setUser, signOut } = accountSlice.actions;
+export const { setUser, setProfile, signOut } = accountSlice.actions;
 

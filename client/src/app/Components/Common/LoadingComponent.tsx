@@ -17,7 +17,7 @@ export default function LoadingComponent({ message = 'Loading' }: Props) {
             className={`${styles.baseStyle} ${styles.inner} animate-spin-normal`}
           ></div>
         </div>
-        <p className=' font-Oswald text-2xl font-thin text-center lg:text-5xl py-10 text-white uppercase'>
+        <p className=' font-Primary text-2xl font-thin text-center lg:text-5xl py-10 text-white uppercase'>
           {message}
         </p>
       </div>

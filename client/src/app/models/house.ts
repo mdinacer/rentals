@@ -2,6 +2,7 @@ import { Address } from "./address";
 import { HouseDetails } from "./houseDetails";
 import { HousePrice } from "./housePrice";
 import { HouseReview } from "./houseReview";
+import { HouseServices } from "./HouseServices";
 import { HouseType } from "./houseType";
 import { Image } from "./image";
 import { UserProfile } from "./profile";
@@ -13,8 +14,8 @@ export interface House {
     slug: string,
     type: HouseType,
     catchPhrase?: string,
-    details: HouseDetails,
-    prices: HousePrice[],
+    area: string,
+    price: HousePrice,
     address: Address,
     cover: Image,
     images: Image[],
@@ -27,5 +28,7 @@ export interface House {
     rating: number,
     reviews: HouseReview[],
     isOwner: boolean
+    details: HouseDetails,
+    services: HouseServices,
 }
 

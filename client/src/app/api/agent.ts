@@ -94,13 +94,15 @@ const requests = {
     }).then(responseBody),
 }
 
-function createFormData(item: any) {
-    let formData = new FormData();
-    for (const key in item) {
-        formData.append(key, item[key])
-    }
-    return formData
-}
+// function createFormData(item: any) {
+//     let formData = new FormData();
+//     for (const key in item) {
+//         formData.append(key, item[key])
+//     }
+//     return formData
+// }
+
+
 
 // function buildFormData(formData: any, data: any, parentKey?: any) {
 //     if (
@@ -133,7 +135,9 @@ function createFormData(item: any) {
 
 const Account = {
     login: (values: any) => requests.post<User>('auth/', values),
-    register: (values: any) => requests.postForm('users/', createFormData(values)),
+    register: (values: any) => requests.post('users/', values),
+    createProfile: (values: any) => requests.postForm(`profiles/`, values),
+    updateProfile: (values: any) => requests.putForm(`profiles/`, values),
     currentUser: () => requests.get<User>('auth/me'),
 }
 
@@ -161,8 +165,8 @@ const Rents = {
     getActiveRequest: (houseId: string) => requests.get<Rent>(`rents/${houseId}/active`),
     create: (houseId: string, rent: any) => requests.post(`rents/${houseId}`, rent),
     update: (id: string, rent: any) => requests.put(`rents/${id}`, rent),
-    acceptRequest: (id: string, status: any) => requests.put(`rents/${id}/accept`, status),
-    cancelRequest: (id: string, status: any) => requests.put(`rents/${id}/cancel`, status),
+    acceptRequest: (id: string) => requests.put(`rents/${id}/accept`, {}),
+    cancelRequest: (id: string) => requests.put(`rents/${id}/cancel`, {}),
     delete: (id: string) => requests.delete<void>(`rents/${id}`),
 }
 

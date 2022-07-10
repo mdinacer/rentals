@@ -4,14 +4,15 @@ export interface HouseParams {
     pageNumber: number,
     pageSize: number,
     orderBy: string;
+    province?: string,
     city?: string,
     rooms?: number,
     minPrice?: number,
     maxPrice?: number,
     type?: HouseType,
     pool?: boolean,
-    parking?: boolean,
-    pets?: boolean,
+    // parking?: boolean,
+    // pets?: boolean,
 }
 
 
@@ -24,37 +25,50 @@ export function getAxiosHouseParams(houseParams: HouseParams) {
     }
 
 
+    if (houseParams.province) {
+        params.append("address.province", houseParams.province);
+    }
+    else {
+        params.delete("address.province");
+    }
+
     if (houseParams.city) {
-        params.append("city", houseParams.city);
+        params.append("address.city", houseParams.city);
+    }
+    else {
+        params.delete("address.city");
     }
 
-    if (houseParams.rooms) {
-        params.append("rooms", houseParams.rooms.toString());
+    if (houseParams.rooms && houseParams.rooms > 0) {
+        params.append("details.rooms", houseParams.rooms.toString());
+    }
+    else {
     }
 
-    if (houseParams.minPrice) {
+    if (houseParams.minPrice && houseParams.minPrice > 0) {
         params.append("minPrice", houseParams.minPrice.toString());
     }
+    else {
+        params.delete("minPrice");
+    }
 
-    if (houseParams.maxPrice) {
+    if (houseParams.maxPrice && houseParams.maxPrice > 0) {
         params.append("maxPrice", houseParams.maxPrice.toString());
+    }
+    else {
+        params.delete("maxPrice");
     }
 
     if (houseParams.type) {
         params.append("type", houseParams.type);
+    } else {
+        params.delete("type");
     }
 
-    if (houseParams.pool) {
-        params.append("pool", houseParams.pool.toString());
-    }
+    // if (houseParams.pool) {
+    //     params.append("pool", houseParams.pool.toString());
+    // }
 
-    if (houseParams.parking) {
-        params.append("parking", houseParams.parking.toString());
-    }
-
-    if (houseParams.pets) {
-        params.append("pets", houseParams.pets.toString());
-    }
 
 
     return params;

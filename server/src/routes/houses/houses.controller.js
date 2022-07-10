@@ -33,6 +33,7 @@ async function httpGetHouse(req, res) {
 }
 
 async function httpCreateHouse(req, res) {
+  console.log(req);
   const { cover, images } = req.files;
   const house = await CreateHouse(req.user._id, req.body, cover, images);
   return res.status(201).json(house);

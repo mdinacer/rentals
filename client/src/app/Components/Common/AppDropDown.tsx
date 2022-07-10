@@ -38,7 +38,7 @@ export default function AppDropDown(props: Props) {
   return (
     <div ref={node} className={'relative select-none' + props.className}>
       <div className='py-1'>
-        <p className='text-base text-gray-500 dark:text-gray-100 capitalize'>
+        <p className='text-sm font-Secondary font-medium  dark:text-gray-100 uppercase'>
           {props.label}
         </p>
       </div>
@@ -47,7 +47,7 @@ export default function AppDropDown(props: Props) {
         className=' inline-flex items-center w-full border border-gray-400'
         onClick={() => setExpanded((prev) => !prev)}
       >
-        <div className='text-left flex-auto w-full font-Montserrat py-2 px-5 uppercase'>
+        <div className='text-left flex-auto w-full font-Secondary py-2 px-5 uppercase'>
           {selectedItem?.title || ''}
         </div>
         <div className=' flex-initial px-2 py-1 border-l border-l-gray-400'>
@@ -83,7 +83,7 @@ export default function AppDropDown(props: Props) {
                       <ChevronRightIcon className='h-6 w-6 ' />
                     )}
                   </div>
-                  <p className='text-left font-Montserrat text-base first-letter:uppercase'>
+                  <p className='text-left font-Secondary text-base first-letter:uppercase'>
                     {item.title}
                   </p>
                 </li>

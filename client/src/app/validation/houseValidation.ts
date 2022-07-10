@@ -8,7 +8,6 @@ const HouseAddressValidationSchema = yup.object({
 });
 
 const HouseDetailsValidationSchema = yup.object({
-    area: yup.number().typeError('Area must be a number').min(1, "Must be greater than 0").required(),
     floors: yup.number().typeError('Floors must be a number').min(0),
     rooms: yup.number().typeError('Rooms must be a number').min(1, "Must be greater than 0").required(),
     beds: yup.number().typeError('Beds must be a number').min(1, "Must be greater than 0").required(),
@@ -17,15 +16,30 @@ const HouseDetailsValidationSchema = yup.object({
     gardens: yup.number().typeError('Gardens must be a number').min(0),
     pool: yup.number().typeError('Pools must be a number').min(0),
     parking: yup.number().typeError('Parking must be a number').min(0),
+
+});
+
+const HouseServicesValidationSchema = yup.object({
+
+    accessibility: yup.boolean(),
+    airConditioner: yup.boolean(),
+    elevator: yup.boolean(),
+    furniture: yup.boolean(),
+    cityGas: yup.boolean(),
+    heater: yup.boolean(),
+    hotWater: yup.boolean(),
+    internet: yup.boolean(),
     smokingFree: yup.boolean(),
     petsAllowed: yup.boolean()
 });
 
 export const HouseValidationSchema = yup.object({
+    area: yup.number().typeError('Area must be a number').min(1, "Must be greater than 0").required(),
     type: yup.string().min(5).required(),
     title: yup.string().min(5).required(),
     catchPhrase: yup.string().min(5, "Too short").required("This field is required"),
     details: HouseDetailsValidationSchema,
+    services: HouseServicesValidationSchema,
     address: HouseAddressValidationSchema,
     cover: yup.mixed().when('pictureUrl', {
         is: (value: string) => !value,
@@ -34,9 +48,11 @@ export const HouseValidationSchema = yup.object({
 });
 
 export const HouseEditValidationSchema = yup.object({
+    area: yup.number().typeError('Area must be a number').min(1, "Must be greater than 0").required(),
     type: yup.string().min(5).required(),
     title: yup.string().min(5).required(),
     catchPhrase: yup.string().min(5, "Too short").required("This field is required"),
     details: HouseDetailsValidationSchema,
+    services: HouseServicesValidationSchema,
     address: HouseAddressValidationSchema,
 });

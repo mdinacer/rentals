@@ -128,14 +128,14 @@ function App() {
               }
             />
 
-            <Route
+            {/* <Route
               path='edit/:slug'
               element={
                 <Suspense fallback={<div />}>
                   <HouseAddEdit />
                 </Suspense>
               }
-            />
+            /> */}
           </Route>
 
           <Route path='profile'>
@@ -156,6 +156,14 @@ function App() {
                 </Suspense>
               }
             />
+            <Route
+              path='houses'
+              element={
+                <Suspense fallback={<div />}>
+                  <UserHouses />
+                </Suspense>
+              }
+            />
           </Route>
         </Route>
       </Routes>
@@ -173,5 +181,6 @@ const Profile = lazy(() => import('../pages/Profile'));
 const UserOperations = lazy(
   () => import('../pages/Profile/UserOperationsPage')
 );
+const UserHouses = lazy(() => import('../pages/Profile/UserHouses'));
 
 export default App;

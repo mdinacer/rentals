@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { House } from '../../models/house';
 import HousesListItem from './HousesListItem';
 

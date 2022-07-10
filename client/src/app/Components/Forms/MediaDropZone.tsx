@@ -2,7 +2,6 @@ import { PhotographIcon } from '@heroicons/react/solid';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useController, UseControllerProps } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 
 interface Props extends UseControllerProps {
   multiFiles?: boolean;
@@ -10,7 +9,6 @@ interface Props extends UseControllerProps {
 
 export default function MediaDropZone(props: Props) {
   const { fieldState, field } = useController({ ...props, defaultValue: null });
-  const { t } = useTranslation(['house_images_form']);
 
   const onDrop = useCallback(
     (acceptedFiles: any[]) => {
@@ -53,8 +51,8 @@ export default function MediaDropZone(props: Props) {
         <div className=' flex flex-row lg:flex-row items-center justify-start'>
           <PhotographIcon className=' w-12 h-12 m-2' />
 
-          <p className=' font-Montserrat text-base lg:text-sm max-w-sm whitespace-pre-wrap'>
-            {t('drop_message')}
+          <p className=' font-Secondary text-base lg:text-sm max-w-sm whitespace-pre-wrap'>
+            drop an image or click to browse.
           </p>
         </div>
         {fieldState.error && (fieldState.isTouched || fieldState.isDirty) && (

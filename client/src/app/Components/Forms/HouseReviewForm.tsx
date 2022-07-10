@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default function HouseReviewForm({ house, handleAddReview }: Props) {
-  const [selectedRating, setSelectedRating] = useState(-1);
+  const [selectedRating, setSelectedRating] = useState(0);
   const {
     control,
     setValue,
@@ -70,30 +70,28 @@ export default function HouseReviewForm({ house, handleAddReview }: Props) {
             </button>
           ))}
         </div>
-        <p className=' font-Oswald text-4xl font-thin'>
+        <p className=' font-Primary text-4xl font-thin'>
           {selectedRating >= 0 ? selectedRating : 'no rating'}
         </p>
       </div>
-      <div className='flex flex-col lg:flex-row  rounded-md overflow-hidden'>
-        <div className=' flex-auto '>
+      <div className='flex flex-col lg:flex-row rounded-md overflow-hidden'>
+        <div className='relative flex-auto '>
           <AppTextArea
             name='body'
             placeholder='Post a review'
-            label='Review'
+            label=''
             control={control}
             rows={5}
           />
+          <input
+            className={`absolute bottom-1 right-1 ${
+              isValid ? 'opacity-100 ' : 'opacity-50 '
+            } text-white bg-gray-900 rounded-lg font-Primary flex-initial text-lg uppercase font-thin px-5 py-1`}
+            disabled={!isValid}
+            type='submit'
+            value={isSubmitting ? 'Please wait' : 'Post'}
+          />
         </div>
-        <input
-          className={` ${
-            isValid
-              ? 'opacity-100 bg-sky-500 dark:bg-indigo-500 '
-              : 'opacity-50 bg-sky-700 dark:bg-indigo-700'
-          } text-white font-Oswald text-2xl font-thin px-5 py-1`}
-          disabled={!isValid}
-          type='submit'
-          value={isSubmitting ? 'Please wait' : 'Post'}
-        />
       </div>
     </form>
   );

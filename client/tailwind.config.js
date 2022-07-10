@@ -6,8 +6,15 @@ module.exports = {
   theme: {
     extend: {},
     fontFamily: {
+      Primary: ["'Oswald'", 'sans-serif'],
+      Secondary: ["'Open Sans'", 'sans-serif'],
       Oswald: ["'Oswald'", 'sans-serif'],
       Montserrat: ["'Montserrat'", 'sans-serif'],
+      Bebas: ["'Bebas Neue'", 'sans-serif'],
+      Roboto: ["'Roboto'", 'sans-serif'],
+      Raleway: ["'Raleway'", 'sans-serif'],
+      Header: ["'Bebas Neue'", 'sans-serif'],
+      Normal: ["'Raleway'", 'sans-serif'],
     },
     animation: {
       'spin-slow': 'spin 2s linear infinite',

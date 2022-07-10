@@ -76,13 +76,15 @@ function validateProfile(values) {
   const schema = Joi.object({
     firstName: Joi.string().min(3).max(255).required(),
     lastName: Joi.string().min(3).max(255).required(),
-    phone: Joi.string(),
+    phone: Joi.string().optional().allow(''),
     mobile: Joi.string().required(),
-    'address.country': Joi.string(),
-    'address.province': Joi.string(),
-    'address.city': Joi.string(),
-    'address.address1': Joi.string(),
-    // user: Joi.objectId().required(),
+    address: Joi.object({
+      country: Joi.string().required(),
+      province: Joi.string().required(),
+      city: Joi.string().required(),
+      address1: Joi.string().required(),
+      address2: Joi.string().optional().allow(''),
+    }),
   });
 
   return schema.validate(values);

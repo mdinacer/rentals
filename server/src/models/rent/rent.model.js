@@ -65,7 +65,6 @@ async function ListRents(skip, limit, params) {
 }
 
 async function GetRent(user, rentId) {
-  console.log(user);
   const rent = await Rent.findOne({
     _id: rentId,
     $or: [{ owner: user._id }, { client: user._id }],
@@ -115,11 +114,6 @@ async function GetRent(user, rentId) {
         select: ['active'],
       },
     },
-    {
-      path: 'payments',
-      sort: { paymentDate: 1 },
-      select: ['creationDate', 'paymentDate', 'amount', 'type', 'received'],
-    },
   ]);
 
   if (!rent) {
@@ -127,26 +121,26 @@ async function GetRent(user, rentId) {
     error.statusCode = 404;
     throw error;
   }
+
   return rent;
 }
 
 async function GetActiveRequest(user, houseId) {
-  const rent = await Rent.findOne({
+  return await Rent.findOne({
     house: houseId,
     client: user._id,
     status: 'request',
   });
 
-  if (!rent) {
-    const error = Error('No matching operation found');
-    error.statusCode = 404;
-    throw error;
-  }
-  return rent;
+  // if (!rent) {
+  //   const error = Error('No matching operation found');
+  //   error.statusCode = 404;
+  //   throw error;
+  // }
+  // return rent;
 }
 
 async function CreateRent(user, houseId, data) {
-  console.log(data);
   validateRentData(data);
 
   const house = await House.findById(houseId);
@@ -205,7 +199,11 @@ async function EditRent(user, id, data) {
 }
 
 async function AcceptRent(user, id) {
-  const rent = await Rent.findOne({ _id: id, owner: user._id });
+  const rent = await Rent.findOne({
+    _id: id,
+    owner: user._id,
+    status: 'request',
+  });
 
   if (!rent) {
     const error = Error('No matching operation found');
@@ -213,7 +211,7 @@ async function AcceptRent(user, id) {
     throw error;
   }
 
-  const result = await rent.updateOne({ accepted: true, type: 'operation' });
+  const result = await rent.updateOne({ accepted: true, status: 'operation' });
   return result.modifiedCount > 0;
 }
 
@@ -229,7 +227,9 @@ async function CancelRent(user, id) {
     throw error;
   }
 
-  const result = await rent.updateOne({ accepted: false, type: 'cancelled' });
+  const status = rent.owner.equals(user._id) ? 'rejected' : 'cancelled';
+
+  const result = await rent.updateOne({ accepted: false, status });
   return result.modifiedCount > 0;
 }
 
@@ -237,7 +237,6 @@ async function DeleteRent(user, id) {
   const rent = await Rent.findOne({
     _id: id,
     $or: [{ owner: user._id }, { client: user._id }],
-    //type: { $ne: 'cancelled' },
   });
 
   if (!rent) {

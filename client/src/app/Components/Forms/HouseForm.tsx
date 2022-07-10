@@ -7,12 +7,12 @@ import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { FieldValues, FormProvider, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import agent from '../../api/agent';
 import { House } from '../../models/house';
 import { setHouse, updateHouse } from '../../slices/housesSlice';
 import { useAppDispatch } from '../../store/configureStore';
+import { buildFormData } from '../../util/formData';
 import {
   HouseEditValidationSchema,
   HouseValidationSchema,
@@ -22,6 +22,7 @@ import HouseDetailsForm from './HouseDetailsForm';
 import HouseInfoForm from './HouseInfoForm';
 import HouseMediaForm from './HouseMediaForm';
 import HousePricesForm from './HousePricesForm';
+import HouseServicesForm from './HouseServicesForm';
 
 interface Props {
   house?: House;
@@ -42,8 +43,6 @@ export default function HouseForm({ house }: Props) {
     resolver: yupResolver(validationSchema),
   });
 
-  const { t } = useTranslation(['house_form']);
-
   const watchFile = methods.watch('cover', null);
   const watchFiles: any[] = methods.watch('images', null);
 
@@ -52,12 +51,12 @@ export default function HouseForm({ house }: Props) {
       const item = {
         title: house.title,
         type: house.type,
+        area: house.area,
         catchPhrase: house.catchPhrase,
-        prices: house.prices,
+        price: house.price,
         details: house.details,
+        services: house.services,
         address: house.address,
-        // images: [''],
-        // cover: '',
       };
       methods.reset(item);
     }
@@ -81,45 +80,6 @@ export default function HouseForm({ house }: Props) {
       images.forEach((file) => {
         formData.append(property, file);
       });
-    }
-  }
-
-  // function flatten(obj: any, formData: FormData, parentKey?: any) {
-  //   for (const key in obj) {
-  //     const value = obj[key];
-
-  //     if (typeof value === 'object') {
-  //       console.log('object: ', value);
-
-  //       flatten(value, formData, key);
-  //     } else {
-  //       if (parentKey) {
-  //         formData.append(`${parentKey}.${key}`, `${value.toString()}`);
-  //       } else {
-  //         formData.append(`${key}`, `${value.toString()}`);
-  //       }
-  //     }
-  //   }
-  // }
-
-  function buildFormData(formData: any, data: any, parentKey?: any) {
-    if (
-      data &&
-      typeof data === 'object' &&
-      !(data instanceof Date) &&
-      !(data instanceof File)
-    ) {
-      Object.keys(data).forEach((key) => {
-        buildFormData(
-          formData,
-          data[key],
-          parentKey ? `${parentKey}[${key}]` : key
-        );
-      });
-    } else {
-      const value = data == null ? '' : data;
-
-      formData.append(parentKey, value);
     }
   }
 
@@ -163,10 +123,12 @@ export default function HouseForm({ house }: Props) {
       case 1:
         return <HouseDetailsForm />;
       case 2:
-        return <HouseAddressForm />;
+        return <HouseServicesForm />;
       case 3:
-        return <HousePricesForm />;
+        return <HouseAddressForm />;
       case 4:
+        return <HousePricesForm />;
+      case 5:
         return (
           <HouseMediaForm house={house} cover={watchFile} images={watchFiles} />
         );
@@ -190,11 +152,12 @@ export default function HouseForm({ house }: Props) {
   };
 
   const pagesNames = [
-    t('informations'),
-    t('details'),
-    t('addresses'),
-    t('prices'),
-    t('images'),
+    'Informations',
+    'Details',
+    'Services',
+    'Addresses',
+    'Price',
+    'Images',
   ];
 
   return (
@@ -224,7 +187,7 @@ export default function HouseForm({ house }: Props) {
                 exit={{ x: pageDirection === 'prev' ? -300 : 300, opacity: 0 }}
                 key={selectedPageIndex}
               >
-                <p className=' font-Oswald text-4xl mb-5 uppercase'>
+                <p className=' font-Primary text-4xl mb-5 uppercase'>
                   {pagesNames[selectedPageIndex]}
                 </p>
                 {handleSelectedPage(selectedPageIndex)}
@@ -237,10 +200,10 @@ export default function HouseForm({ house }: Props) {
               <button
                 type='button'
                 onClick={handlePreviousPage}
-                className={` w-full lg:w-auto cursor-pointer inline-flex items-center gap-x-2 bg-orange-500 py-1 px-5 rounded-md uppercase font-Oswald text-xl font-thin`}
+                className={` w-full lg:w-auto cursor-pointer inline-flex items-center gap-x-2 bg-orange-500 py-1 px-5 rounded-md uppercase font-Primary text-xl font-thin`}
               >
                 <ChevronLeftIcon className='h-6 w-6' />
-                {t('previous')}
+                Previous
               </button>
             ) : (
               <button
@@ -248,9 +211,9 @@ export default function HouseForm({ house }: Props) {
                 onClick={() =>
                   navigate(house ? `/houses/${house.slug}` : '/houses')
                 }
-                className={`$cursor-pointer bg-red-500 py-1 rounded-md px-5 uppercase font-Oswald text-xl font-thin`}
+                className={`$cursor-pointer bg-red-500 py-1 rounded-md px-5 uppercase font-Primary text-xl font-thin`}
               >
-                {t('cancel')}
+                Cancel
               </button>
             )}
 
@@ -258,9 +221,9 @@ export default function HouseForm({ house }: Props) {
               <button
                 type='button'
                 onClick={handleNextPage}
-                className={`cursor-pointer w-full lg:w-auto inline-flex justify-end items-center gap-x-2 bg-sky-500 dark:bg-indigo-500 py-1 rounded-md   px-5 uppercase font-Oswald text-xl font-thin`}
+                className={`cursor-pointer w-full lg:w-auto inline-flex justify-end items-center gap-x-2 bg-sky-500 dark:bg-indigo-500 py-1 rounded-md   px-5 uppercase font-Primary text-xl font-thin`}
               >
-                {t('next')}
+                Next
                 <ChevronRightIcon className='h-6 w-6' />
               </button>
             ) : (
@@ -269,16 +232,16 @@ export default function HouseForm({ house }: Props) {
                   methods.formState.isValid
                     ? 'opacity-100 bg-sky-500 dark:bg-indigo-500 '
                     : 'opacity-50 bg-sky-800 dark:bg-indigo-800'
-                } cursor-pointer  py-1 rounded-md  px-5 uppercase font-Oswald text-xl font-thin`}
+                } cursor-pointer  py-1 rounded-md  px-5 uppercase font-Primary text-xl font-thin`}
                 type='submit'
                 disabled={!methods.formState.isValid}
                 value={
                   methods.formState.isSubmitting ||
                   methods.formState.isValidating
-                    ? t('wait')
+                    ? 'Wait'
                     : isEdit
-                    ? t('update')
-                    : t('save')
+                    ? 'Update'
+                    : 'Save'
                 }
               />
             )}

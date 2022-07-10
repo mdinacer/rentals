@@ -2,13 +2,6 @@ const mongoose = require('mongoose');
 const Joi = require('joi');
 
 const housePriceSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-    min: 5,
-    max: 255,
-  },
-
   price: {
     type: Number,
     default: 0,
@@ -21,12 +14,6 @@ const housePriceSchema = new mongoose.Schema({
   },
 
   duration: {
-    type: Number,
-    required: true,
-    min: 1,
-  },
-
-  durationType: {
     type: String,
     enum: ['day', 'week', 'month', 'year'],
     default: 'day',
@@ -46,10 +33,6 @@ housePriceSchema.options.toJSON = {
 const houseDetailsSchema = new mongoose.Schema({
   floors: {
     type: Number,
-  },
-
-  area: {
-    type: String,
   },
 
   rooms: {
@@ -76,32 +59,22 @@ const houseDetailsSchema = new mongoose.Schema({
     default: 1,
   },
 
-  parking: {
+  parkings: {
     type: Number,
     min: 0,
     default: 0,
   },
 
-  pool: {
+  pools: {
     type: Number,
     min: 0,
     default: 0,
   },
 
-  garden: {
+  gardens: {
     type: Number,
     min: 0,
     default: 0,
-  },
-
-  smokingFree: {
-    type: Boolean,
-    default: false,
-  },
-
-  petsAllowed: {
-    type: Boolean,
-    default: false,
   },
 });
 
@@ -114,18 +87,67 @@ houseDetailsSchema.options.toJSON = {
   },
 };
 
+const houseServicesSchema = new mongoose.Schema({
+  accessibility: {
+    type: Boolean,
+    default: false,
+  },
+
+  airConditioner: {
+    type: Boolean,
+    default: false,
+  },
+
+  elevator: {
+    type: Boolean,
+    default: false,
+  },
+
+  furniture: {
+    type: Boolean,
+    default: false,
+  },
+
+  cityGas: {
+    type: Boolean,
+    default: false,
+  },
+
+  heater: {
+    type: Boolean,
+    default: false,
+  },
+
+  hotWater: {
+    type: Boolean,
+    default: false,
+  },
+
+  internet: {
+    type: Boolean,
+    default: false,
+  },
+
+  petsAllowed: {
+    type: Boolean,
+    default: false,
+  },
+
+  smokingFree: {
+    type: Boolean,
+    default: false,
+  },
+});
+
 function validateDetails(values) {
   const schema = Joi.object({
-    area: Joi.number().min(0),
     floors: Joi.number().min(0).max(300),
     rooms: Joi.number().min(0).max(50),
     beds: Joi.number().min(0).max(50),
     baths: Joi.number().min(0).max(50),
     kitchens: Joi.number().min(0).max(50),
-    parking: Joi.number().min(0).max(50),
-    pool: Joi.number().min(0).max(50),
-    smokingFree: Joi.boolean(),
-    petsAllowed: Joi.boolean(),
+    parkings: Joi.number().min(0).max(50),
+    pools: Joi.number().min(0).max(50),
   });
 
   return schema.validate(values);
@@ -133,9 +155,8 @@ function validateDetails(values) {
 
 function validatePrice(values) {
   const schema = Joi.object({
-    title: Joi.string().min(0).max(300).required(),
     price: Joi.number().min(0).required(),
-    duration: Joi.number().min(0).required(),
+    duration: Joi.string().required(),
   });
 
   return schema.validate(values);
@@ -150,3 +171,5 @@ module.exports.HouseDetails = mongoose.model(
 module.exports.housePriceSchema = housePriceSchema;
 module.exports.validatePrice = validatePrice;
 module.exports.HousePrice = mongoose.model('HousePrice', housePriceSchema);
+
+module.exports.houseServicesSchema = houseServicesSchema;

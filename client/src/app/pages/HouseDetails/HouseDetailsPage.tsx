@@ -2,21 +2,23 @@ import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import agent from '../../api/agent';
 import LoadingComponent from '../../Components/Common/LoadingComponent';
-import ImageSlider from '../../Components/House/ImageSlider';
-import HouseDetailsHeader from '../../Components/HouseDetails/HouseDetailsHeader';
 import { House } from '../../models/house';
-import HouseOwnerDetails from '../../Components/HouseDetails/HouseOwnerDetails';
-import HouseDetailsList from '../../Components/HouseDetails/HouseDetailsList';
-import HouseDetailsSection from '../../Components/HouseDetails/HouseDetailsSection';
-import HouseDetailsPrices from '../../Components/HouseDetails/HouseDetailsPrices';
-import HouseDetailsReviews from '../../Components/HouseDetails/HouseDetailsReviews';
 import { useAppSelector } from '../../store/configureStore';
 import { Client } from '../../layout/App';
 import { HouseReview } from '../../models/houseReview';
 import { Socket } from 'socket.io-client';
-import RentRequestForm from '../../Components/Forms/RentRequestForm';
 import { Rent } from '../../models/rent';
-import { useTranslation } from 'react-i18next';
+import { Image } from '../../models/image';
+import { XIcon } from '@heroicons/react/solid';
+import Layout from '../../layout/Layout';
+import RentRequestForm from '../../Components/Forms/RentRequestForm';
+import ImageSlider from '../../Components/Common/ImageSlider';
+import HouseDetailsHeader from '../../Components/HouseDetails/HouseDetailsHeader';
+import HouseDetailsPrice from '../../Components/HouseDetails/HouseDetailsPrice';
+import HouseServicesList from '../../Components/HouseDetails/HouseServicesList';
+import HouseDetailsSection from '../../Components/HouseDetails/HouseDetailsSection';
+import HouseDetailsReviews from '../../Components/HouseDetails/HouseDetailsReviews';
+import HouseDetailsList from '../../Components/HouseDetails/HouseDetailsList';
 
 export default function HouseDetails() {
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -30,7 +32,7 @@ export default function HouseDetails() {
     undefined
   );
   const [loadingRequest, setLoadingRequest] = useState(false);
-  const { t } = useTranslation('house_details_page');
+  const [selectedImage, setSelectedImage] = useState<Image | null>(null);
 
   const fetchHouse = useCallback(
     async (slug: string) => {
@@ -127,71 +129,79 @@ export default function HouseDetails() {
   if (!house)
     return (
       <div className='py-20 w-screen h-screen bg-slate-300 flex items-center justify-center'>
-        <p className=' font-Montserrat text-xl'>{t('notfound')}</p>
+        <p className=' font-Secondary text-xl'>Property not found</p>
       </div>
     );
   return (
-    <div className='relative flex-1 w-full select-none lg:py-5 bg-black lg:pt-[45px]'>
-      <div className='container mx-auto  my-auto h-full  rounded-md overflow-hidden'>
-        <HouseDetailsHeader house={house} />
-
-        <div className='bg-black'>
-          <div className=' w-full bg-white  overflow-hidden dark:bg-gradient-to-b dark:bg-black flex flex-col  lg:rounded-t-3xl  min-h-[50vh] lg:-translate-y-[3vh] py-10 lg:py-10 lg:px-0 px-0'>
-            <div className='px-10 mb-5'>
-              <HouseOwnerDetails
-                slug={slug!}
-                isOwner={house.isOwner}
-                owner={house.owner}
-                onRequest={() => setOpenRequest(true)}
-                isEdit={!!activeRequest}
-                loadingRequest={loadingRequest}
-              />
+    <>
+      <Layout className='bg-black flex pt-[44px] overflow-hidden '>
+        <div className='flex-1 container mx-auto lg:bg-black dark:bg-black bg-gray-200 lg:p-5  flex flex-col  overflow-hidden'>
+          <HouseDetailsHeader house={house} />
+          <HouseDetailsPrice
+            busy={loadingRequest}
+            isEdit={!!activeRequest}
+            price={house.price}
+            onRequest={() => setOpenRequest(true)}
+          />
+          {house.services && (
+            <div className='px-5'>
+              <HouseServicesList services={house.services} />
             </div>
+          )}
 
-            <HouseDetailsSection
-              title={t('description')}
-              className=' py-5 lg:px-10 px-5 mb-5'
-            >
-              <p className=' font-Montserrat text-lg'>{house.catchPhrase}</p>
+          <div className=' bg-gray-200 dark:bg-black  py-5 px-5 lg:px-10 flex flex-col justify-between'>
+            <HouseDetailsSection title='Description' className='mt-5'>
+              <p className='font-Raleway'>{house.catchPhrase}</p>
             </HouseDetailsSection>
 
-            <HouseDetailsSection
-              title={t('details')}
-              className=' overflow-x-auto overscroll-none scrollbar-hide snap-x snap-mandatory bg-gray-900 lg:px-10 px-5 py-5 dark:bg-gray-800 lg:bg-gray-200 lg:dark:bg-gray-800 shadow-inner  lg:text-inherit text-white'
-            >
-              <HouseDetailsList houseDetails={house.details} />
-            </HouseDetailsSection>
-
-            <HouseDetailsSection
-              title={t('prices')}
-              className='py-5 bg-gray-800 lg:bg-inherit dark:bg-gray-900 lg:dark:bg-gray-900 lg:text-inherit   text-white lg:px-10 px-5'
-            >
-              <HouseDetailsPrices prices={house.prices} />
-            </HouseDetailsSection>
-
-            <HouseDetailsSection
-              title={t('photos')}
-              className=' overscroll-x-none lg:px-10 px-5 py-5 my-5'
-            >
-              <div className=' w-full max-w-[100vw] rounded-md overflow-auto max-h-[40vh] snap-x snap-mandatory overscroll-x-none scrollbar-hide'>
-                <ImageSlider house={house} />
+            <HouseDetailsSection title='Gallery' className='my-5'>
+              <div className='h-40 overflow-x-auto scrollbar-hide rounded-lg snap-mandatory snap-x my-5 overscroll-x-none flex justify-start'>
+                <ImageSlider
+                  house={house}
+                  setSelectedImage={setSelectedImage}
+                />
               </div>
             </HouseDetailsSection>
 
-            <HouseDetailsSection
-              title={t('reviews')}
-              className='py-5 lg:px-10 px-5'
-            >
-              <HouseDetailsReviews house={house} reviews={reviews} />
+            <HouseDetailsSection title='More Details' className='my-5'>
+              <HouseDetailsList details={house.details} />
+            </HouseDetailsSection>
+
+            <HouseDetailsSection title='Reviews'>
+              <HouseDetailsReviews house={house} />
             </HouseDetailsSection>
           </div>
         </div>
-      </div>
+      </Layout>
+      {selectedImage && (
+        <div
+          className=' fixed top-0 left-0 right-0 bottom-0 h-screen w-full px-5 lg:px-10 z-20  overflow-auto py-10  bg-black bg-opacity-90 overscroll-none'
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className='relative  h-full w-full  overflow-auto scrollbar-hide overscroll-none rounded-lg '>
+            <img
+              src={selectedImage.pictureUrl}
+              alt={selectedImage.publicId}
+              className='absolute object-none max-w-[1920px] h-auto lg:max-w-screen-lg top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
+            />
+            <button
+              className='fixed text-white z-10 top-0 right-0 m-2 bg-black bg-opacity-70 rounded-full'
+              onClick={() => setSelectedImage(null)}
+            >
+              <XIcon className='lg:h-8 h-6 lg:w-8 w-6' />
+            </button>
+          </div>
+        </div>
+      )}
+
       {openRequest && (
-        <div className='fixed top-0 left-0 right-0 bottom-0 z-20 bg-black bg-opacity-70 flex items-center lg:justify-center'>
+        <div
+          className=' fixed top-0 left-0 right-0 bottom-0 h-screen w-full  z-20 bg-black bg-opacity-90  flex items-center justify-center'
+          onClick={() => setSelectedImage(null)}
+        >
           <RentRequestForm
-            request={activeRequest}
             house={house}
+            request={activeRequest}
             onClose={(value) => {
               if (value) {
                 setActiveRequest(value);
@@ -201,6 +211,6 @@ export default function HouseDetails() {
           />
         </div>
       )}
-    </div>
+    </>
   );
 }

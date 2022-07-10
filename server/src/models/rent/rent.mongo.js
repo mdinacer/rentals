@@ -36,7 +36,7 @@ const rentSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['request', 'operation', 'cancelled'],
+    enum: ['request', 'operation', 'rejected', 'cancelled'],
     default: 'request',
   },
 
@@ -56,13 +56,6 @@ const rentSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-
-  payments: [
-    {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: 'Payment',
-    },
-  ],
 });
 
 rentSchema.options.toJSON = {

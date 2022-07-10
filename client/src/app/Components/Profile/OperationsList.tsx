@@ -17,11 +17,25 @@ export default function OperationsList({ rents, onSelect }: Props) {
         initial='hidden'
         animate='open'
         exit='exit'
-        className='grid gap-5 mb-10'
+        className='grid gap-5 lg:gap-2 mb-10'
       >
-        {rents.map((rent) => (
-          <OperationsListItem rent={rent} key={rent.id} onSelect={onSelect} />
-        ))}
+        {rents.length > 0 ? (
+          <>
+            {rents.map((rent) => (
+              <OperationsListItem
+                rent={rent}
+                key={rent.id}
+                onSelect={onSelect}
+              />
+            ))}
+          </>
+        ) : (
+          <div className='w-full h-20 bg-gray-300 dark:bg-gray-800 flex items-center justify-center'>
+            <p className=' font-Primary text-2xl uppercase text-gray-500'>
+              No Operations
+            </p>
+          </div>
+        )}
       </motion.div>
     </>
   );
@@ -34,12 +48,13 @@ const getStatusColor = (value: string) => {
     case 'operation':
       return 'bg-green-500';
     case 'cancelled':
+    case 'rejected':
       return 'bg-red-500';
   }
 };
 
 function OperationsListHeader() {
-  const itemStyle = 'font-Oswald font-thin text-base capitalize px-5';
+  const itemStyle = 'font-Primary font-thin text-lg capitalize px-5';
   return (
     <div className=' grid-cols-7 gap-5 dark:bg-gray-800 bg-gray-300 py-2 my-3 hidden lg:grid'>
       <small className={itemStyle}>Status</small>
@@ -73,12 +88,12 @@ function OperationsListItem({ rent, onSelect }: ItemProps) {
       <div
         className={`${getStatusColor(
           rent.status
-        )} text-white px-5 py-2 flex flex-row justify-between`}
+        )} text-white px-5 py-2 flex flex-row justify-between `}
       >
-        <small className='font-Oswald font-thin text-base capitalize block lg:hidden'>
+        <small className='font-Primary font-thin text-base capitalize block lg:hidden'>
           Status
         </small>
-        <p className=' font-Montserrat text-lg capitalize'>
+        <p className=' font-Primary uppercase font-thin text-xl '>
           {rent.status === 'operation'
             ? rent.active
               ? 'Active'
@@ -87,43 +102,41 @@ function OperationsListItem({ rent, onSelect }: ItemProps) {
         </p>
       </div>
       <div className='px-5 py-2 flex flex-row justify-between'>
-        <small className='font-Oswald font-thin text-base capitalize block lg:hidden'>
+        <small className='font-Primary font-thin text-base capitalize block lg:hidden'>
           Request date
         </small>
-        <p className=' font-Montserrat text-lg capitalize'>
+        <p className=' font-Secondary text-lg capitalize'>
           {format(new Date(rent.creationDate), 'dd/MM/yyyy')}
         </p>
       </div>
       <div className='px-5 py-2 flex flex-row justify-between'>
-        <small className='font-Oswald font-thin text-base capitalize block lg:hidden'>
+        <small className='font-Primary font-thin text-base capitalize block lg:hidden'>
           {rent.house.type}
         </small>
-        <p className=' font-Montserrat text-lg capitalize'>
-          {rent.house.title}
-        </p>
+        <p className=' font-Secondary text-lg capitalize'>{rent.house.title}</p>
       </div>
       <div className='px-5 py-2 lg:col-span-2 flex flex-row justify-between'>
-        <small className='font-Oswald font-thin text-base capitalize block lg:hidden'>
+        <small className='font-Primary font-thin text-base capitalize block lg:hidden'>
           Customer
         </small>
-        <p className=' font-Montserrat text-lg capitalize'>
-          {rent.client.profile.fullName}
+        <p className=' font-Secondary text-lg capitalize'>
+          {rent.client?.profile?.fullName}
         </p>
       </div>
 
       <div className='px-5 py-2 flex flex-row justify-between'>
-        <small className='font-Oswald font-thin text-base capitalize block lg:hidden'>
+        <small className='font-Primary font-thin text-base capitalize block lg:hidden'>
           Start date
         </small>
-        <p className=' font-Montserrat text-lg capitalize'>
+        <p className=' font-Secondary text-lg capitalize'>
           {format(new Date(rent.startDate), 'dd/MM/yyyy')}
         </p>
       </div>
       <div className='px-5 py-2 flex flex-row justify-between'>
-        <small className='font-Oswald font-thin text-base capitalize block lg:hidden'>
+        <small className='font-Primary font-thin text-base capitalize block lg:hidden'>
           End date
         </small>
-        <p className=' font-Montserrat text-lg capitalize'>
+        <p className=' font-Secondary text-lg capitalize'>
           {format(new Date(rent.endDate), 'dd/MM/yyyy')}
         </p>
       </div>

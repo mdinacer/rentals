@@ -7,6 +7,7 @@ const { addressSchema } = require('../address/address.mongo');
 const {
   houseDetailsSchema,
   housePriceSchema,
+  houseServicesSchema,
 } = require('./houseDetails.mongo');
 
 mongoose.plugin(slug);
@@ -37,8 +38,12 @@ const houseSchema = new mongoose.Schema({
   },
 
   details: houseDetailsSchema,
+  services: houseServicesSchema,
 
-  prices: [housePriceSchema],
+  price: {
+    type: housePriceSchema,
+    required: true,
+  },
 
   address: {
     type: addressSchema,
@@ -78,6 +83,10 @@ const houseSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+
+  area: {
+    type: String,
+  },
 });
 
 houseSchema.options.toJSON = {
@@ -98,9 +107,10 @@ houseSchema.options.toJSON = {
     // };
 
     if (doc.rents && doc.rents.length > 0) {
-      ret.available = !doc.rents.some((rent) => rent.active);
-      ret.availableFrom = doc.rents.filter((rent) => rent.active)[0]?.endDate;
     }
+
+    ret.available = !doc.rents.some((rent) => rent.active) || true;
+    ret.availableFrom = doc.rents.filter((rent) => rent.active)[0]?.endDate;
 
     delete ret._id;
     delete ret.__v;
@@ -118,6 +128,7 @@ function validateHouse(values) {
   });
   const schema = Joi.object({
     title: Joi.string().min(5).max(255).required(),
+    area: Joi.number().required(),
     catchPhrase: Joi.string(),
     address: addressValidationSchema,
     owner: Joi.objectId().required(),
