@@ -11,7 +11,16 @@ const api = require('./routes/api');
 
 const app = express();
 
-app.use(helmet());
+//app.use(helmet());
+
+app.use(
+  helmet.contentSecurityPolicy({
+    useDefaults: true,
+    directives: {
+      'img-src': ["'self'", 'https: data:'],
+    },
+  })
+);
 
 // parse various different custom JSON types as JSON
 app.use(bodyParser.json({ type: 'application/*+json' }));

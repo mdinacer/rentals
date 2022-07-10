@@ -63,11 +63,11 @@ interface ItemProps {
 }
 function ListItem({ icon, title, value }: ItemProps) {
   return (
-    <div className='flex flex-row items-center snap-center bg-gray-00 border-2 border-yellow-400 dark:border-indigo-400  drop-shadow-m bg-yellow-400  dark:bg-gray-900 rounded-full dark:text-white w-auto  py-0 pl-3 pr-5'>
+    <div className='flex flex-row items-center snap-center bg-gray-00 border-2 border-yellow-400 dark:border-indigo-400  drop-shadow-m bg-yellow-400  dark:bg-gray-900 rounded-md lg:rounded-full dark:text-white w-auto  py-0 pl-3 pr-5'>
       <div className='flex-initial py-1  fill-black dark:fill-white px-2'>
         {icon}
       </div>
-      <p className='flex-auto font-Secondary text-sm font-medium capitalize py-1 min-w-[5rem] '>
+      <p className='flex-auto font-Secondary text-base font-medium capitalize py-1 min-w-[5rem] '>
         {title}
       </p>
       <p className='flex-initial font-Primary text-xl font-thin uppercase  py-1 '>

@@ -144,7 +144,7 @@ export default function HouseDetails() {
             onRequest={() => setOpenRequest(true)}
           />
           {house.services && (
-            <div className='px-5'>
+            <div className='px-5  bg-black'>
               <HouseServicesList services={house.services} />
             </div>
           )}

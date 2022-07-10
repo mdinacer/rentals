@@ -8,10 +8,12 @@ import AppDropDownInput from '../Forms/DropDownInput';
 import AppNumberInput from '../Forms/NumberInput';
 
 interface Props {
+  province?: string | null;
+  city?: string | null;
   onExit: () => void;
 }
 
-export default function HousesFilters({ onExit }: Props) {
+export default function HousesFilters({ province, city, onExit }: Props) {
   const { houseParams } = useHouses();
   const dispatch = useAppDispatch();
   const {
@@ -25,6 +27,7 @@ export default function HousesFilters({ onExit }: Props) {
   async function handleSubmitData(data: FieldValues) {
     dispatch(setHouseParams(data));
   }
+
   return (
     <form
       onSubmit={handleSubmit(handleSubmitData)}
@@ -63,7 +66,7 @@ export default function HousesFilters({ onExit }: Props) {
               control={control}
               label='Province'
               name='province'
-              initial={houseParams.province || ''}
+              initial={province || houseParams.province || ''}
               items={provinces}
             />
             <AppDropDownInput
@@ -72,7 +75,7 @@ export default function HousesFilters({ onExit }: Props) {
               control={control}
               label='City'
               name='city'
-              initial={houseParams.city || ''}
+              initial={city || houseParams.city || ''}
               items={cities}
             />
 

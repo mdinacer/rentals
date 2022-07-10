@@ -1,12 +1,13 @@
 import { AdjustmentsIcon } from '@heroicons/react/solid';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import AppPagination from '../../Components/Common/AppPagination';
 import HousesFilters from '../../Components/House/HousesFilters';
 import HousesList from '../../Components/House/HousesList';
 import useHouses from '../../hooks/useHouses';
 import Layout from '../../layout/Layout';
-import { setPageNumber } from '../../slices/housesSlice';
+import { setHouseParams, setPageNumber } from '../../slices/housesSlice';
 import { useAppDispatch } from '../../store/configureStore';
 import { useOutsideClick } from '../../util/outsideClick';
 
@@ -15,12 +16,19 @@ export default function HousesPage() {
   const dispatch = useAppDispatch();
   const [filtersVisible, setFiltersVisible] = useState(false);
   const { houses, metaData } = useHouses();
+  const [searchParams] = useSearchParams();
+  const province = searchParams.get('province');
+  const city = searchParams.get('city');
 
   const handleCloseMenu = () => {
     setFiltersVisible(false);
   };
 
   useOutsideClick(node, handleCloseMenu);
+
+  useEffect(() => {
+    dispatch(setHouseParams({ province, city }));
+  }, [city, dispatch, province]);
   return (
     <Layout className='relative w-full flex-1 flex flex-row'>
       <AnimatePresence exitBeforeEnter>
@@ -44,9 +52,11 @@ export default function HousesPage() {
                 duration: 0.2,
               }}
               exit={{ x: '-100%' }}
-              className=' absolute top-0 left-0 bottom-0 z-10 overflow-y-auto max-h-screen  bg-gray-200 dark:bg-slate-900 lg:max-w-sm w-full  lg:flex drop-shadow-md  py-5  flex-col'
+              className=' absolute top-0 left-0 bottom-0 z-10 overflow-y-auto max-h-screen  bg-gray-200 dark:bg-slate-900 md:max-w-sm w-full  lg:flex drop-shadow-md  py-5  flex-col'
             >
               <HousesFilters
+                province={province}
+                city={city}
                 onExit={() => {
                   setFiltersVisible(false);
                 }}

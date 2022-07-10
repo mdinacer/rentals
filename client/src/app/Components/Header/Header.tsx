@@ -46,12 +46,14 @@ export default function Header() {
                 key={index}
                 className={`${
                   pathname === link.path
-                    ? ' opacity-100 font-bold'
+                    ? ' opacity-100 text-yellow-500 dark:text-indigo-500 font-bold'
                     : 'text-inherit opacity-50 font-normal'
                 } hover:scale-110 transition-all duration-300`}
               >
                 <Link to={link.path}>
-                  <p className={' font-Secondary uppercase'}>{link.title}</p>
+                  <p className={' font-Primary text-lg uppercase font-thin'}>
+                    {link.title}
+                  </p>
                 </Link>
               </li>
             ))}
@@ -83,10 +85,10 @@ export default function Header() {
                 to={logoutElement.path}
                 onClick={() => dispatch(signOut())}
                 className={
-                  ' font-Primary font-thin text-base uppercase  bg-red-500 py-1 px-3 rounded-md flex flex-row gap-x-2 items-center'
+                  ' font-Primary font-thin text-base uppercase  g-red-500 py-1 px-3 rounded-md flex flex-row gap-x-2 items-center'
                 }
               >
-                <LogoutIcon className='h-6 w-6' />
+                <LogoutIcon className='h-6 w-6 text-red-500' />
                 <p>{logoutElement.title}</p>
               </Link>
             </div>
