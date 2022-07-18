@@ -11,7 +11,7 @@ export default function HomePage() {
       /> */}
 
       <video
-        src='https://download-video.akamaized.net/playback/f56ae198-3975-4f7d-a289-a57e02832be1/8e209a34-1f2374a2?__token__=st=1658177731~exp=1658192131~acl=%2Fplayback%2Ff56ae198-3975-4f7d-a289-a57e02832be1%2F8e209a34-1f2374a2%2A~hmac=7a99bc24f4becbee91ff60c2a0b32138724a6b2a82fc1fc19e5dc493a9baf812&r=dXM%3D'
+        src='/assets/videos/hero.mp4'
         autoPlay
         playsInline
         muted
