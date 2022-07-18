@@ -15,7 +15,7 @@ export default function RentActionsButtons({ rent }: Props) {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.account);
   const [action, setAction] = useState<rentAction | null>(null);
-  const isOwner = !!user && rent.owner._id === user.id;
+  const isPropertyOwner = !!user && rent.receiver.id === user.profile.id;
 
   function getActionContent(rentAction: rentAction | null) {
     switch (rentAction) {
@@ -39,9 +39,9 @@ export default function RentActionsButtons({ rent }: Props) {
         return (
           <Dialog
             key={action}
-            title={`${isOwner ? 'Reject' : 'Cancel'} Request`}
+            title={`${isPropertyOwner ? 'Reject' : 'Cancel'} Request`}
             body={`This action is permanent and irreversible, do you want to proceed with the ${
-              isOwner ? 'Rejection' : 'Cancellation'
+              isPropertyOwner ? 'Rejection' : 'Cancellation'
             }?`}
             onClose={(value) => {
               if (value) {
@@ -90,7 +90,7 @@ export default function RentActionsButtons({ rent }: Props) {
     try {
       setBusy(true);
       await agent.Rents.cancelRequest(rent.id);
-      const status = isOwner ? 'rejected' : 'cancelled';
+      const status = isPropertyOwner ? 'rejected' : 'cancelled';
       dispatch(
         updateRent({
           id: rent.id,
@@ -121,22 +121,28 @@ export default function RentActionsButtons({ rent }: Props) {
       <div className=' flex flex-row gap-x-6'>
         {rent.status === 'request' && (
           <>
-            <button
-              onClick={() => setAction('accept')}
-              className={`${buttonStyle} bg-green-800 hover:bg-green-400 hover:shadow-green-600`}
-            >
-              {busy ? 'Wait' : 'Accept'}
-            </button>
+            {isPropertyOwner && (
+              <button
+                onClick={() => setAction('accept')}
+                className={`${buttonStyle} bg-green-800 hover:bg-green-400 hover:shadow-green-600`}
+              >
+                {busy ? 'Wait' : 'Accept'}
+              </button>
+            )}
             <button
               onClick={() => setAction('reject')}
-              className={`${buttonStyle} bg-orange-800 hover:bg-orange-400 hover:shadow-orange-600`}
+              className={`${buttonStyle} ${
+                isPropertyOwner
+                  ? 'bg-orange-800 hover:bg-orange-400 hover:shadow-orange-600'
+                  : 'bg-red-800 hover:bg-red-400 hover:shadow-red-600'
+              } bg-orange-800 hover:bg-orange-400 hover:shadow-orange-600`}
             >
-              {busy ? 'Wait' : isOwner ? 'Reject' : 'Cancel'}
+              {busy ? 'Wait' : isPropertyOwner ? 'Reject' : 'Cancel'}
             </button>
           </>
         )}
         {(rent.status === 'cancelled' || rent.status === 'rejected') &&
-          !isOwner && (
+          !isPropertyOwner && (
             <button
               onClick={() => setAction('delete')}
               className={`${buttonStyle} bg-red-800 hover:bg-red-300 hover:shadow-red-500`}
@@ -196,7 +202,7 @@ function Dialog({
         } gap-x-5 pt-5 justify-center  items-center  w-full `}
       >
         <button
-          className={`${buttonStyle} border-y-gray-600 hover:border-y-gray-100 hover:shadow-gray-300`}
+          className={`${buttonStyle} bg-gray-600 hover:border-y-gray-100 hover:shadow-gray-300`}
           onClick={() => onClose(false)}
         >
           {cancelText}
@@ -204,8 +210,8 @@ function Dialog({
         <button
           className={`${buttonStyle} ${
             isDelete
-              ? 'border-y-red-800 hover:border-y-red-300 hover:shadow-red-500'
-              : 'border-y-sky-800 hover:border-y-sky-100 hover:shadow-sky-300'
+              ? 'bg-red-800 hover:border-y-red-300 hover:shadow-red-500'
+              : 'bg-sky-800 hover:border-y-sky-100 hover:shadow-sky-300'
           }`}
           onClick={() => onClose(true)}
         >

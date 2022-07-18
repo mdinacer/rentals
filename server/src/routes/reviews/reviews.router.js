@@ -2,8 +2,7 @@ const express = require('express');
 const auth = require('../../middlewares/auth');
 
 const {
-  httpGetReviewsByHouse,
-  httpGetReviewsByUser,
+  httpGetPropertyReviews,
   httpCreateReview,
   httpEditReview,
   httpDeleteReview,
@@ -11,8 +10,7 @@ const {
 
 const reviewsRouter = express.Router();
 
-reviewsRouter.get('/:id', httpGetReviewsByHouse);
-reviewsRouter.get('/me', auth, httpGetReviewsByUser);
+reviewsRouter.get('/:id', httpGetPropertyReviews);
 reviewsRouter.post('/:id', auth, httpCreateReview);
 reviewsRouter.put('/:id', auth, httpEditReview);
 reviewsRouter.delete('/:id', auth, httpDeleteReview);

@@ -1,75 +1,34 @@
-const { string } = require('joi');
 const mongoose = require('mongoose');
 
-const countrySchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  provinces: [
-    {
-      province: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'Province',
-        required: true,
-      },
-    },
-  ],
-});
-
-const provinceSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  country: {
-    type: mongoose.SchemaTypes.ObjectId,
-    ref: 'Country',
-    required: true,
-  },
-  cities: [
-    {
-      city: {
-        type: mongoose.SchemaTypes.ObjectId,
-        required: true,
-        ref: 'City',
-      },
-    },
-  ],
-});
-
-const citySchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  province: {
-    type: mongoose.SchemaTypes.ObjectId,
-    ref: 'Province',
-    required: true,
-  },
-});
-
 const addressSchema = new mongoose.Schema({
-  country: {
+  wilaya: {
     type: String,
     required: true,
-    default: 'Algeria',
+    lowercase: true,
+    trim: true,
   },
-  province: {
+  daira: {
     type: String,
     required: true,
+    lowercase: true,
+    trim: true,
   },
-  city: {
+  commune: {
     type: String,
     required: true,
+    lowercase: true,
+    trim: true,
   },
   address1: {
     type: String,
     required: true,
+    lowercase: true,
+    trim: true,
   },
   address2: {
     type: String,
+    lowercase: true,
+    trim: true,
   },
   location: {
     long: String,
@@ -85,4 +44,98 @@ addressSchema.options.toJSON = {
   },
 };
 
+const wilayaSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    lowercase: true,
+    trim: true,
+    required: true,
+  },
+  nameAr: {
+    type: String,
+    lowercase: true,
+    trim: true,
+    required: true,
+  },
+  code: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+});
+
+wilayaSchema.options.toJSON = {
+  transform: function (doc, ret, options) {
+    ret.id = doc._id;
+    delete ret._id;
+    delete ret.__v;
+    return ret;
+  },
+};
+
+const dairaSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    lowercase: true,
+    trim: true,
+    required: true,
+  },
+  nameAr: {
+    type: String,
+    lowercase: true,
+    trim: true,
+    required: true,
+  },
+
+  wilaya: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'Wilaya',
+  },
+});
+
+dairaSchema.options.toJSON = {
+  transform: function (doc, ret, options) {
+    ret.id = doc._id;
+    delete ret._id;
+    delete ret.__v;
+    return ret;
+  },
+};
+
+const communeSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    lowercase: true,
+    trim: true,
+    required: true,
+  },
+  nameAr: {
+    type: String,
+    lowercase: true,
+    trim: true,
+    required: true,
+  },
+  wilaya: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'Wilaya',
+  },
+  daira: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'Daira',
+  },
+});
+
+communeSchema.options.toJSON = {
+  transform: function (doc, ret, options) {
+    ret.id = doc._id;
+    delete ret._id;
+    delete ret.__v;
+    return ret;
+  },
+};
+
 module.exports.addressSchema = addressSchema;
+
+module.exports.Wilaya = mongoose.model('Wilaya', wilayaSchema);
+module.exports.Daira = mongoose.model('Daira', dairaSchema);
+module.exports.Commune = mongoose.model('Commune', communeSchema);

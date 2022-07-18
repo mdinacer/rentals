@@ -1,4 +1,4 @@
-const cloudinary = require('cloudinary').v2;
+const Cloudinary = require('cloudinary').v2;
 const { createReadStream } = require('streamifier');
 
 require('dotenv').config();
@@ -7,7 +7,7 @@ const cloudName = process.env.CLOUDINARY_CLOUDNAME;
 const apiKey = process.env.CLOUDINARY_APIKEY;
 const apiSecret = process.env.CLOUDINARY_APISECRET;
 
-cloudinary.config({
+Cloudinary.config({
   cloud_name: cloudName,
   api_key: apiKey,
   api_secret: apiSecret,
@@ -23,7 +23,7 @@ function SaveImage(
   tags = ''
 ) {
   return new Promise((resolve, reject) => {
-    let stream = cloudinary.uploader.upload_stream(
+    let stream = Cloudinary.uploader.upload_stream(
       {
         tags,
         width,
@@ -31,6 +31,7 @@ function SaveImage(
         crop,
         folder,
         gravity,
+        format: 'webp',
       },
       (error, result) => {
         if (result) {
@@ -51,7 +52,7 @@ function SaveImage(
 
 function DeleteImage(publicId) {
   return new Promise((resolve, reject) => {
-    cloudinary.uploader.destroy(publicId, (error, result) => {
+    Cloudinary.uploader.destroy(publicId, (error, result) => {
       if (result) {
         resolve(result);
       } else {

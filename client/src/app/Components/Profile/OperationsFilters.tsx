@@ -11,8 +11,8 @@ export default function OperationsFilters() {
     const item = {
       orderBy: 'creationDate',
       status: '',
-      owner: user?.id,
-      client: null,
+      receiver: user?.profile.id,
+      sender: null,
     };
 
     dispatch(setRentParams(item));
@@ -23,15 +23,15 @@ export default function OperationsFilters() {
       setRentParams({
         orderBy: 'creationDate',
         status: '',
-        owner: user?.id,
+        // receiver: user?.profile.id,
       })
     );
-  }, [dispatch, user?.id]);
+  }, [dispatch, user?.profile.id]);
 
   const handleTypeChange = (value: string) => {
-    const owner = value === 'received' ? user?.id : '';
-    const client = value === 'sent' ? user?.id : '';
-    dispatch(setRentParams({ owner, client }));
+    const receiver = value === 'received' ? user?.profile.id : '';
+    const sender = value === 'sent' ? user?.profile.id : '';
+    dispatch(setRentParams({ receiver, sender }));
   };
 
   const handleSortChange = (orderBy: string) => {
@@ -53,7 +53,7 @@ export default function OperationsFilters() {
         />
         <AppDropDown
           className='  w-full lg:max-w-[14rem]'
-          label='Sort'
+          label='Ordre'
           items={sortItems}
           onChange={handleSortChange}
         />
@@ -80,21 +80,21 @@ export default function OperationsFilters() {
 }
 
 const typeItems = [
-  { title: 'Received', value: 'received' },
-  { title: 'Sent', value: 'sent' },
+  { title: 'Reçus', value: 'received' },
+  { title: 'Envoyés', value: 'sent' },
 ];
 
 const sortItems = [
   { title: 'Date', value: 'creationDate' },
   { title: 'Status', value: 'status' },
-  { title: 'Start Date', value: 'startDate' },
-  { title: 'End Date', value: 'endDate' },
+  { title: 'Date début', value: 'startDate' },
+  { title: 'Date fin', value: 'endDate' },
 ];
 
 const statusItems = [
   { title: 'All', value: '' },
-  { title: 'Pending', value: 'request' },
-  { title: 'Accepted', value: 'operation' },
-  { title: 'Cancelled', value: 'cancelled' },
-  { title: 'Rejected', value: 'rejected' },
+  { title: 'En attente', value: 'request' },
+  { title: 'Acceptée', value: 'operation' },
+  { title: 'Annulée', value: 'cancelled' },
+  { title: 'Rejetées', value: 'rejected' },
 ];

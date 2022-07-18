@@ -1,7 +1,7 @@
 import { useController, UseControllerProps } from 'react-hook-form';
 
 interface Props extends UseControllerProps {
-  label: string;
+  label?: string;
   type?: string;
   placeholder: string;
   autoComplete?: string | undefined;
@@ -17,11 +17,13 @@ export default function AppTextArea(props: Props) {
 
   return (
     <div className={`w-full overflow-hidden flex flex-col`}>
-      <div className='py-1'>
-        <p className='text-sm text-slate-600 dark:text-gray-100 capitalize'>
-          {props.label}
-        </p>
-      </div>
+      {props.label && (
+        <div className='py-1'>
+          <p className='text-sm text-slate-600 dark:text-gray-100 capitalize'>
+            {props.label}
+          </p>
+        </div>
+      )}
       <textarea
         rows={props.rows || 3}
         className={`resize-none focus:outline-none border bg-transparent py-2 px-5 flex-auto form-input font-Secondary placeholder:capitalize placeholder:text-gray-400 w-full  ${

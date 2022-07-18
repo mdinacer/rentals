@@ -18,13 +18,13 @@ export default function Header() {
   const { pathname } = useLocation();
 
   const links = [
-    { title: 'Home', path: '/' },
-    { title: 'Houses', path: '/houses' },
-    { title: 'About', path: '/about' },
-    { title: 'Contact', path: '/contact' },
+    { title: 'accueil', path: '/' },
+    { title: 'propriétés', path: '/properties' },
+    { title: 'à propos', path: '/about' },
+    { title: 'contact', path: '/contact' },
   ];
-  const loginElement = { title: 'Login', path: '/account/login' };
-  const logoutElement = { title: 'Logout', path: '/' };
+  const loginElement = { title: 'Se connecter', path: '/account/login' };
+  const logoutElement = { title: 'Se déconnecter', path: '/' };
 
   useEffect(() => {
     if (!isMobile && open) {
@@ -66,7 +66,7 @@ export default function Header() {
               <Link to={'/profile'} className={'px-5'}>
                 <div className=' flex flex-row items-center justify-center gap-x-2'>
                   {user.profile?.image ? (
-                    <div className=' h-10 w-10 rounded-md overflow-hidden'>
+                    <div className=' h-8 w-8 rounded-full overflow-hidden'>
                       <img
                         src={user.profile.image}
                         alt={user.username}
@@ -76,7 +76,7 @@ export default function Header() {
                   ) : (
                     <UserIcon className='h-6 w-6' />
                   )}
-                  <p className=' font-Primary text-2xl font-thin capitalize'>
+                  <p className=' font-Primary text-xl font-thin capitalize'>
                     {user.username}
                   </p>
                 </div>
@@ -85,7 +85,7 @@ export default function Header() {
                 to={logoutElement.path}
                 onClick={() => dispatch(signOut())}
                 className={
-                  ' font-Primary font-thin text-base uppercase  g-red-500 py-1 px-3 rounded-md flex flex-row gap-x-2 items-center'
+                  ' font-Primary font-thin text-base uppercase py-1 px-3 rounded-md flex flex-row gap-x-2 items-center'
                 }
               >
                 <LogoutIcon className='h-6 w-6 text-red-500' />
@@ -97,7 +97,7 @@ export default function Header() {
               to={loginElement.path}
               onClick={() => setOpen(false)}
               className={
-                ' font-Primary text-base uppercase font-thin bg-red-500 py-1 px-3 rounded-md'
+                ' font-Primary text-lg uppercase font-thin bg-yellow-500 dark:bg-indigo-500 py-1 px-3 rounded-'
               }
             >
               {loginElement.title}

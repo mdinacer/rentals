@@ -58,11 +58,11 @@ function OperationsListHeader() {
   return (
     <div className=' grid-cols-7 gap-5 dark:bg-gray-800 bg-gray-300 py-2 my-3 hidden lg:grid'>
       <small className={itemStyle}>Status</small>
-      <small className={itemStyle}>Request Date</small>
-      <small className={itemStyle}>House</small>
-      <small className={itemStyle + ' col-span-2'}>Customer</small>
-      <small className={itemStyle}>Start Date</small>
-      <small className={itemStyle}>End Date</small>
+      <small className={itemStyle}>Date</small>
+      {/* <small className={itemStyle}>Property</small> */}
+      <small className={itemStyle + ' col-span-2'}>Client </small>
+      <small className={itemStyle}>Début</small>
+      <small className={itemStyle}>Fin</small>
     </div>
   );
 }
@@ -79,7 +79,7 @@ function OperationsListItem({ rent, onSelect }: ItemProps) {
       onClick={() => onSelect(rent)}
       variants={itemVariants}
       layout
-      className={`cursor-pointer grid lg:grid-cols-7 lg:gap-x-5 bg-gray-200 dark:bg-gray-800 ${
+      className={`cursor-pointer grid lg:grid-cols-6 lg:gap-x-5 bg-gray-200 dark:bg-gray-800 ${
         rent.active === true && rent.accepted && rent.status === 'operation'
           ? 'border-2 border-green-500'
           : 'border-0'
@@ -109,18 +109,20 @@ function OperationsListItem({ rent, onSelect }: ItemProps) {
           {format(new Date(rent.creationDate), 'dd/MM/yyyy')}
         </p>
       </div>
-      <div className='px-5 py-2 flex flex-row justify-between'>
+      {/* <div className='px-5 py-2 flex flex-row justify-between'>
         <small className='font-Primary font-thin text-base capitalize block lg:hidden'>
-          {rent.house.type}
+          {rent.property.type}
         </small>
-        <p className=' font-Secondary text-lg capitalize'>{rent.house.title}</p>
-      </div>
+        <p className=' font-Secondary text-lg capitalize'>
+          {rent.property.title}
+        </p>
+      </div> */}
       <div className='px-5 py-2 lg:col-span-2 flex flex-row justify-between'>
         <small className='font-Primary font-thin text-base capitalize block lg:hidden'>
           Customer
         </small>
         <p className=' font-Secondary text-lg capitalize'>
-          {rent.client?.profile?.fullName}
+          {rent.sender?.fullName}
         </p>
       </div>
 

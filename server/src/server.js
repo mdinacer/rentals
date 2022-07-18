@@ -1,6 +1,8 @@
 const http = require('http');
 const https = require('https');
 
+const parser = require('./services/citiesParser');
+
 require('express-async-errors');
 require('dotenv').config();
 
@@ -25,7 +27,7 @@ socketApi.io.attach(server, {
 
 async function startServer() {
   await mongoConnect();
-
+  parser.readCities();
   require('./services/validation')();
 
   if (!process.env.JWT_KEY) {

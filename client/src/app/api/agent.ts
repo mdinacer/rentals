@@ -1,8 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../..";
-import { House } from "../models/house";
-import { HouseReview } from "../models/houseReview";
+import { Property } from "../models/property";
+import { PropertyReview } from "../models/propertyReview";
 import { PaginatedResponse } from "../models/pagination";
 import { Rent } from "../models/rent";
 import { User } from "../models/user";
@@ -65,9 +65,9 @@ axios.interceptors.response.use(async response => {
                 toast.error("You are not allowed")
                 break;
 
-            // case 404:
-            //     history.push('/not-found', data);
-            //     break;
+            case 404:
+                history.push('/not-found', data);
+                break;
 
             case 500:
                 history.push('/server-error', data);
@@ -133,6 +133,11 @@ const requests = {
 //     return formData;
 // }
 
+const Address = {
+    listWilayas: () => requests.get('addresses/wilaya'),
+    listDairas: (countryId: string) => requests.get(`addresses/${countryId}/daira`,),
+    listCommunes: (provinceId: string) => requests.get(`addresses/${provinceId}/commune`),
+}
 const Account = {
     login: (values: any) => requests.post<User>('auth/', values),
     register: (values: any) => requests.post('users/', values),
@@ -141,29 +146,32 @@ const Account = {
     currentUser: () => requests.get<User>('auth/me'),
 }
 
-const Houses = {
-    list: (params: URLSearchParams) => requests.get<House[]>('houses', params),
-    listByUser: () => requests.get<House[]>('houses/me'),
-    details: (slug: string) => requests.get<House>(`houses/${slug}`),
-    create: (house: any) => requests.postForm(`houses/`, house),
-    update: (id: string, house: any) => requests.putForm(`houses/${id}`, house),
-    delete: (id: string) => requests.delete<void>(`houses/${id}`),
-    addFav: (id: string) => requests.put(`houses/${id}/fav`, {}),
+
+
+const Properties = {
+    list: (params: URLSearchParams) => requests.get<Property[]>('properties', params),
+    listByUser: () => requests.get<Property[]>('properties/me'),
+    details: (slug: string) => requests.get<Property>(`properties/${slug}`),
+    create: (property: any) => requests.postForm(`properties/`, property),
+    update: (id: string, property: any) => requests.putForm(`properties/${id}`, property),
+    delete: (id: string) => requests.delete<void>(`properties/${id}`),
+    setFav: (id: string) => requests.put(`properties/${id}/favorite`, {}),
+    deleteImages: (id: string, images: any) => requests.put(`properties/${id}/deleteImages`, { images }),
+    availability: (id: string, values: any) => requests.put(`properties/${id}/availability`, values),
 }
 
 const Reviews = {
-    list: (houseId: string, params?: URLSearchParams) => requests.get<HouseReview[]>(`reviews/${houseId}`, params),
-    listByUser: (params?: URLSearchParams) => requests.get<HouseReview[]>('reviews/me'),
-    create: (houseId: string, review: any) => requests.post(`reviews/${houseId}`, review),
-    update: (id: string, review: any) => requests.put<House>(`reviews/${id}`, review),
+    list: (propertyId: string, params?: URLSearchParams) => requests.get<PropertyReview[]>(`reviews/${propertyId}`, params),
+    create: (propertyId: string, review: any) => requests.post(`reviews/${propertyId}`, review),
+    update: (id: string, review: any) => requests.put<Property>(`reviews/${id}`, review),
     delete: (id: string) => requests.delete<void>(`reviews/${id}`),
 }
 
 const Rents = {
     list: (params?: URLSearchParams) => requests.get<Rent[]>(`rents/`, params),
     details: (id: string) => requests.get<Rent>(`rents/${id}`),
-    getActiveRequest: (houseId: string) => requests.get<Rent>(`rents/${houseId}/active`),
-    create: (houseId: string, rent: any) => requests.post(`rents/${houseId}`, rent),
+    getActiveRequest: (propertyId: string) => requests.get<Rent>(`rents/${propertyId}/active`),
+    create: (propertyId: string, rent: any) => requests.post(`rents/${propertyId}`, rent),
     update: (id: string, rent: any) => requests.put(`rents/${id}`, rent),
     acceptRequest: (id: string) => requests.put(`rents/${id}/accept`, {}),
     cancelRequest: (id: string) => requests.put(`rents/${id}/cancel`, {}),
@@ -171,14 +179,20 @@ const Rents = {
 }
 
 const Location = {
-    getLocation: (lat: number, long: number) => axios.get(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${long}&format=json`,
+    getLocation: (lat: number, long: number, lang: string = "en") => axios.get(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${long}&addressdetails=1&format=json&accept-language=${lang}&zoom=18`,
         { headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, withCredentials: false }).then(responseBody),
 }
 
+const Notifications = {
+    list: () => requests.get<Notification[]>('notifications',),
+}
+
 const agent = {
+    Address,
     Account,
-    Houses,
+    Properties,
     Location,
+    Notifications,
     Rents,
     Reviews
 }

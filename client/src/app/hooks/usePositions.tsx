@@ -66,9 +66,17 @@ export default function usePositions() {
     });
   }
 
-  const fetchReverseGeolocation = async (lon: number, lat: number) => {
+  const fetchReverseGeolocation = async (
+    lon: number,
+    lat: number,
+    lang?: string
+  ) => {
     try {
-      const result: LocationData = await agent.Location.getLocation(lat, lon);
+      const result: LocationData = await agent.Location.getLocation(
+        lat,
+        lon,
+        lang
+      );
 
       const data: LocationAddress = {
         ...result.address,
@@ -87,7 +95,7 @@ export default function usePositions() {
     }
   };
 
-  async function getCurrentLocation() {
+  async function getCurrentLocation(lang?: string) {
     try {
       setBusy(true);
       setServiceState({
@@ -98,7 +106,11 @@ export default function usePositions() {
 
       const coords: coordsType = await getCoordinates();
 
-      const result = await fetchReverseGeolocation(coords.long, coords.lat);
+      const result = await fetchReverseGeolocation(
+        coords.long,
+        coords.lat,
+        lang
+      );
       return result;
     } catch (error) {
       console.log(error);

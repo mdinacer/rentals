@@ -1,6 +1,6 @@
 export enum RentStatus {
-    request = "Pending" as any,
-    operation = "Accepted" as any,
-    cancelled = "Cancelled" as any,
-    rejected = "Rejected" as any,
+    request = "En attente" as any,
+    operation = "Acceptée" as any,
+    cancelled = "Annulée" as any,
+    rejected = "Rejetée" as any,
 }

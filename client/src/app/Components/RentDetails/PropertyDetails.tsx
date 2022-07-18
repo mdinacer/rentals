@@ -1,10 +1,10 @@
-import { House } from '../../models/house';
+import { Property } from '../../models/property';
 
 interface Props {
-  house: House;
+  property: Property;
 }
 
-export default function PropertyDetails({ house }: Props) {
+export default function PropertyDetails({ property }: Props) {
   return (
     <div>
       <p className='font-Primary text-2xl uppercase font-thin mb-2 border-b dark:border-b-white pb-1'>
@@ -13,17 +13,17 @@ export default function PropertyDetails({ house }: Props) {
       <div className=' flex flex-row gap-x-5'>
         <div className='h-full w-[120px] rounded-md overflow-hidden '>
           <img
-            src={house.cover.pictureUrl}
+            src={property.cover.pictureUrl}
             alt=''
             className='h-full w-full object-cover object-center'
           />
         </div>
         <div className='flex-auto flex flex-col justify-center'>
-          <p className=' font-Primary text-3xl font-thin'>{house.title}</p>
+          <p className=' font-Primary text-3xl font-thin'>{property.title}</p>
           <p className=' font-Secondary text-base'>
-            {house.address?.country}, {house.address?.province}
+            {property.address?.wilaya}, {property.address?.daira}
             {', '}
-            {house.address?.city}
+            {property.address?.commune}
           </p>
         </div>
       </div>

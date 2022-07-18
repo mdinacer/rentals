@@ -76,8 +76,10 @@ export default function LoginPage() {
             <input
               disabled={!isValid}
               className={`${
-                isValid ? 'opacity-100  ' : 'opacity-70 '
-              } cursor-pointer bg-gray-900 text-white w-full py-2 my-10 px-5 uppercase font-Primary text-xl font-thin`}
+                isValid
+                  ? 'opacity-100  bg-yellow-500 dark:bg-indigo-500 cursor-pointer '
+                  : 'opacity-70 bg-gray-400 '
+              }   w-full py-2 my-10 px-5 uppercase font-Primary text-xl font-thin`}
               type='submit'
               value={isSubmitting ? 'Please wait' : 'Login'}
             />

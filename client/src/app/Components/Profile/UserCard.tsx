@@ -14,58 +14,51 @@ interface Props {
 
 export default function UserCard({ profile, onEdit }: Props) {
   return (
-    <div className='relative flex items-center  py-5 px-5 lg:px-10 rounded-lg drop-shadow-md mx-auto bg-white dark:bg-gray-800'>
-      <div className=' flex flex-col lg:flex-row gap-x-10  items-center gap-y-5 lg:gap-y-0'>
-        <div className='  h-32 w-32 rounded-full overflow-hidden  my-auto flex-initial'>
-          <img
-            src={profile.image}
-            alt=''
-            className='object-center  h-32 w-32 object-cover  rounded-full  '
-          />
-        </div>
+    <div className='relative flex items-center max-w-lg w-full  py-5 px-5 lg:px-5  mx-auto bg-gray-300 dark:bg-gray-800'>
+      <div className='  h-32 w-32 rounded-full overflow-hidden  my-auto flex-initial'>
+        <img
+          src={profile.image}
+          alt=''
+          className='object-center  h-32 w-32 object-cover  rounded-full  '
+        />
+      </div>
 
-        <div className='flex flex-col font-Secondary  text-base gap-y-3  flex-auto'>
-          <p className=' font-Primary text-3xl font-thin w-full capitalize  mb-5 '>
-            {profile.fullName}
-          </p>
-          {profile.address && (
-            <div className='  inline-flex gap-x-3 items-center '>
-              <LocationMarkerIcon className='h-5 w-5 dark:text-gray-400' />
+      <div className='flex flex-col font-Secondary  text-base gap-y-3 px-5  flex-auto'>
+        <p className=' font-Primary text-3xl font-thin w-full capitalize  mb-2 '>
+          {profile.fullName}
+        </p>
+        {profile.address && (
+          <div className=' flex flex-row gap-x-3 items-start '>
+            <LocationMarkerIcon className='h-5 w-5 dark:text-gray-400' />
+            <div>
               <p className=' '>
-                {profile.address.country} - {profile.address.province} -{' '}
-                {profile.address.city}{' '}
+                {profile.address.wilaya} - {profile.address.daira} -{' '}
+                {profile.address.commune}{' '}
               </p>
+              <p className=' '>{profile.address.address1}</p>
+              <p className=' '>{profile.address.address2}</p>
             </div>
-          )}
-
-          <div className=' inline-flex items-center gap-x-3'>
-            <MailIcon className='h-5 w-5 dark:text-gray-400' />
-            <p className=''>{profile.email}</p>
           </div>
+        )}
 
-          {profile.phone && (
-            <div className='inline-flex gap-x-3 items-center'>
-              <PhoneIcon className='h-5 w-5 dark:text-gray-400' />
-
-              <span>{profile.phone}</span>
-            </div>
-          )}
-          {profile.mobile && (
-            <div className='inline-flex gap-x-3 items-center'>
-              <DeviceMobileIcon className='h-5 w-5 dark:text-gray-400' />
-              <span>{profile.mobile}</span>
-            </div>
-          )}
+        <div className=' inline-flex items-center gap-x-3'>
+          <MailIcon className='h-5 w-5 dark:text-gray-400' />
+          <p className=''>{profile.email}</p>
         </div>
 
-        <div className=' flex-initial self-end'>
-          <button
-            onClick={onEdit}
-            className=' p-2 bg-gray-900 rounded-full text-white font-Primary text-lg font-thin'
-          >
-            <PencilAltIcon className='h-6 w-6' />
-          </button>
-        </div>
+        {profile.phone && (
+          <div className='inline-flex gap-x-3 items-center'>
+            <PhoneIcon className='h-5 w-5 dark:text-gray-400' />
+
+            <span>{profile.phone}</span>
+          </div>
+        )}
+        {profile.mobile && (
+          <div className='inline-flex gap-x-3 items-center'>
+            <DeviceMobileIcon className='h-5 w-5 dark:text-gray-400' />
+            <span>{profile.mobile}</span>
+          </div>
+        )}
       </div>
     </div>
   );

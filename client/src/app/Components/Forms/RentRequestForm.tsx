@@ -13,7 +13,7 @@ import AppDatePicker from './AppDatePicker';
 import { ar, fr, enUS } from 'date-fns/locale';
 import { registerLocale } from 'react-datepicker';
 import { PlusIcon, RefreshIcon, XIcon } from '@heroicons/react/solid';
-import { House } from '../../models/house';
+import { Property } from '../../models/property';
 import { RentRequestValidationSchema } from '../../validation/requestValidation';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import agent from '../../api/agent';
@@ -25,25 +25,25 @@ registerLocale('fr', fr);
 registerLocale('en', enUS);
 
 const durations = [
-  { title: 'Day', value: 'day' },
-  { title: 'Week', value: 'week' },
-  { title: 'Month', value: 'month' },
-  { title: 'Year', value: 'year' },
+  { title: 'Jour', value: 'day' },
+  { title: 'Semaine', value: 'week' },
+  { title: 'Mois', value: 'month' },
+  { title: 'Année', value: 'year' },
 ];
 
 interface Props {
-  house: House;
+  property: Property;
   request?: Rent;
   onClose: (value: Rent | null) => void;
 }
 
 const styles = {
   title: 'uppercase font-Primary font-thin  text-lg ',
-  paragraph: 'capitalize font-Raleway  text-xl ',
+  paragraph: 'capitalize font-Secondary  text-xl ',
   detailsContainer: 'w-full flex flex-row gap-x-5 ',
 };
 
-export default function RentRequestForm({ house, request, onClose }: Props) {
+export default function RentRequestForm({ property, request, onClose }: Props) {
   const isEdit = !!request;
   const [startDate, setStartDate] = useState<Date | null>(
     request ? new Date(request.startDate) : new Date()
@@ -98,7 +98,7 @@ export default function RentRequestForm({ house, request, onClose }: Props) {
       if (isEdit) {
         result = await agent.Rents.update(request.id, data);
       } else {
-        result = await agent.Rents.create(house.id, data);
+        result = await agent.Rents.create(property.id, data);
       }
     } catch (error) {
       console.log(error);
@@ -124,10 +124,10 @@ export default function RentRequestForm({ house, request, onClose }: Props) {
   }, [request, reset]);
 
   useEffect(() => {
-    if (!house.available && house.availableFrom) {
-      setStartDate(new Date(house.availableFrom));
+    if (!property.available && property.availableFrom) {
+      setStartDate(new Date(property.availableFrom));
     }
-  }, [house.available, house.availableFrom]);
+  }, [property.available, property.availableFrom]);
 
   return (
     <div className='relative bg-gray-100 dark:bg-slate-800 lg:rounded-md w-full lg:w-full lg:max-w-xl'>
@@ -141,10 +141,10 @@ export default function RentRequestForm({ house, request, onClose }: Props) {
       </button>
       <div className='grid grid-flow-row gap-2  bg-gray-900 text-white px-10 py-5 lg:rounded-t-md'>
         <div className={'w-full'}>
-          <p className={' font-Primary text-4xl font-thin'}>{house.title}</p>
+          <p className={' font-Primary text-4xl font-thin'}>{property.title}</p>
           <p className={'font-Secondary text-base'}>
-            {house.address.city} - {house.address.province},{' '}
-            {house.address.country}
+            {property.address.commune} - {property.address.daira},{' '}
+            {property.address.wilaya}
           </p>
         </div>
 
@@ -187,15 +187,15 @@ export default function RentRequestForm({ house, request, onClose }: Props) {
         <div className='grid gap-5'>
           <div className=' grid grid-cols-1 lg:grid-cols-2 gap-x-5'>
             <AppDatePicker
-              label={'Start date'}
+              label={'Date début'}
               control={control}
               name='startDate'
               selectsStart
               startDate={startDate}
               endDate={endDate}
               minDate={
-                house.availableFrom
-                  ? new Date(house.availableFrom)
+                property.availableFrom
+                  ? new Date(property.availableFrom)
                   : addDays(new Date(), -1)
               }
               secondaryAction={(date) => {
@@ -210,9 +210,10 @@ export default function RentRequestForm({ house, request, onClose }: Props) {
             />
             <AppDatePicker
               // defaultValue={request ? new Date(request.endDate) : new Date()}
-              label={'End date'}
+              label={'Date fin'}
               control={control}
               name='endDate'
+              
               selectsEnd
               startDate={startDate}
               endDate={endDate}
@@ -258,7 +259,7 @@ export default function RentRequestForm({ house, request, onClose }: Props) {
           <input
             className={`border-gray-800 border cursor-pointer  font-Secondary text-base  px-5 py-1 uppercase `}
             type='button'
-            value={'Exit'}
+            value={'Sortir'}
             onClick={() => onClose(null)}
           />
           <input
@@ -267,7 +268,7 @@ export default function RentRequestForm({ house, request, onClose }: Props) {
             }  bg-gray-900 text-white font-Secondary text-base  px-5 py-1 uppercase `}
             disabled={!isValid}
             type='submit'
-            value={isSubmitting ? 'Please wait' : 'Send'}
+            value={isSubmitting ? 'Attendez SVP' : 'Envoyer'}
           />
         </div>
       </form>

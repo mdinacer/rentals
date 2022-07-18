@@ -1,7 +1,7 @@
 export interface Address {
-    country: string,
-    province: string,
-    city: string,
+    wilaya: string,
+    daira: string,
+    commune: string,
     address1: string,
     address2: string,
     location: location
@@ -19,19 +19,25 @@ export interface location {
     lat: string
 }
 
-export interface Country {
+export interface Wilaya {
+    id: string,
     name: string,
-    provinces: Province[]
+    nameAr: string,
+    code: number;
 }
 
-export interface Province {
+export interface Daira {
+    id: string,
     name: string,
-    country: string,
-    cities: City[]
+    nameAr: string,
+    wilaya: string;
 }
 
-export interface City {
+export interface Commune {
+    id: string,
     name: string,
-    province: string
+    nameAr: string,
+    wilaya: string;
+    daira: string;
 }
 

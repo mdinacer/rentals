@@ -26,11 +26,11 @@ export default function PersonDetails({ profile, title }: Props) {
               {profile.fullName}
             </p>
             <p className=' font-Secondary text-base'>
-              {profile.address?.country}
+              {profile.address?.wilaya}
               {', '}
-              {profile.address?.province}
+              {profile.address?.daira}
               {', '}
-              {profile.address?.city}
+              {profile.address?.commune}
             </p>
           </div>
           <div className=' flex flex-row gap-x-5 flex-initial'>

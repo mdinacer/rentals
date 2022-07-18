@@ -1,60 +1,35 @@
-const { Task, init } = require('fawn');
-
-const { House } = require('../../models/house/house.mongo');
-const { User } = require('../../models/user/user.mongo');
+const { Property } = require('../../models/property/property.mongo');
 const { Rent, validateRent } = require('./rent.mongo');
 
-init(process.env.MONGO_URL, 'tempRentsCollection');
+const selectItems = [
+  '_id',
+  'fullName',
+  'firstName',
+  'lastName',
+  'address',
+  'email',
+  'mobile',
+  'image.pictureUrl',
+];
 
-async function ListRents(skip, limit, params) {
+async function ListRents(user, skip, limit, params) {
   const { orderBy, ...filters } = params;
-  const query = await Rent.find(filters)
+
+  const query = await Rent.find(filters || { receiver: user.profile._id })
+
     .sort({ [orderBy]: -1 })
     .populate([
       {
-        path: 'owner',
-        select: 'profile',
-        populate: {
-          path: 'profile',
-          model: 'Profile',
-          select: [
-            '_id',
-            'fullName',
-            'firstName',
-            'lastName',
-            'address',
-            'email',
-            'mobile',
-            'image.pictureUrl',
-          ],
-        },
+        path: 'receiver',
+        select: selectItems,
       },
       {
-        path: 'client',
-        select: 'profile',
-        populate: {
-          path: 'profile',
-          model: 'Profile',
-          select: [
-            '_id',
-            'fullName',
-            'firstName',
-            'lastName',
-            'address',
-            'email',
-            'mobile',
-            'image.pictureUrl',
-          ],
-        },
+        path: 'sender',
+        select: selectItems,
       },
       {
-        path: 'house',
+        path: 'property',
         select: ['title', 'type', 'address', 'cover.pictureUrl'],
-        populate: {
-          path: 'rents',
-          model: 'Rent',
-          select: ['active'],
-        },
       },
     ])
     .skip(skip)
@@ -67,52 +42,19 @@ async function ListRents(skip, limit, params) {
 async function GetRent(user, rentId) {
   const rent = await Rent.findOne({
     _id: rentId,
-    $or: [{ owner: user._id }, { client: user._id }],
+    $or: [{ receiver: user.profile._id }, { sender: user.profile._id }],
   }).populate([
     {
-      path: 'owner',
-      select: 'profile',
-      populate: {
-        path: 'profile',
-        model: 'Profile',
-        select: [
-          '_id',
-          'fullName',
-          'firstName',
-          'lastName',
-          'address',
-          'email',
-          'mobile',
-          'image.pictureUrl',
-        ],
-      },
+      path: 'receiver',
+      select: selectItems,
     },
     {
-      path: 'client',
-      select: 'profile',
-      populate: {
-        path: 'profile',
-        model: 'Profile',
-        select: [
-          '_id',
-          'fullName',
-          'firstName',
-          'lastName',
-          'address',
-          'email',
-          'mobile',
-          'image.pictureUrl',
-        ],
-      },
+      path: 'sender',
+      select: selectItems,
     },
     {
-      path: 'house',
+      path: 'property',
       select: ['title', 'type', 'address', 'cover.pictureUrl'],
-      populate: {
-        path: 'rents',
-        model: 'Rent',
-        select: ['active'],
-      },
     },
   ]);
 
@@ -125,62 +67,40 @@ async function GetRent(user, rentId) {
   return rent;
 }
 
-async function GetActiveRequest(user, houseId) {
+async function GetActiveRequest(user, propertyId) {
   return await Rent.findOne({
-    house: houseId,
-    client: user._id,
+    property: propertyId,
+    sender: user.profile._id,
     status: 'request',
   });
-
-  // if (!rent) {
-  //   const error = Error('No matching operation found');
-  //   error.statusCode = 404;
-  //   throw error;
-  // }
-  // return rent;
 }
 
-async function CreateRent(user, houseId, data) {
+async function CreateRent(user, propertyId, data) {
   validateRentData(data);
 
-  const house = await House.findById(houseId);
+  const property = await Property.findById(propertyId);
 
-  if (!house) {
-    const error = Error('No matching house found');
+  if (!property) {
+    const error = Error('No matching property found');
     error.statusCode = 404;
     throw error;
   }
 
   const rent = new Rent({
-    owner: house.owner,
-    client: user._id,
-    house: house._id,
+    receiver: property.owner,
+    sender: user.profile._id,
+    property: property._id,
     startDate: data.startDate,
     endDate: data.endDate,
   });
 
   await rent.save();
-
-  // new Task()
-  //   .save('rents', rent)
-  //   .update('houses', { id: houseId }, { $push: { rents: rent._id } })
-  //   .update(
-  //     'users',
-  //     { _id: user._id },
-  //     { $push: { 'requests.sent': rent._id } }
-  //   )
-  //   .update(
-  //     'users',
-  //     { _id: house.owner },
-  //     { $push: { 'requests.received': rent._id } }
-  //   )
-  //   .run();
   return rent;
 }
 
 async function EditRent(user, id, data) {
   validateRentData(data);
-  const rent = await Rent.findOne({ _id: id, owner: user._id });
+  const rent = await Rent.findOne({ _id: id, sender: user.profile._id });
 
   if (!rent) {
     const error = Error('No matching operation found');
@@ -189,7 +109,7 @@ async function EditRent(user, id, data) {
   }
 
   if (!rent.status === 'request') {
-    const error = Error('You cannot update a confirmed rent operation');
+    const error = Error("You can't edit a confirmed rent operation");
     error.statusCode = 400;
     throw error;
   }
@@ -201,7 +121,7 @@ async function EditRent(user, id, data) {
 async function AcceptRent(user, id) {
   const rent = await Rent.findOne({
     _id: id,
-    owner: user._id,
+    receiver: user.profile._id,
     status: 'request',
   });
 
@@ -218,7 +138,7 @@ async function AcceptRent(user, id) {
 async function CancelRent(user, id) {
   const rent = await Rent.findOne({
     _id: id,
-    $or: [{ owner: user._id }, { client: user._id }],
+    $or: [{ receiver: user.profile_id }, { sender: user.profile._id }],
   });
 
   if (!rent) {
@@ -227,7 +147,9 @@ async function CancelRent(user, id) {
     throw error;
   }
 
-  const status = rent.owner.equals(user._id) ? 'rejected' : 'cancelled';
+  const status = rent.receiver.equals(user.profile._id)
+    ? 'rejected'
+    : 'cancelled';
 
   const result = await rent.updateOne({ accepted: false, status });
   return result.modifiedCount > 0;
@@ -236,7 +158,7 @@ async function CancelRent(user, id) {
 async function DeleteRent(user, id) {
   const rent = await Rent.findOne({
     _id: id,
-    $or: [{ owner: user._id }, { client: user._id }],
+    $or: [{ receiver: user.profile._id }, { sender: user.profile._id }],
   });
 
   if (!rent) {
@@ -252,35 +174,14 @@ async function DeleteRent(user, id) {
   }
 
   if (
-    rent.client.toString() === user._id.toString() &&
+    rent.sender.toString() === user.profile._id.toString() &&
     rent.type === 'request'
   ) {
-    new Task()
-      .delete('rents', rent)
-      .update('houses', { id: rent.house }, { $pull: { rents: rent._id } })
-      .update(
-        'users',
-        { _id: rent.client },
-        { $pull: { 'requests.sent': rent._id } }
-      )
-      .update(
-        'users',
-        { _id: rent.owner },
-        { $pull: { 'requests.received': rent._id } }
-      )
-      .run();
+    await rent.deleteOne();
   }
 
-  if (rent.owner.toString() === user._id.toString()) {
-    new Task()
-      .update('rents', { _id: rent._id }, { type: 'cancelled' })
-      .update('houses', { _id: rent.house }, { $pull: { rents: rent._id } })
-      .update(
-        'users',
-        { _id: rent.owner },
-        { $pull: { 'requests.received': rent._id } }
-      )
-      .run();
+  if (rent.owner.toString() === user.profile._id.toString()) {
+    await rent.update({ type: 'cancelled' });
   }
 
   return rent;

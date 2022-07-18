@@ -1,7 +1,7 @@
 const logger = require('./logger');
 
 const users = require('./users');
-const { addUser, removeUser, getUser, getUsersInRoom } = users;
+const { addUser, removeUser, getUser, getUsersInCity } = users;
 
 const io = require('socket.io')();
 const socketApi = {
@@ -11,9 +11,14 @@ const socketApi = {
 
 io.on('connection', (socket) => {
   //socket.on('join', ({ name, room }, callback) => {
-  socket.on('join', ({ name, room }) => {
-    const { error, user } = addUser({ id: socket.id, name, room });
-
+  socket.on('join', (props) => {
+    const { error, user } = addUser({
+      id: socket.id,
+      name: props.name,
+      province: props.province,
+      city: props.city,
+    });
+    console.log('Connected', props);
     //if (error) return callback(error);
 
     // Emit will send message to the user
@@ -34,7 +39,7 @@ io.on('connection', (socket) => {
 
     io.to(user.room).emit('roomData', {
       room: user.room,
-      users: getUsersInRoom(user.room),
+      users: getUsersInCity(user.room),
     });
     //callback();
   });
@@ -51,7 +56,7 @@ io.on('connection', (socket) => {
     socket.emit('message', {
       user: 'admin',
       text: `${user.name}, welcome to room ${user.room}.`,
-      count: getUsersInRoom(room).length,
+      count: getUsersInCity(room).length,
       id: socket.id,
     });
 
@@ -66,7 +71,7 @@ io.on('connection', (socket) => {
 
     io.to(user.room).emit('roomData', {
       room: user.room,
-      users: getUsersInRoom(user.room),
+      users: getUsersInCity(user.room),
     });
     //callback();
   });
@@ -88,7 +93,7 @@ io.on('connection', (socket) => {
 
     io.to(user.room).emit('roomData', {
       room: user.room,
-      users: getUsersInRoom(user.room),
+      users: getUsersInCity(user.room),
     });
     //callback();
   });

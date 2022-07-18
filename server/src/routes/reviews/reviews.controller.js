@@ -1,6 +1,6 @@
 const {
-  GetReviewsByHouse,
-  GetReviewsByUser,
+  GetPropertyReviews,
+  //GetReviewsByUser,
   CreateReview,
   EditReview,
   DeleteReview,
@@ -8,24 +8,24 @@ const {
 
 const { getPagination, setPaginationHeader } = require('../../services/query');
 
-async function httpGetReviewsByHouse(req, res) {
+async function httpGetPropertyReviews(req, res) {
   const houseId = req.params.id;
   const { pageNumber, pageSize } = req.query;
   const { skip, limit } = getPagination({ pageNumber, pageSize });
-  const { totalCount, items } = await GetReviewsByHouse(houseId, skip, limit);
+  const { totalCount, items } = await GetPropertyReviews(houseId, skip, limit);
   setPaginationHeader(req, totalCount, res);
 
   return res.status(200).json(items);
 }
 
-async function httpGetReviewsByUser(req, res) {
-  const { pageNumber, pageSize } = req.query;
-  const { skip, limit } = getPagination({ pageNumber, pageSize });
-  const { totalCount, items } = await GetReviewsByUser(req.user, skip, limit);
-  setPaginationHeader(req, totalCount, res);
+// async function httpGetReviewsByUser(req, res) {
+//   const { pageNumber, pageSize } = req.query;
+//   const { skip, limit } = getPagination({ pageNumber, pageSize });
+//   const { totalCount, items } = await GetReviewsByUser(req.user, skip, limit);
+//   setPaginationHeader(req, totalCount, res);
 
-  return res.status(200).json(items);
-}
+//   return res.status(200).json(items);
+// }
 
 async function httpCreateReview(req, res) {
   const houseId = req.params.id;
@@ -49,8 +49,8 @@ async function httpDeleteReview(req, res) {
 }
 
 module.exports = {
-  httpGetReviewsByHouse,
-  httpGetReviewsByUser,
+  httpGetPropertyReviews,
+
   httpCreateReview,
   httpEditReview,
   httpDeleteReview,

@@ -1,57 +1,38 @@
 const { Review, validateReview } = require('./review.mongo');
-const { House } = require('../house/house.mongo');
+const { Property } = require('../property/property.mongo');
 
-const socketApi = require('../../services/socket');
-// const { init, Task } = require('fawn');
-
-// init(process.env.MONGO_URL, 'tempReviewCollection');
-
-async function GetReviewsByHouse(houseId, skip, limit) {
-  const reviews = await Review.find({ house: houseId })
+async function GetPropertyReviews(propertyId) {
+  return await Review.find({ property: propertyId })
     .populate('host')
     .sort({ creationDate: -1 })
     .skip(skip)
     .limit(limit);
-
-  const totalCount = await Review.countDocuments({ house: houseId });
-  return { items: reviews, totalCount };
 }
 
-async function GetReviewsByUser(user, skip, limit) {
-  const reviews = await Review.find({ host: user._id })
-    .populate('host')
-    .sort({ creationDate: -1 })
-    .skip(skip)
-    .limit(limit);
-
-  const totalCount = await Review.countDocuments({ host: user._id });
-  return { items: reviews, totalCount };
-}
-
-async function CreateReview(user, houseId, data) {
+async function CreateReview(user, propertyId, data) {
   validate(data);
-  const house = await House.findById(houseId);
+  const property = await Property.findById(propertyId);
 
-  if (!house) {
-    const error = Error('No matching house found');
+  if (!property) {
+    const error = Error('No matching property found');
     error.statusCode = 404;
     throw error;
   }
   const review = new Review({
     ...data,
-    host: user._id,
+    host: user.profile._id,
     hostName: `${user.profile.firstName} ${user.profile.lastName}`,
-    house: house._id,
+    property: property._id,
   });
 
   await review.save();
-  await House.findOneAndUpdate(
-    { _id: house.id },
+  await Property.findOneAndUpdate(
+    { _id: property.id },
     {
       $set: {
         rating:
-          house.rating > 0
-            ? Math.ceil((house.rating + review.rating) / 2)
+          property.rating > 0
+            ? Math.ceil((property.rating + review.rating) / 2)
             : review.rating,
       },
       $push: {
@@ -60,9 +41,7 @@ async function CreateReview(user, houseId, data) {
     }
   );
 
-  socketApi.io.in(house.slug).emit('addReview', review);
-
-  // socketApi.io.emit('houseRequired', houseData);
+  // socketApi.io.emit('propertyRequired', propertyData);
   // socket.broadcast
   // .to(user.room)
   // .emit('message', { user: 'admin', text: `${user.name}, has joined` });
@@ -73,7 +52,7 @@ async function CreateReview(user, houseId, data) {
 async function EditReview(user, reviewId, data) {
   validate(data);
 
-  let review = await Review.findOne({ _id: reviewId, host: user._id });
+  let review = await Review.findOne({ _id: reviewId, host: user.profile._id });
 
   if (!review) {
     const error = Error('No matching review found');
@@ -87,7 +66,7 @@ async function EditReview(user, reviewId, data) {
 async function DeleteReview(user, id) {
   validate(data);
 
-  let review = await Review.findOne({ _id: id, host: user.profile });
+  let review = await Review.findOne({ _id: id, host: user.profile._id });
 
   if (!review) {
     const error = Error('No matching review found');
@@ -108,8 +87,8 @@ function validate(values) {
 }
 
 module.exports = {
-  GetReviewsByHouse,
-  GetReviewsByUser,
+  GetPropertyReviews,
+  //GetReviewsByUser,
   CreateReview,
   EditReview,
   DeleteReview,

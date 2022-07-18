@@ -30,7 +30,6 @@ export const fetchRentsAsync = createAsyncThunk<
   const params = getAxiosRentParams(rentParams);
   try {
     const response = await agent.Rents.list(params);
-    //console.log('Response: ', response);
 
     thunkApi.dispatch(setMetaData(response.metaData));
     return response.items;

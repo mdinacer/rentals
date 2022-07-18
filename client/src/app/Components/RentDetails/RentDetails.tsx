@@ -47,7 +47,7 @@ export default function RentDetails({ rentId, onClose }: Props) {
 
   useEffect(() => {
     if (user && rent) {
-      const item = rent.client._id === user.id ? 'sent' : 'received';
+      const item = rent.sender.id === user.profile.id ? 'sent' : 'received';
       setRentType(item);
     }
     return () => {
@@ -76,11 +76,9 @@ export default function RentDetails({ rentId, onClose }: Props) {
       <div>
         <div className='shadow-md lg:shadow-none'>
           <div className=' px-5 lg:pt-10 pt-5 grid gap-y-10 lg:min-w-[32rem] w-full'>
-            <PropertyDetails house={rent.house} />
+            <PropertyDetails property={rent.property} />
             <PersonDetails
-              profile={
-                rentType === 'sent' ? rent.owner.profile : rent.client.profile
-              }
+              profile={rentType === 'sent' ? rent.receiver : rent.sender}
               title={rentType === 'sent' ? 'Owner' : 'Client'}
             />
             <PeriodDetails startDate={rent.startDate} endDate={rent.endDate} />

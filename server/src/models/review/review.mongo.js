@@ -40,9 +40,9 @@ const reviewSchema = new mongoose.Schema({
     ref: 'Profile',
   },
 
-  house: {
+  property: {
     type: mongoose.SchemaTypes.ObjectId,
-    ref: 'House',
+    ref: 'Property',
   },
 });
 

@@ -8,7 +8,6 @@ const {
 
 async function httpRegisterUser(req, res) {
   let user = await RegisterUser(req.body);
-  console.log(user);
   const token = user.generateAuthToken();
   user = pick(user, ['_id', 'username', 'email']);
   return res.header('x-auth-token', token).status(201).json(user);

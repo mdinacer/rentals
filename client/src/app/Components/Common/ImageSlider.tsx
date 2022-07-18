@@ -1,24 +1,22 @@
-import { House } from '../../models/house';
+import { Property } from '../../models/property';
 import { Image } from '../../models/image';
 import ImageSliderItem from './ImageSliderItem';
 
 interface Props {
-  house: House;
+  property: Property;
   setSelectedImage: (image: Image) => void;
 }
 
-export default function ImageSlider({ house, setSelectedImage }: Props) {
+export default function ImageSlider({ property, setSelectedImage }: Props) {
   return (
-    <>
-      <div className='relative grid grid-flow-col  snap-start h-full'>
-        {house.images.map((image) => (
-          <ImageSliderItem
-            key={image.publicId}
-            image={image}
-            handleOnClick={(image) => setSelectedImage(image)}
-          />
-        ))}
-      </div>
-    </>
+    <div className='relative grid grid-flow-col snap-start h-full'>
+      {property.images.map((image) => (
+        <ImageSliderItem
+          key={image.publicId}
+          image={image}
+          handleOnClick={(image) => setSelectedImage(image)}
+        />
+      ))}
+    </div>
   );
 }

@@ -79,12 +79,16 @@ function validateProfile(values) {
     phone: Joi.string().optional().allow(''),
     mobile: Joi.string().required(),
     address: Joi.object({
-      country: Joi.string().required(),
-      province: Joi.string().required(),
-      city: Joi.string().required(),
+      wilaya: Joi.string().required(),
+      daira: Joi.string().required(),
+      commune: Joi.string().required(),
       address1: Joi.string().required(),
       address2: Joi.string().optional().allow(''),
     }),
+    user: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'User',
+    },
   });
 
   return schema.validate(values);

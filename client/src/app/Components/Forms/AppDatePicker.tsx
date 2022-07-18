@@ -38,11 +38,12 @@ export default function AppDatePicker(props: Props) {
           <DatePicker
             todayButton={
               <div className=' my-2 px-5'>
-                <button className='w-full bg-sky-500 dark:bg-indigo-500 font-Primary text-base py-1 px-2 rounded-md font-thin text-white'>
+                <button className='w-full bg-yellow-500 dark:bg-indigo-500 font-Primary text-base py-1 px-2 rounded-md font-thin text-white'>
                   Today
                 </button>
               </div>
             }
+            locale='fr'
             className='w-full'
             placeholderText='Select date'
             onChange={(date) => {
@@ -52,6 +53,7 @@ export default function AppDatePicker(props: Props) {
               }
             }}
             selected={field.value}
+            ref={null}
             selectsStart={props.selectsStart}
             selectsEnd={props.selectsEnd}
             minDate={props.minDate}

@@ -18,8 +18,8 @@ export default function AppDropDown(props: Props) {
   const [selectedItem, setSelectedItem] = useState<ListItem | null>(null);
 
   const handleSelectionChange = (item: ListItem) => {
-    setSelectedItem(item);
     props.onChange(item.value);
+    setSelectedItem(item);
     setExpanded(false);
   };
 
@@ -27,7 +27,7 @@ export default function AppDropDown(props: Props) {
     if (props.items.length > 0) {
       setSelectedItem(props.items[0]);
     }
-  }, [props.items]);
+  }, []);
 
   const handleCloseMenu = () => {
     setExpanded(false);
@@ -48,7 +48,7 @@ export default function AppDropDown(props: Props) {
         onClick={() => setExpanded((prev) => !prev)}
       >
         <div className='text-left flex-auto w-full font-Secondary py-2 px-5 uppercase'>
-          {selectedItem?.title || ''}
+          {selectedItem?.title}
         </div>
         <div className=' flex-initial px-2 py-1 border-l border-l-gray-400'>
           <div
@@ -73,19 +73,18 @@ export default function AppDropDown(props: Props) {
           >
             <motion.ul className='bg-gray-200 dark:bg-slate-700 flex flex-col border border-gray-400 dark:border-y-gray-800 z-40'>
               {props.items.map((item, index) => (
-                <li
-                  key={index}
-                  className='px-5 py-2 hover:bg-sky-500 dark:hover:bg-indigo-500 cursor-pointer inline-flex items-center gap-x-3'
-                  onClick={() => handleSelectionChange(item)}
-                >
-                  <div className='h-6 w-6'>
+                <li key={index} className='w-full'>
+                  <button
+                    className='relative w-full  px-5 py-2 hover:bg-sky-500 dark:hover:bg-indigo-500 cursor-pointer inline-flex items-center gap-x-3'
+                    onClick={() => handleSelectionChange(item)}
+                  >
                     {selectedItem && selectedItem.value === item.value && (
                       <ChevronRightIcon className='h-6 w-6 ' />
                     )}
-                  </div>
-                  <p className='text-left font-Secondary text-base first-letter:uppercase'>
-                    {item.title}
-                  </p>
+                    <p className='text-left font-Secondary text-base first-letter:uppercase'>
+                      {item.title}
+                    </p>
+                  </button>
                 </li>
               ))}
             </motion.ul>

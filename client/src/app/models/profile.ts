@@ -1,6 +1,8 @@
 import { Address } from "./address";
 
 export interface UserProfile {
+    id: string,
+    //_id: string,
     firstName: string,
     lastName: string,
     fullName: string,

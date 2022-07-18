@@ -14,7 +14,7 @@ const { getPagination } = require('../../services/query');
 async function httpListRents(req, res) {
   const { pageNumber, pageSize, ...params } = req.query;
   const { skip, limit } = getPagination({ pageNumber, pageSize });
-  const rents = await ListRents(skip, limit, params);
+  const rents = await ListRents(req.user, skip, limit, params);
   return res.status(200).json(rents);
 }
 

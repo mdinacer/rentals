@@ -33,19 +33,19 @@ export default function AppDropDownInput(props: Props) {
   useOutsideClick(node, handleCloseMenu);
 
   return (
-    <div ref={node} className={'relative select-none' + props.className}>
-      <div className='py-1'>
-        <p className='text-sm text-gray-500 dark:text-gray-100 capitalize'>
-          {props.label}
-        </p>
-      </div>
+    <div ref={node} className={'relative select-none'}>
       <button
         type='button'
-        className=' inline-flex items-center w-full border border-gray-400'
+        className={
+          ' inline-flex items-center  border border-gray-400 ' + props.className
+        }
         onClick={() => setExpanded((prev) => !prev)}
       >
-        <div className='text-left flex-auto w-full font-Secondary py-0 px-5 uppercase'>
-          {getItem(field.value)}
+        <div className='inline-flex items-center gap-x-4 text-left flex-auto w-full font-Secondary py-0 px-5 capitalize'>
+          <p className='text-sm text-gray-500 dark:text-gray-100 uppercase'>
+            {props.label}
+          </p>
+          <p>{getItem(field.value)}</p>
         </div>
         <div className=' flex-initial px-2 py-0 border-l border-l-gray-400'>
           <div
@@ -73,13 +73,13 @@ export default function AppDropDownInput(props: Props) {
             animate='open'
             exit='exit'
             style={{ transformOrigin: 'top' }}
-            className='absolute mt-1 w-full z-10 '
+            className='absolute mt-1 w-full z-10 max-w-lg '
           >
-            <motion.ul className='bg-gray-200 dark:bg-slate-700 flex flex-col border border-gray-400 dark:border-y-gray-800 z-40'>
+            <motion.ul className='bg-gray-200 dark:bg-black flex flex-col border border-gray-400 dark:border-y-gray-800 z-40'>
               {props.items.map((item, index) => (
                 <li
                   key={index}
-                  className='px-5 py-2 hover:bg-sky-500 dark:hover:bg-indigo-500 cursor-pointer inline-flex items-center gap-x-3'
+                  className='px-5 py-2 hover:bg-yellow-500 dark:hover:bg-indigo-500 cursor-pointer inline-flex items-center gap-x-3'
                   onClick={() => {
                     field.onChange(item.value);
                     setExpanded(false);
