@@ -3,6 +3,13 @@ const https = require('https');
 
 const parser = require('./services/citiesParser');
 
+const fs = require('fs');
+
+const options = {
+  key: fs.readFileSync(__dirname + '/key.pem', 'utf8'),
+  cert: fs.readFileSync(__dirname + '/cert.pem', 'utf8'),
+};
+
 require('express-async-errors');
 require('dotenv').config();
 
@@ -14,12 +21,14 @@ const socketApi = require('./services/socket');
 const PORT = process.env.PORT || 8000;
 
 const server = http.createServer(app);
+const sServer = https.createServer(options, app);
+
 socketApi.io.attach(server, {
   cors: {
     origin: '*',
     methods: ['GET', 'POST'],
-    //allowedHeaders: ['my-custom-header'],
-    //credentials: true,
+    // allowedHeaders: ['pagination'],
+    // credentials: true,
   },
 });
 
@@ -37,6 +46,10 @@ async function startServer() {
 
   server.listen(PORT, () => {
     logger.info(`Listening on port ${PORT}...`);
+  });
+
+  sServer.listen(443, () => {
+    console.log('HTTPS Server running on port 443');
   });
 }
 

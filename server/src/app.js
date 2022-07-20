@@ -12,13 +12,25 @@ const api = require('./routes/api');
 const app = express();
 
 //app.use(helmet());
-
+//app.use(helmet({ crossOriginEmbedderPolicy: false, originAgentCluster: true }));
 app.use(
   helmet.contentSecurityPolicy({
     useDefaults: true,
     directives: {
-      'img-src': ["'self'", 'https: data:'],
+      'default-src': ["'self'"],
+      'img-src': ["'self'", 'data:', 'https://res.cloudinary.com'],
     },
+  })
+);
+
+app.use(
+  cors({
+    origin: '*', //'http://localhost:3000/',
+    optionsSuccessStatus: 200,
+    exposedHeaders: ['Pagination'],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    preflightContinue: true,
   })
 );
 
@@ -30,17 +42,6 @@ app.use(bodyParser.raw({ type: 'application/vnd.custom-type' }));
 
 // parse an HTML body into a string
 app.use(bodyParser.text({ type: 'text/html' }));
-
-app.use(
-  cors({
-    origin: '*', //'http://localhost:3000/',
-    optionsSuccessStatus: 200,
-    exposedHeaders: ['Pagination'],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    // credentials: true,
-    // preflightContinue: true,
-  })
-);
 
 // app.use(
 //   cors({

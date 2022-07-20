@@ -88,7 +88,6 @@ const propertySchema = new mongoose.Schema({
   available: {
     type: Boolean,
     default: true,
-    required: true,
   },
 
   availableFrom: {
@@ -133,7 +132,7 @@ function validateProperty(values) {
     type: Joi.string().min(5).max(255).required(),
     title: Joi.string().min(5).max(255).required(),
     description: Joi.string(),
-    available: Joi.boolean().required(),
+    available: Joi.boolean().optional(),
     availableFrom: Joi.date().optional(),
     price: Joi.object({
       amount: Joi.number().min(0).required(),

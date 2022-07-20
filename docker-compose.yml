@@ -1,0 +1,19 @@
+version: "3"
+services:
+       app:
+           container_name: app
+           image: nacer84/rentals
+           restart: always
+           build: .
+           ports:
+             - "8000:8000"
+             - "443:443"
+           links:
+             - mongo
+       mongo:
+             container_name: mongo
+             image: mongo
+             volumes:
+               - ./data:/data/rentals
+             ports:
+               - '27018:27017'
