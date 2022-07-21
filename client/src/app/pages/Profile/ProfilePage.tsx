@@ -55,7 +55,7 @@ export default function ProfilePage() {
                   type='button'
                   onClick={() => element.onClick()}
                   key={index}
-                  className='h-36 w-full bg-gray-300 hover:drop-shadow-lg hover:bg-black hover:text-yellow-500 last:hover:text-red-600 dark:hover:text-indigo-500 transition-all duration-300 flex flex-col items-center justify-center'
+                  className='h-36 w-full bg-gray-300 dark:bg-gray-700 hover:drop-shadow-lg hover:bg-black hover:text-yellow-500 last:hover:text-red-600 dark:hover:text-indigo-500 transition-all duration-300 flex flex-col items-center justify-center'
                 >
                   {element.icon}
                   <p className=' font-Primary text-base font-thin uppercase'>

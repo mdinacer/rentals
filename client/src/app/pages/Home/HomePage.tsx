@@ -18,7 +18,7 @@ export default function HomePage() {
         loop
         className='absolute top-0 left-0 right-0 bottom-0 object-cover object-center h-full w-full '
       ></video>
-      <div className='absolute top-0 left-0 right-0 bottom-0 w-screen h-screen bg-gradient-to-br from-sky-400 to-sky-800 dark:from-indigo-700 dark:to-indigo-900 opacity-90 mix-blend-multiply '></div>
+      <div className='absolute top-0 left-0 right-0 bottom-0 w-screen h-screen bg-gradient-to-br from-sky-400 to-sky-800 dark:from-indigo-700 dark:to-indigo-900 opacity-90'></div>
       <div className='relative container mx-auto px-5 flex-col flex items-center justify-center flex-1 '>
         <p className=' font-Secondary text-5xl max-w-2xl text-center'>
           Si vous n'aimez pas où vous êtes, bougez. Vous n'êtes pas un arbre.
